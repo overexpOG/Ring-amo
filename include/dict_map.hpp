@@ -124,8 +124,10 @@ namespace ring
      * Assigns an ID and inserts it into the tree.
      *
      * @param val value being inserted
+     *
+     * @return The ID assigned to the inserted value
      */
-    void insert(const std::string &val)
+    uint64_t insert(const std::string &val)
     {
       uint64_t id;
       if (free_ids.size() == 0)
@@ -139,6 +141,8 @@ namespace ring
         free_ids.pop_back();
         id_map[id - 1] = root->insert(val, id, id_map);
       }
+
+      return id;
     }
 
     /**
@@ -172,7 +176,7 @@ namespace ring
           id_map[id - 1] = std::get<1>(res);
         }
       }
-      // std::cout << ", PFC size: " << id_map.size() << std::endl;
+
       return found_id;
     }
 
@@ -185,12 +189,27 @@ namespace ring
      * @brief Deletes a value from the mapping
      *
      * @param val value being eliminated
+     *
+     * @return The ID of the eliminated value
      */
-    void eliminate(const std::string &val)
+    uint64_t eliminate(const std::string &val)
     {
       uint64_t elim_id = std::get<0>(root->eliminate(val, id_map));
       id_map[elim_id - 1] = nullptr;
       free_ids.push_back(elim_id);
+      return elim_id;
+    }
+
+    /**
+     * @brief Deletes a value from the mapping
+     *
+     * @param id ID of the value being eliminated
+     */
+    void eliminate(const uint64_t id)
+    {
+      id_map[id - 1]->elim(id);
+      id_map[id - 1] = nullptr;
+      free_ids.push_back(id);
     }
 
     /**
@@ -216,7 +235,8 @@ namespace ring
       return id_map[id - 1]->extract(id);
     }
 
-    size_t size() {
+    size_t size()
+    {
       return id_map.size();
     }
 
@@ -230,6 +250,11 @@ namespace ring
     std::string root_value()
     {
       return root->get_value();
+    }
+
+    PFC *get_root_pfc()
+    {
+      return root->get_pfc();
     }
 
   private:
@@ -506,18 +531,18 @@ namespace ring
         if (r == 0)
         {
           // Go to PFC
-          res = right->eliminate(val);
+          res = right->eliminate(val, id_map);
           child_size = std::get<0>(res);
           value = pfc->first_word();
         }
         else if (r < 0)
         {
-          res = left->eliminate(val);
+          res = left->eliminate(val, id_map);
           child_size = std::get<0>(res);
         }
         else
         {
-          res = right->eliminate(val);
+          res = right->eliminate(val, id_map);
           child_size = std::get<0>(res);
         }
 
@@ -529,7 +554,7 @@ namespace ring
             id_map[id - 1] = left->pfc;
           }
 
-          std::string right_string = right->pfc->pfc_string(); 
+          std::string right_string = right->pfc->pfc_string();
 
           left->pfc->fuse(right_string, right->pfc->size());
           right->free_mem();

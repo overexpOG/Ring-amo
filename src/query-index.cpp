@@ -85,6 +85,22 @@ std::vector<std::string> tokenizer(const std::string &input, const char &delimit
     return res;
 }
 
+std::vector<std::string> parse_select(const std::string &input)
+{
+    std::vector<std::string> res;
+    size_t start = input.find_first_of("{"),
+           end = input.find_last_of("}");
+    std::string query = input.substr(start + 1, end - start - 1);
+    size_t index = 0, tmp_index = 0;
+    while (tmp_index < query.size())
+    {
+        tmp_index = query.find(" . ", index);
+        res.emplace_back(query.substr(index, tmp_index - index));
+        index = tmp_index + 2;
+    }
+    return res;
+}
+
 std::vector<std::string> regex_tokenizer(const std::string &input, std::regex regex_token)
 {
     std::smatch match;
@@ -160,7 +176,7 @@ ring::triple_pattern get_triple(string &s, std::unordered_map<std::string, uint8
 }
 
 template <class map_type>
-ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, uint8_t> &hash_table_vars, map_type &mapping)
+ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, uint8_t> &hash_table_vars, map_type &so_mapping, map_type &p_mapping)
 {
     std::regex token_regex("(?:\".*\"|[^[:space:]])+");
     vector<string> terms = regex_tokenizer(s, token_regex);
@@ -172,7 +188,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_s(mapping.locate(terms[0]));
+        triple.const_s(so_mapping.locate(terms[0]));
     }
     if (is_variable(terms[1]))
     {
@@ -180,7 +196,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_p(mapping.locate(terms[1]));
+        triple.const_p(p_mapping.locate(terms[1]));
     }
     if (is_variable(terms[2]))
     {
@@ -188,7 +204,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_o(mapping.locate(terms[2]));
+        triple.const_o(so_mapping.locate(terms[2]));
     }
     return triple;
 }
@@ -223,13 +239,8 @@ void query(const std::string &file, const std::string &queries)
 
     if (result)
     {
-
-        int count = 1;
         for (string &query_string : dummy_queries)
         {
-
-            // vector<Term*> terms_created;
-            // vector<Triple*> query;
             std::unordered_map<std::string, uint8_t> hash_table_vars;
             std::vector<ring::triple_pattern> query;
             vector<string> tokens_query = tokenizer(query_string, '.');
@@ -252,41 +263,33 @@ void query(const std::string &file, const std::string &queries)
             time_span = duration_cast<microseconds>(stop - start);
             total_time = time_span.count();
 
-            // std::unordered_map<uint8_t, std::string> ht;
-            // for (const auto &p : hash_table_vars)
-            // {
-            //     ht.insert({p.second, p.first});
-            // }
-
-            if (res.size() > 0)
-            {
-                for (auto x: res[0]) {
-                    cout << get<0>(x) << ", " << get<1>(x) << endl;
-                }
-            }
-
             cout << nQ << ";" << res.size() << ";" << (unsigned long long)(total_time * 1000000000ULL) << endl;
             nQ++;
-
-            count += 1;
         }
     }
 }
 
 template <class ring_type, class map_type>
-void mapped_query(const std::string &file, const std::string &mapping_file, const std::string &queries)
+void mapped_query(const std::string &file, const std::string &so_mapping_file, const std::string &p_mapping_file, const std::string &queries)
 {
     vector<string> dummy_queries;
 
     bool result = get_file_content(queries, dummy_queries);
 
     // Load Dictionary Mapping
-    map_type mapping;
-    std::ifstream infs(mapping_file, std::ios::binary | std::ios::in);
-    mapping.load(infs);
+    map_type so_mapping;
+    std::ifstream so_infs(so_mapping_file, std::ios::binary | std::ios::in);
+    so_mapping.load(so_infs);
 
     cout << endl
-         << " Mapping loaded " << mapping.bit_size() / 8 << " bytes" << endl;
+         << " SO Mapping loaded " << so_mapping.bit_size() / 8 << " bytes" << endl;
+
+    map_type p_mapping;
+    std::ifstream p_infs(p_mapping_file, std::ios::binary | std::ios::in);
+    p_mapping.load(p_infs);
+
+    cout << endl
+         << " P Mapping loaded " << p_mapping.bit_size() / 8 << " bytes" << endl;
 
     ring_type graph;
 
@@ -301,26 +304,28 @@ void mapped_query(const std::string &file, const std::string &mapping_file, cons
     uint64_t nQ = 0;
 
     high_resolution_clock::time_point start, stop;
-    double total_time = 0.0;
+    double total_time = 0.0, forward_trad = 0.0, backward_trad = 0.0;
     duration<double> time_span;
 
     if (result)
     {
-
-        int count = 1;
         for (string &query_string : dummy_queries)
         {
-
-            // vector<Term*> terms_created;
-            // vector<Triple*> query;
             std::unordered_map<std::string, uint8_t> hash_table_vars;
             std::vector<ring::triple_pattern> query;
-            vector<string> tokens_query = tokenizer(query_string, ' . ');
+            vector<string> tokens_query = parse_select(query_string);
+
+            start = high_resolution_clock::now();
+
             for (string &token : tokens_query)
             {
-                auto triple_pattern = get_user_triple<map_type>(token, hash_table_vars, mapping);
+                auto triple_pattern = get_user_triple<map_type>(token, hash_table_vars, so_mapping, p_mapping);
                 query.push_back(triple_pattern);
             }
+
+            stop = high_resolution_clock::now();
+            time_span = duration_cast<microseconds>(stop - start);
+            forward_trad = time_span.count();
 
             start = high_resolution_clock::now();
 
@@ -335,34 +340,34 @@ void mapped_query(const std::string &file, const std::string &mapping_file, cons
             time_span = duration_cast<microseconds>(stop - start);
             total_time = time_span.count();
 
-            // std::unordered_map<uint8_t, std::string> ht;
-            // for (const auto &p : hash_table_vars)
-            // {
-            //     ht.insert({p.second, p.first});
-            // }
+            start = high_resolution_clock::now();
 
             if (res.size() > 0)
             {
-                for (auto x: res[0]) {
-                    cout << get<0>(x) << ", " << get<1>(x) << endl;
+                for (auto r : res)
+                {
+                    for (auto x : r)
+                    {
+                        so_mapping.extract(get<1>(x));
+                    }
                 }
             }
 
+            stop = high_resolution_clock::now();
+            time_span = duration_cast<microseconds>(stop - start);
+            backward_trad = time_span.count();
 
-            cout << nQ << ";" << res.size() << ";" << (unsigned long long)(total_time * 1000000000ULL) << endl;
+            cout << nQ << ";" << res.size() << ";" << (unsigned long long)(total_time * 1000000000ULL);
+            cout << ";" << (unsigned long long)(forward_trad * 1000000000ULL);
+            cout << ";" << (unsigned long long)(backward_trad * 1000000000ULL) << endl;
             nQ++;
-
-            count += 1;
         }
     }
 }
 
 int main(int argc, char *argv[])
 {
-
-    // typedef ring::ring<> ring_type;
-    // typedef ring::c_ring ring_type;
-    if (argc != 3 && argc != 4)
+    if (argc != 3 && argc != 5)
     {
         std::cout << "Usage: " << argv[0] << " <index> <queries>" << std::endl;
         return 0;
@@ -372,39 +377,62 @@ int main(int argc, char *argv[])
     std::string queries = argv[2];
     std::string type = get_type(index);
 
-    if (type == "ring")
+    if (argc == 3)
     {
-        query<ring::ring<>>(index, queries);
-    }
-    else if (type == "c-ring")
-    {
-        query<ring::c_ring>(index, queries);
-    }
-    else if (type == "ring-sel")
-    {
-        query<ring::ring_sel>(index, queries);
-    }
-    else if (type == "ring-dyn")
-    {
-        query<ring::ring_dyn>(index, queries);
-    }
-    else if (type == "ring-dyn-m")
-    {
-        query<ring::medium_ring_dyn>(index, queries);
-    }
-    else if (type == "ring-dyn-map")
-    {
-        if (argc != 4)
+        if (type == "ring")
         {
-            std::cout << "Usage: " << argv[0] << " <index> <queries> <mapping>" << std::endl;
-            return 0;
+            query<ring::ring<>>(index, queries);
         }
-        std::string mapping = argv[3];
-        mapped_query<ring::medium_ring_dyn, ring::basic_map>(index, mapping, queries);
+        else if (type == "c-ring")
+        {
+            query<ring::c_ring>(index, queries);
+        }
+        else if (type == "ring-sel")
+        {
+            query<ring::ring_sel>(index, queries);
+        }
+        else if (type == "ring-dyn-basic")
+        {
+            query<ring::ring_dyn>(index, queries);
+        }
+        else if (type == "ring-dyn")
+        {
+            query<ring::medium_ring_dyn>(index, queries);
+        }
+        else
+        {
+            std::cout << "Type of index: " << type << " is not supported." << std::endl;
+        }
     }
-    else
+
+    if (argc == 5)
     {
-        std::cout << "Type of index: " << type << " is not supported." << std::endl;
+        std::string so_mapping = argv[3];
+        std::string p_mapping = argv[4];
+        if (type == "ring")
+        {
+            mapped_query<ring::ring<>, ring::basic_map>(index, so_mapping, p_mapping, queries);
+        }
+        else if (type == "c-ring")
+        {
+            mapped_query<ring::c_ring, ring::basic_map>(index, so_mapping, p_mapping, queries);
+        }
+        else if (type == "ring-sel")
+        {
+            mapped_query<ring::ring_sel, ring::basic_map>(index, so_mapping, p_mapping, queries);
+        }
+        else if (type == "ring-dyn-basic")
+        {
+            mapped_query<ring::ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
+        }
+        else if (type == "ring-dyn")
+        {
+            mapped_query<ring::medium_ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
+        }
+        else
+        {
+            std::cout << "Type of index: " << type << " is not supported." << std::endl;
+        }
     }
 
     return 0;

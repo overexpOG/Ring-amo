@@ -60,7 +60,7 @@ namespace ring
       m_C = c_type();
     }
 
-    bwt_dyn(const vector<uint64_t> &L, const vector<uint64_t> &C, uint32_t sigma)
+    bwt_dyn(const vector<uint64_t> &L, const vector<uint64_t> &C, uint64_t sigma)
     {
       m_sigma = sigma;
       // Building the wavelet matrix
@@ -76,7 +76,7 @@ namespace ring
     }
 
 
-    bwt_dyn(const int_vector<> &L, const vector<uint64_t> &C, uint32_t sigma)
+    bwt_dyn(const int_vector<> &L, const vector<uint64_t> &C, uint64_t sigma)
     {
       m_sigma = sigma;
       // Building the wavelet matrix
@@ -172,12 +172,12 @@ namespace ring
       return m_L.bit_size() + m_C.bit_size();
     }
 
-    uint32_t alphabet_size() {
-      return m_sigma;
+     uint64_t alphabet_size() {
+      return m_L.sigma - 1;
     }
 
     void increment_alphabet() {
-      m_sigma++;
+      m_L.increment_alphabet();
     }
 
     void print_tree()

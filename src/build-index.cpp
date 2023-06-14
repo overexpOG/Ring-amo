@@ -62,7 +62,8 @@ void build_index(const std::string &dataset, const std::string &output)
 template <class map>
 void build_mapping(const std::string &dataset, std::vector<spo_triple> &D)
 {
-    map mapping;
+    map so_mapping;
+    map p_mapping;
 
     std::ifstream ifs(dataset);
     std::string line;
@@ -80,15 +81,24 @@ void build_mapping(const std::string &dataset, std::vector<spo_triple> &D)
         {
             user_input[i] = (*reg_it).str();
         }
-        D.push_back(mapping.get_or_insert_triple(user_input[0], user_input[1], user_input[2]));
+        D.push_back(spo_triple(
+            so_mapping.get_or_insert(user_input[0]),
+            p_mapping.get_or_insert(user_input[1]),
+            so_mapping.get_or_insert(user_input[2])));
     }
     auto mapping_stop = timer::now();
-    cout << "  Mapping built  " << mapping.bit_size() / 8 << " bytes" << endl;
+    cout << "  Mapping built" << endl;
+    cout << "    SO mapping " << so_mapping.bit_size() / 8 << " bytes" << endl;
+    cout << "    P mapping " << p_mapping.bit_size() / 8 << " bytes" << endl;
     cout << "  Mapping took " << duration_cast<seconds>(mapping_stop - mapping_start).count() << " seconds." << endl;
 
-    osfstream out(dataset + ".mapping", std::ios::binary | std::ios::trunc | std::ios::out);
-    mapping.serialize(out);
-    cout << "Mapping saved" << endl;
+    osfstream so_out(dataset + ".so.mapping", std::ios::binary | std::ios::trunc | std::ios::out);
+    so_mapping.serialize(so_out);
+    cout << "SO Mapping saved" << endl;
+
+    osfstream p_out(dataset + ".p.mapping", std::ios::binary | std::ios::trunc | std::ios::out);
+    p_mapping.serialize(p_out);
+    cout << "P Mapping saved" << endl;
 }
 
 template <class ring, class map>

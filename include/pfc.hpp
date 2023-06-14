@@ -90,6 +90,11 @@ namespace ring
       uint64_t curr_id = 0;
       uint64_t index = 0;
 
+      // Get first word
+      curr_id = decode_number(index);
+      index = text_string.find_first_of('\0', index) + 1;
+      id_map[curr_id - 1] = this;
+
       // Go through the PFC loading the ID map
       while (index < text_string.size())
       {
@@ -360,8 +365,6 @@ namespace ring
       else
       {
         // Delete and update the next one
-        text_string.erase(curr_index, index - curr_index);
-        index = curr_index;
         uint64_t next_id = decode_number(index);
         uint64_t lcp = decode_number(index);
         std::string next;
@@ -374,6 +377,65 @@ namespace ring
 
       current_size--;
       return curr_id;
+    }
+
+    /**
+     * @brief Delete a string from the PFC. Search it by ID.
+     *
+     * @param id The ID of the string being deleted
+     */
+    void elim(const uint64_t &id)
+    {
+      uint64_t index = 0, curr_index = 0;
+      std::string prev = "\0", curr = "\0";
+      uint64_t curr_id = 0;
+
+      curr_id = decode_number(index);
+      read_string(index, curr);
+
+      while (index < text_string.size() && curr_id != id)
+      {
+        prev = curr;
+        curr_index = index;
+        curr_id = decode_number(index);
+        uint64_t lcp = decode_number(index);
+        read_string(index, curr, prev, lcp);
+      }
+
+      if (index >= text_string.size() && curr_id != id)
+      {
+        this->print();
+        throw std::invalid_argument(id + " not in PFC");
+      }
+
+      if (index >= text_string.size())
+      {
+        // Delete at the end
+        text_string.erase(curr_index, text_string.size());
+      }
+      else if (prev == "\0")
+      {
+        // Delete at the front
+        uint64_t next_id = decode_number(index);
+        uint64_t lcp = decode_number(index);
+        std::string next = encode_number(next_id) + curr.substr(0, lcp) + read_string(index) + '\0';
+        text_string.erase(0, index);
+        text_string.insert(0, next);
+      }
+      else
+      {
+        // Delete and update the next one
+        uint64_t next_id = decode_number(index);
+        uint64_t lcp = decode_number(index);
+        std::string next;
+        read_string(index, next, curr, lcp);
+        uint64_t lcp_with_prev = longest_common_prefix(prev, next, std::min(prev.size(), next.size()));
+        std::string p = encode_number(next_id) + encode_number(lcp_with_prev) + next.substr(lcp_with_prev) + '\0';
+        text_string.erase(curr_index, index - curr_index);
+        text_string.insert(curr_index, p);
+      }
+
+      current_size--;
     }
 
     /**
@@ -412,7 +474,7 @@ namespace ring
       second_half.erase(0, index);
       second_half.insert(0, encode_number(first_id) + first_word + '\0');
       std::tuple<std::string, uint64_t, std::string> response = std::make_tuple(second_half, current_size - middle, first_word);
-      
+
       current_size = middle;
       text_string.shrink_to_fit();
 

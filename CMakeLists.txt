@@ -25,7 +25,7 @@ else()
 endif()
 if( CMAKE_COMPILER_IS_GNUCXX )
     append_cxx_compiler_flags("-fpermissive -std=c++11 -Wall -Wextra " "GCC" CMAKE_CXX_FLAGS)
-    append_cxx_compiler_flags("-msse4.2 -O3 -ffast-math -funroll-loops -fno-omit-frame-pointer -pg -g" "GCC" CMAKE_CXX_FLAGS_RELEASE)
+    append_cxx_compiler_flags("-msse4.2 -O3 -ffast-math -funroll-loops -fno-omit-frame-pointer -g" "GCC" CMAKE_CXX_FLAGS_RELEASE)
 else()
     append_cxx_compiler_flags("-fpermissive -std=c++11" "CLANG" CMAKE_CXX_FLAGS)
     append_cxx_compiler_flags("-stdlib=libc++" "CLANG" CMAKE_CXX_FLAGS)
@@ -44,6 +44,7 @@ else()
     message(STATUS "CPU does NOT support SSE4.2")
 endif()
 
+message(STATUS "DYNAMIC PATH=${DYNAMIC_PATH}")
 include_directories(~/include
                     ${DYNAMIC_PATH}/include
                     ${DYNAMIC_PATH}/build/hopscotch_map-prefix/src/hopscotch_map/include
@@ -58,5 +59,11 @@ target_link_libraries(build-index sdsl divsufsort divsufsort64)
 add_executable(query-index src/query-index.cpp)
 target_link_libraries(query-index sdsl divsufsort divsufsort64)
 
-add_executable(test src/test.cpp)
-target_link_libraries(test sdsl divsufsort divsufsort64)
+add_executable(delete-edge src/delete-edge.cpp)
+target_link_libraries(delete-edge sdsl divsufsort divsufsort64)
+
+add_executable(delete-node src/delete-node.cpp)
+target_link_libraries(delete-node sdsl divsufsort divsufsort64)
+
+add_executable(insert-edge src/insert-edge.cpp)
+target_link_libraries(insert-edge sdsl divsufsort divsufsort64)
