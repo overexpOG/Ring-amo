@@ -404,7 +404,6 @@ namespace ring
 
       if (index >= text_string.size() && curr_id != id)
       {
-        this->print();
         throw std::invalid_argument(id + " not in PFC");
       }
 
