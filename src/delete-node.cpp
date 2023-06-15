@@ -1,5 +1,5 @@
 /*
- * delete-edge.cpp
+ * delete-node.cpp
  * Copyright (C) 2020 Author removed for double-blind evaluation
  *
  *
@@ -145,7 +145,7 @@ void mapped_delete_query(const std::string &file, const std::string &so_mapping_
 
     cout << endl
          << " SO Mapping loaded " << so_mapping.bit_size() / 8 << " bytes" << endl;
-    
+
     // Load P Dictionary Mapping
     map_type p_mapping;
     std::ifstream p_infs(p_mapping_file, std::ios::binary | std::ios::in);
@@ -187,7 +187,6 @@ void mapped_delete_query(const std::string &file, const std::string &so_mapping_
             vector<uint64_t> so_removed_ids;
             vector<uint64_t> p_removed_ids;
 
-
             start = high_resolution_clock::now();
 
             uint64_t total_removed = graph.remove_node_with_check(node_id, so_removed_ids, p_removed_ids);
@@ -198,18 +197,19 @@ void mapped_delete_query(const std::string &file, const std::string &so_mapping_
 
             start = high_resolution_clock::now();
 
-            for (uint64_t id: so_removed_ids) {
+            for (uint64_t id : so_removed_ids)
+            {
                 so_mapping.eliminate(id);
             }
 
-            for (uint64_t id: p_removed_ids) {
+            for (uint64_t id : p_removed_ids)
+            {
                 p_mapping.eliminate(id);
             }
 
             stop = high_resolution_clock::now();
             time_span = duration_cast<microseconds>(stop - start);
             backward_time = time_span.count();
-
 
             cout << nQ << ";" << total_removed << ";" << (unsigned long long)(total_time * 1000000000ULL);
             cout << ";" << (unsigned long long)(forward_trad * 1000000000ULL);

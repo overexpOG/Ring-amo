@@ -67,7 +67,7 @@ namespace ring
       m_L = bwt_type(C.size() - 2, L);
       // Building C and its rank and select structures
       m_C = c_type();
-      for (uint64_t i = 0; i < C[C.size() - 1] + 1 + C.size(); i++)
+      for (uint64_t i = 0; i < C[C.size() - 1] + C.size(); i++)
         m_C.insert0(0);
       for (uint64_t i = 0; i < C.size(); i++)
       {
@@ -86,7 +86,7 @@ namespace ring
       // Building C and its rank and select structures
       m_C = c_type();
       uint64_t c_index = 0;
-      for (uint64_t i = 0; i < C[C.size() - 1] + 1 + C.size(); i++) {
+      for (uint64_t i = 0; i < C[C.size() - 1] + C.size(); i++) {
         if (c_index < C.size() && c_index + C[c_index] == i) {
           m_C.insert1(i);
           c_index++;
@@ -320,7 +320,7 @@ namespace ring
     }
 
     void push_back_C(bool b) {
-      m_C.insert(m_C.size() - 1, b);
+      m_C.insert(m_C.size(), b);
     }
 
     void insert_WT(uint64_t i, uint64_t v) {

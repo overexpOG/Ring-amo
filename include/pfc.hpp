@@ -510,7 +510,7 @@ namespace ring
       std::string first_word = read_string(new_half, index);
       uint64_t lcp = longest_common_prefix(curr, first_word, std::min(curr.size(), first_word.size()));
       new_half.erase(0, index);
-      new_half.insert(0, encode_number(new_id) + encode_number(lcp) + first_word.substr(lcp));
+      new_half.insert(0, encode_number(new_id) + encode_number(lcp) + first_word.substr(lcp) + '\0');
       text_string += new_half;
       current_size += new_words_counter;
     }

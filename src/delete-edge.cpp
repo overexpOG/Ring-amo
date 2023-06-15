@@ -130,6 +130,12 @@ std::string get_type(const std::string &file)
     return file.substr(p + 1);
 }
 
+std::string get_file_without_type(const std::string &file)
+{
+    auto p = file.find_last_of('.');
+    return file.substr(0, p);
+}
+
 template <class ring_type>
 void delete_query(const std::string &file, const std::string &queries)
 {
@@ -176,14 +182,14 @@ void mapped_delete_query(const std::string &file, const std::string &so_mapping_
 
     bool result = get_file_content(queries, dummy_queries);
 
-     // Load SO Dictionary Mapping
+    // Load SO Dictionary Mapping
     map_type so_mapping;
     std::ifstream so_infs(so_mapping_file, std::ios::binary | std::ios::in);
     so_mapping.load(so_infs);
 
     cout << endl
          << " SO Mapping loaded " << so_mapping.bit_size() / 8 << " bytes" << endl;
-    
+
     // Load P Dictionary Mapping
     map_type p_mapping;
     std::ifstream p_infs(p_mapping_file, std::ios::binary | std::ios::in);
@@ -231,17 +237,20 @@ void mapped_delete_query(const std::string &file, const std::string &so_mapping_
             start = high_resolution_clock::now();
 
             // Is S still in use? If not delete it from the mapping
-            if (!get<0>(valid)) {
+            if (!get<0>(valid))
+            {
                 so_mapping.eliminate(get<0>(query_triple));
             }
 
             // Is P still in use? If not delete it from the mapping
-            if (!get<1>(valid)) {
+            if (!get<1>(valid))
+            {
                 p_mapping.eliminate(get<1>(query_triple));
             }
 
             // Is O still in use? If not delete it from the mapping
-            if (!get<2>(valid)) {
+            if (!get<2>(valid))
+            {
                 so_mapping.eliminate(get<2>(query_triple));
             }
 
@@ -254,6 +263,19 @@ void mapped_delete_query(const std::string &file, const std::string &so_mapping_
             cout << ";" << (unsigned long long)(backward_time * 1000000000ULL) << endl;
             nQ++;
         }
+        std::string outfile = get_file_without_type(file) + ".updated." + get_type(file);
+        sdsl::store_to_file(graph, outfile);
+        std::cout << "Modified Ring stored" << std::endl;
+
+        std::string so_outfile = get_file_without_type(so_mapping_file) + ".updated.mapping";
+        std::ofstream so_out(so_outfile, std::ios::binary | std::ios::trunc | std::ios::out);
+        so_mapping.serialize(so_out);
+        std::cout << "Modified SO Mapping stored" << std::endl;
+
+        std::string p_outfile = get_file_without_type(p_mapping_file) + ".updated.mapping";
+        std::ofstream p_out(p_outfile, std::ios::binary | std::ios::trunc | std::ios::out);
+        p_mapping.serialize(p_out);
+        std::cout << "Modified P Mapping stored" << std::endl;
     }
 }
 

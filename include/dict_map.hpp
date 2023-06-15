@@ -532,18 +532,18 @@ namespace ring
         {
           // Go to PFC
           res = right->eliminate(val, id_map);
-          child_size = std::get<0>(res);
+          child_size = std::get<1>(res);
           value = pfc->first_word();
         }
         else if (r < 0)
         {
           res = left->eliminate(val, id_map);
-          child_size = std::get<0>(res);
+          child_size = std::get<1>(res);
         }
         else
         {
           res = right->eliminate(val, id_map);
-          child_size = std::get<0>(res);
+          child_size = std::get<1>(res);
         }
 
         if (child_size < MINSIZE)
@@ -561,6 +561,7 @@ namespace ring
           delete right;
           _is_leaf = true;
           pfc = left->pfc;
+          left->pfc = nullptr;
           delete left;
           value = pfc->first_word();
 

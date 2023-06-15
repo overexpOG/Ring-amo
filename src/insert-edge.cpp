@@ -1,5 +1,5 @@
 /*
- * delete-edge.cpp
+ * insert-edge.cpp
  * Copyright (C) 2020 Author removed for double-blind evaluation
  *
  *
@@ -121,7 +121,7 @@ spo_triple parse_insert(const std::string &input, const map_type &so_mapping, co
     string query = input.substr(start + 1, end - start - 1);
     regex token_regex("(?:\".*\"|[^[:space:]])+");
     vector<string> terms = regex_tokenizer(query, token_regex);
-    return {so_mapping.insert(terms[0]), p_mapping.insert(terms[1]), so_mapping.insert(terms[2])};
+    return {so_mapping.get_or_insert(terms[0]), p_mapping.get_or_insert(terms[1]), so_mapping.get_or_insert(terms[2])};
 }
 
 std::string get_type(const std::string &file)
@@ -131,7 +131,7 @@ std::string get_type(const std::string &file)
 }
 
 template <class ring_type>
-void delete_query(const std::string &file, const std::string &queries)
+void insert_query(const std::string &file, const std::string &queries)
 {
     vector<spo_triple> dummy_queries;
     bool result = get_triples_from_file(queries, dummy_queries);
@@ -170,20 +170,20 @@ void delete_query(const std::string &file, const std::string &queries)
 }
 
 template <class ring_type, class map_type>
-void mapped_delete_query(const std::string &file, const std::string &so_mapping_file, const std::string &p_mapping_file, const std::string &queries)
+void mapped_insert_query(const std::string &file, const std::string &so_mapping_file, const std::string &p_mapping_file, const std::string &queries)
 {
     vector<string> dummy_queries;
 
     bool result = get_file_content(queries, dummy_queries);
 
-     // Load SO Dictionary Mapping
+    // Load SO Dictionary Mapping
     map_type so_mapping;
     std::ifstream so_infs(so_mapping_file, std::ios::binary | std::ios::in);
     so_mapping.load(so_infs);
 
     cout << endl
          << " SO Mapping loaded " << so_mapping.bit_size() / 8 << " bytes" << endl;
-    
+
     // Load P Dictionary Mapping
     map_type p_mapping;
     std::ifstream p_infs(p_mapping_file, std::ios::binary | std::ios::in);
@@ -216,8 +216,6 @@ void mapped_delete_query(const std::string &file, const std::string &so_mapping_
 
             spo_triple query_triple = parse_insert<map_type>(query_string, so_mapping, p_mapping);
 
-            cout << "Translated query" << endl;
-
             stop = high_resolution_clock::now();
             time_span = duration_cast<microseconds>(stop - start);
             forward_trad = time_span.count();
@@ -229,8 +227,6 @@ void mapped_delete_query(const std::string &file, const std::string &so_mapping_
             stop = high_resolution_clock::now();
             time_span = duration_cast<microseconds>(stop - start);
             total_time = time_span.count();
-
-            cout << "Inserted query" << endl;
 
             cout << nQ << ";" << (unsigned long long)(total_time * 1000000000ULL);
             cout << ";" << (unsigned long long)(forward_trad * 1000000000ULL) << endl;
@@ -255,11 +251,11 @@ int main(int argc, char *argv[])
     {
         if (type == "ring-dyn-basic")
         {
-            delete_query<ring::ring_dyn>(index, queries);
+            insert_query<ring::ring_dyn>(index, queries);
         }
         else if (type == "ring-dyn")
         {
-            delete_query<ring::medium_ring_dyn>(index, queries);
+            insert_query<ring::medium_ring_dyn>(index, queries);
         }
         else
         {
@@ -273,11 +269,11 @@ int main(int argc, char *argv[])
         std::string p_mapping = argv[4];
         if (type == "ring-dyn-basic")
         {
-            mapped_delete_query<ring::ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
+            mapped_insert_query<ring::ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
         }
         else if (type == "ring-dyn")
         {
-            mapped_delete_query<ring::medium_ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
+            mapped_insert_query<ring::medium_ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
         }
         else
         {
