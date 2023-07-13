@@ -25,7 +25,7 @@
 
 using namespace std;
 
-typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector,2048,256>>> chosen_one_bwt;
+typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector,2048,16>>> chosen_one_bwt;
 
 namespace ring
 {

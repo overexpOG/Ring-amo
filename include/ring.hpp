@@ -1062,11 +1062,11 @@ namespace ring
             insert_index = m_bwt_p.get_C(o) + m_bwt_o.ranky(insert_index, o);
             m_bwt_p.insert_WT(insert_index, p);
             m_bwt_s.insert_C(m_bwt_s.select_C(p + 1), 0);
-
+            
             return;
         }
 
-        low = m_bwt_o.get_C(s) - 1 + m_bwt_s.ranky(low, s) + 1;
+        low = m_bwt_o.get_C(s) + m_bwt_s.ranky(low, s);
         high = m_bwt_o.get_C(s) - 1 + m_bwt_s.ranky(high + 1, s);
 
         // Inserting in O first
@@ -1081,10 +1081,11 @@ namespace ring
             insert_index = m_bwt_s.get_C(p) + m_bwt_p.ranky(insert_index, p);
             m_bwt_s.insert_WT(insert_index, s); // POS
             m_bwt_o.insert_C(m_bwt_o.select_C(s + 1), 0);
+
             return;
         }
 
-        low = m_bwt_p.get_C(o) - 1 + m_bwt_o.ranky(low, o) + 1;
+        low = m_bwt_p.get_C(o) + m_bwt_o.ranky(low, o);
         high = m_bwt_p.get_C(o) - 1 + m_bwt_o.ranky(high + 1, o);
 
         // Inserting in P
@@ -1096,9 +1097,10 @@ namespace ring
             insert_index = m_bwt_s.get_C(p) + m_bwt_p.ranky(insert_index, p);
             m_bwt_s.insert_WT(insert_index, s);
             m_bwt_o.insert_C(m_bwt_o.select_C(s + 1), 0);
-            insert_index = m_bwt_o.get_C(s) + m_bwt_p.ranky(insert_index, s);
+            insert_index = m_bwt_o.get_C(s) + m_bwt_s.ranky(insert_index, s);
             m_bwt_o.insert_WT(insert_index, o);
             m_bwt_p.insert_C(m_bwt_p.select_C(o + 1), 0);
+
             return;
         }
     }
@@ -1222,15 +1224,19 @@ namespace ring
         uint64_t p = get<1>(triple);
         uint64_t o = get<2>(triple);
 
+        uint64_t low = 0, high = 0;
+
         // Find triple
-        tuple<uint64_t, uint64_t> restricted_range = {m_bwt_s.get_C(p), m_bwt_s.get_C(p + 1) - 1};
-        // Inserting in S first
-        if (get<0>(restricted_range) == get<1>(restricted_range))
+        low = m_bwt_s.get_C(p);
+        high = m_bwt_s.get_C(p + 1) - 1;
+
+        // Deleting in S first
+        if (low == high)
         {
-            uint64_t o_remove_index = m_bwt_o.get_C(s) + m_bwt_s.ranky(get<0>(restricted_range), s);
+            uint64_t o_remove_index = m_bwt_o.get_C(s) + m_bwt_s.ranky(low, s);
             uint64_t p_remove_index = m_bwt_p.get_C(o) + m_bwt_o.ranky(o_remove_index, o);
 
-            m_bwt_s.remove_WT(get<0>(restricted_range));
+            m_bwt_s.remove_WT(low);
             m_bwt_o.remove_WT(o_remove_index);
             m_bwt_p.remove_WT(p_remove_index);
 
@@ -1239,18 +1245,20 @@ namespace ring
             m_bwt_s.remove_C(m_bwt_s.select_C(p + 1) - 1);
             m_bwt_p.remove_C(m_bwt_p.select_C(o + 1) - 1);
 
-            return;
+            return ;
         }
 
-        get<0>(restricted_range) = m_bwt_o.get_C(s) - 1 + m_bwt_s.ranky(get<0>(restricted_range), s) + 1;
-        get<1>(restricted_range) = m_bwt_o.get_C(s) - 1 + m_bwt_s.ranky(get<1>(restricted_range) + 1, s);
-        // Inserting in O first
-        if (get<0>(restricted_range) == get<1>(restricted_range))
+        low = m_bwt_o.get_C(s) - 1 + m_bwt_s.ranky(low, s) + 1;
+        high = m_bwt_o.get_C(s) - 1 + m_bwt_s.ranky(high + 1, s);
+
+
+        // Deleting in O first
+        if (low == high)
         {
-            uint64_t p_remove_index = m_bwt_p.get_C(o) + m_bwt_o.ranky(get<0>(restricted_range), o);
+            uint64_t p_remove_index = m_bwt_p.get_C(o) + m_bwt_o.ranky(low, o);
             uint64_t s_remove_index = m_bwt_s.get_C(p) + m_bwt_p.ranky(p_remove_index, p);
 
-            m_bwt_o.remove_WT(get<0>(restricted_range));
+            m_bwt_o.remove_WT(low);
             m_bwt_p.remove_WT(p_remove_index);
             m_bwt_s.remove_WT(s_remove_index);
 
@@ -1262,15 +1270,17 @@ namespace ring
             return;
         }
 
-        get<0>(restricted_range) = m_bwt_p.get_C(o) - 1 + m_bwt_o.ranky(get<0>(restricted_range), o) + 1;
-        get<1>(restricted_range) = m_bwt_p.get_C(o) - 1 + m_bwt_o.ranky(get<1>(restricted_range) + 1, o);
-        // Inserting in P
-        if (get<0>(restricted_range) <= get<1>(restricted_range))
-        {
-            uint64_t s_remove_index = m_bwt_s.get_C(p) + m_bwt_p.ranky(get<0>(restricted_range), p);
-            uint64_t o_remove_index = m_bwt_o.get_C(s) + m_bwt_p.ranky(s_remove_index, s);
+        low = m_bwt_p.get_C(o) - 1 + m_bwt_o.ranky(low, o) + 1;
+        high = m_bwt_p.get_C(o) - 1 + m_bwt_o.ranky(high + 1, o);
 
-            m_bwt_p.remove_WT(get<0>(restricted_range));
+
+        // Deleting in P
+        if (low <= high)
+        {
+            uint64_t s_remove_index = m_bwt_s.get_C(p) + m_bwt_p.ranky(low, p);
+            uint64_t o_remove_index = m_bwt_o.get_C(s) + m_bwt_s.ranky(s_remove_index, s);
+
+            m_bwt_p.remove_WT(low);
             m_bwt_s.remove_WT(s_remove_index);
             m_bwt_o.remove_WT(o_remove_index);
 
@@ -1280,10 +1290,6 @@ namespace ring
             m_bwt_p.remove_C(m_bwt_p.select_C(o + 1) - 1);
 
             return;
-        }
-        else
-        {
-            throw std::invalid_argument("The given triple doesnt exist in the graph");
         }
     }
 

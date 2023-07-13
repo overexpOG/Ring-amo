@@ -40,6 +40,8 @@ do
 	mkdir $3/updates/output/${queryName%%.txt}
 done
 
+mkdir $3/updates/output/insertJoin
+
 bash build-rings.sh $1 $3
 bash query-rings.sh $1 $2 $3
 bash update-ring.sh $1 $2 $3

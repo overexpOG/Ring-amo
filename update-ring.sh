@@ -37,4 +37,8 @@ echo Processing deleteNode
 ./delete-node ../$1/wikidata-wcg-filtered.nt.ring-dyn ../$2/updates/deleteNode.txt ../$1/wikidata-wcg-filtered.nt.so.mapping ../$1/wikidata-wcg-filtered.nt.p.mapping > ../$3/updates/output/deleteNode/ring-dyn-map
 echo "[Done]"
 
+echo "Processing insert then query"
+./update-query ../$1/wikidata-wcg-filtered.nt.ring-dyn ../$1/wikidata-wcg-filtered.nt.so.mapping ../$1/wikidata-wcg-filtered.nt.p.mapping ../$2/insertJoin.txt ../$2/insertJoinTriples.txt > ../$3/updates/output/insertJoin/ring-dyn-map
+echo "[Done]"
+
 cd ..

@@ -106,7 +106,7 @@ std::vector<std::string> parse_select(const std::string &input)
 }
 
 template <class map_type>
-void parse_triples(std::vector<std::string> &lines, std::vector<spo_triple> res, map_type &so_mapping, map_type &p_mapping)
+void parse_triples(std::vector<std::string> &lines, std::vector<spo_triple> &res, map_type &so_mapping, map_type &p_mapping)
 {
     std::regex token_regex("(?:\".*\"|[^[:space:]])+");
     for (std::string &line : lines)
@@ -256,11 +256,10 @@ void mapped_delete_insert(const std::string &file, const std::string &so_mapping
         time_span = duration_cast<microseconds>(stop - start);
         delete_time = time_span.count();
 
-        cout << nQ << ";" << (unsigned long long)(delete_time * 1000000000ULL);
+        cout << nQ << ";" << (unsigned long long)(delete_time * 1000000000ULL) << endl;
         nQ++;
 
         // Query
-
         start = high_resolution_clock::now();
 
         ring::ltj_algorithm<ring_type> ltj(&query, &graph);
@@ -277,6 +276,7 @@ void mapped_delete_insert(const std::string &file, const std::string &so_mapping
         nQ++;
 
         uint8_t batch_size = 100;
+        uint64_t limit = 4000;
 
         for (auto it = triples.begin(); it != triples.end(); std::advance(it, batch_size))
         {
@@ -290,8 +290,10 @@ void mapped_delete_insert(const std::string &file, const std::string &so_mapping
             stop = high_resolution_clock::now();
             time_span = duration_cast<microseconds>(stop - start);
             insert_time = time_span.count();
-            cout << nQ << ";" << (unsigned long long)(delete_time * 1000000000ULL);
+            cout << nQ << ";" << (unsigned long long)(insert_time * 1000000000ULL) << endl;
             nQ++;
+
+            limit -= batch_size;
 
             // Query again
             start = high_resolution_clock::now();
@@ -300,7 +302,7 @@ void mapped_delete_insert(const std::string &file, const std::string &so_mapping
 
             results_type res;
 
-            ltj.join(res, 1000, 600);
+            ltj.join(res, 0, 600);
 
             stop = high_resolution_clock::now();
             time_span = duration_cast<microseconds>(stop - start);
@@ -308,6 +310,8 @@ void mapped_delete_insert(const std::string &file, const std::string &so_mapping
 
             cout << nQ << ";" << res.size() << ";" << (unsigned long long)(query_time * 1000000000ULL) << endl;
             nQ++;
+
+            if (limit <= 0) break;
         }
     }
 }
