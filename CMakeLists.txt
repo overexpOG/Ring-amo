@@ -67,3 +67,6 @@ target_link_libraries(delete-node sdsl divsufsort divsufsort64)
 
 add_executable(insert-edge src/insert-edge.cpp)
 target_link_libraries(insert-edge sdsl divsufsort divsufsort64)
+
+add_executable(update-query src/update-query.cpp)
+target_link_libraries(update-query sdsl divsufsort divsufsort64)
