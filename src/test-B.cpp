@@ -253,19 +253,19 @@ void instantiate_and_run()
   D.shrink_to_fit();
   queries.shrink_to_fit();
 
-  typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector, 256, 64>>> big_wm_str_1;
-  typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector, 512, 64>>> big_wm_str_2;
-  typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector, 1024, 64>>> big_wm_str_3;
-  typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector, 2048, 64>>> big_wm_str_4;
-  typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector, 4096, 64>>> big_wm_str_5;
-  typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector, 8192, 64>>> big_wm_str_6;
+  typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector, 256, 1024>>> big_wm_str_1;
+  typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector, 512, 1024>>> big_wm_str_2;
+  typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector, 1024, 1024>>> big_wm_str_3;
+  typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector, 2048, 1024>>> big_wm_str_4;
+  typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector, 4096, 1024>>> big_wm_str_5;
+  typedef dyn::wm_string<dyn::succinct_bitvector<dyn::spsi<dyn::packed_bit_vector, 8192, 1024>>> big_wm_str_6;
 
-  test_ring_all<ring::ring<ring::bwt_dyn<dyn::suc_bv, big_wm_str_1>, ring::bwt_dyn<dyn::suc_bv, big_wm_str_1>>>(D, queries, insert_triples, nodes, 64, 256);
-  test_ring_all<ring::ring<ring::bwt_dyn<dyn::suc_bv, big_wm_str_2>, ring::bwt_dyn<dyn::suc_bv, big_wm_str_2>>>(D, queries, insert_triples, nodes, 64, 512);
-  test_ring_all<ring::ring<ring::bwt_dyn<dyn::suc_bv, big_wm_str_3>, ring::bwt_dyn<dyn::suc_bv, big_wm_str_3>>>(D, queries, insert_triples, nodes, 64, 1024);
-  test_ring_all<ring::ring<ring::bwt_dyn<dyn::suc_bv, big_wm_str_4>, ring::bwt_dyn<dyn::suc_bv, big_wm_str_4>>>(D, queries, insert_triples, nodes, 64, 2048);
-  test_ring_all<ring::ring<ring::bwt_dyn<dyn::suc_bv, big_wm_str_5>, ring::bwt_dyn<dyn::suc_bv, big_wm_str_5>>>(D, queries, insert_triples, nodes, 64, 4096);
-  test_ring_all<ring::ring<ring::bwt_dyn<dyn::suc_bv, big_wm_str_6>, ring::bwt_dyn<dyn::suc_bv, big_wm_str_6>>>(D, queries, insert_triples, nodes, 64, 8192);
+  test_ring_all<ring::ring<ring::bwt_dyn<dyn::suc_bv, big_wm_str_1>, ring::bwt_dyn<dyn::suc_bv, big_wm_str_1>>>(D, queries, insert_triples, nodes, 1024, 256);
+  test_ring_all<ring::ring<ring::bwt_dyn<dyn::suc_bv, big_wm_str_2>, ring::bwt_dyn<dyn::suc_bv, big_wm_str_2>>>(D, queries, insert_triples, nodes, 1024, 512);
+  test_ring_all<ring::ring<ring::bwt_dyn<dyn::suc_bv, big_wm_str_3>, ring::bwt_dyn<dyn::suc_bv, big_wm_str_3>>>(D, queries, insert_triples, nodes, 1024, 1024);
+  test_ring_all<ring::ring<ring::bwt_dyn<dyn::suc_bv, big_wm_str_4>, ring::bwt_dyn<dyn::suc_bv, big_wm_str_4>>>(D, queries, insert_triples, nodes, 1024, 2048);
+  test_ring_all<ring::ring<ring::bwt_dyn<dyn::suc_bv, big_wm_str_5>, ring::bwt_dyn<dyn::suc_bv, big_wm_str_5>>>(D, queries, insert_triples, nodes, 1024, 4096);
+  test_ring_all<ring::ring<ring::bwt_dyn<dyn::suc_bv, big_wm_str_6>, ring::bwt_dyn<dyn::suc_bv, big_wm_str_6>>>(D, queries, insert_triples, nodes, 1024, 8192);
 }
 
 int main()
