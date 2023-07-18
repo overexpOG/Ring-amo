@@ -70,3 +70,6 @@ target_link_libraries(insert-edge sdsl divsufsort divsufsort64)
 
 add_executable(update-query src/update-query.cpp)
 target_link_libraries(update-query sdsl divsufsort divsufsort64)
+
+add_executable(test-B src/test-B.cpp)
+target_link_libraries(test-B sdsl divsufsort divsufsort64)

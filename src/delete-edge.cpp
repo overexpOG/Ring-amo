@@ -173,6 +173,10 @@ void delete_query(const std::string &file, const std::string &queries)
             nQ++;
         }
     }
+
+    std::string outfile = get_file_without_type(file) + ".updated." + get_type(file);
+    sdsl::store_to_file(graph, outfile);
+    std::cout << "Modified Ring stored" << std::endl;
 }
 
 template <class ring_type, class map_type>
