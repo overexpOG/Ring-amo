@@ -444,7 +444,7 @@ namespace ring
      * @return std::tuple<std::string, uint64_t, std::string> A triple containing:
      *  (The string corresponding to the second half, The size of the second half, The first word of the second half)
      */
-    std::tuple<std::string, uint64_t, std::string> split()
+    std::tuple<std::string, uint64_t> split()
     {
       uint64_t index = 0, counter = 1;
       uint64_t middle = current_size / 2;
@@ -472,7 +472,7 @@ namespace ring
       read_string(second_half, index, first_word, curr, decode_id);
       second_half.erase(0, index);
       second_half.insert(0, encode_number(first_id) + first_word + '\0');
-      std::tuple<std::string, uint64_t, std::string> response = std::make_tuple(second_half, current_size - middle, first_word);
+      std::tuple<std::string, uint64_t> response = std::make_tuple(second_half, current_size - middle);
 
       current_size = middle;
       text_string.shrink_to_fit();

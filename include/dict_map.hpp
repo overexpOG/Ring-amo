@@ -321,7 +321,6 @@ namespace ring
       size_t bs = 8 * sizeof(left) * 2;
       bs += 8 * sizeof(pfc);
       bs += 8 * sizeof(bool);
-      bs += 8 * value.capacity();
       if (_is_leaf)
       {
         return bs + pfc->bit_size();
@@ -334,7 +333,7 @@ namespace ring
 
     std::string get_value()
     {
-      return value;
+      return pfc->first_word();
     }
 
     /**
@@ -349,11 +348,6 @@ namespace ring
 
       out.write((char *)&_is_leaf, sizeof(_is_leaf));
       w_bytes += sizeof(_is_leaf);
-      size_t string_size = value.size();
-      out.write((char *)&string_size, sizeof(string_size));
-      w_bytes += sizeof(string_size);
-      out.write((char *)&(value[0]), string_size);
-      w_bytes += string_size;
 
       if (_is_leaf)
       {
@@ -380,9 +374,6 @@ namespace ring
     {
       size_t string_size;
       in.read((char *)&_is_leaf, sizeof(_is_leaf));
-      in.read((char *)&string_size, sizeof(string_size));
-      value.resize(string_size);
-      in.read((char *)(&value[0]), string_size);
 
       if (_is_leaf)
       {
@@ -416,10 +407,9 @@ namespace ring
         if (pfc->size() > MAXSIZE)
         {
           // Split PFC
-          std::tuple<std::string, uint64_t, std::string> res = pfc->split();
+          std::tuple<std::string, uint64_t> res = pfc->split();
           PFC *new_pfc = new PFC(std::get<0>(res), std::get<1>(res));
           _is_leaf = false;
-          value = std::get<2>(res);
           right = new node(new_pfc);
           left = new node(pfc);
           pfc = new_pfc;
@@ -430,7 +420,7 @@ namespace ring
             id_map[id - 1] = pfc;
           }
 
-          if (val.compare(value) >= 0)
+          if (val.compare(pfc->first_word()) >= 0)
             return right->get_pfc();
           else
             return left->get_pfc();
@@ -440,7 +430,7 @@ namespace ring
       else
       {
         // Go to correct children
-        if (val.compare(value) > 0)
+        if (val.compare(pfc->first_word()) > 0)
         {
           return right->insert(val, id, id_map);
         }
@@ -467,10 +457,9 @@ namespace ring
         if (pfc->size() > MAXSIZE)
         {
           // Split PFC
-          std::tuple<std::string, uint64_t, std::string> res = pfc->split();
+          std::tuple<std::string, uint64_t> res = pfc->split();
           PFC *new_pfc = new PFC(std::get<0>(res), std::get<1>(res));
           _is_leaf = false;
-          value = std::get<2>(res);
           right = new node(new_pfc);
           left = new node(pfc);
           pfc = new_pfc;
@@ -481,7 +470,7 @@ namespace ring
             id_map[id - 1] = pfc;
           }
 
-          if (val.compare(value) >= 0)
+          if (val.compare(pfc->first_word()) >= 0)
             return {new_id, right->get_pfc()};
           else
             return {new_id, left->get_pfc()};
@@ -491,7 +480,7 @@ namespace ring
       else
       {
         // Go to correct children
-        int r = val.compare(value);
+        int r = val.compare(pfc->first_word());
         if (r == 0)
         {
           uint64_t new_id = pfc->get_or_insert(val, id);
@@ -524,7 +513,7 @@ namespace ring
       }
       else
       {
-        int r = val.compare(value);
+        int r = val.compare(pfc->first_word());
         std::tuple<uint64_t, uint64_t> res;
         uint64_t child_size = MAXSIZE;
         // Go to correct children
@@ -533,7 +522,6 @@ namespace ring
           // Go to PFC
           res = right->eliminate(val, id_map);
           child_size = std::get<1>(res);
-          value = pfc->first_word();
         }
         else if (r < 0)
         {
@@ -563,15 +551,13 @@ namespace ring
           pfc = left->pfc;
           left->pfc = nullptr;
           delete left;
-          value = pfc->first_word();
 
           if (pfc->size() > MAXSIZE)
           {
             // Split PFC
-            std::tuple<std::string, uint64_t, std::string> split_res = pfc->split();
+            std::tuple<std::string, uint64_t> split_res = pfc->split();
             PFC *new_pfc = new PFC(std::get<0>(split_res), std::get<1>(split_res));
             _is_leaf = false;
-            value = std::get<2>(split_res);
             right = new node(new_pfc);
             left = new node(pfc);
             pfc = new_pfc;
@@ -602,7 +588,7 @@ namespace ring
       }
       else
       {
-        int r = val.compare(value);
+        int r = val.compare(pfc->first_word());
         if (r == 0)
         {
           return pfc->locate(val);
@@ -619,7 +605,6 @@ namespace ring
     }
 
   private:
-    std::string value;
     bool _is_leaf = false;
     node *left = NULL;
     node *right = NULL;
