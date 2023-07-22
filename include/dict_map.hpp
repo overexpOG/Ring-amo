@@ -45,7 +45,7 @@ namespace ring
     dict_map(std::string val)
     {
       root = new node(val, 1);
-      id_map.push_back(root->get_pfc());
+      id_map.push_back({ .pfc = root->get_pfc()});
     }
 
     // Move constructor
@@ -70,15 +70,25 @@ namespace ring
     {
       uint64_t w_bytes = 0;
       size_t map_size = id_map.size();
-      size_t stack_size = free_ids.size();
 
       out.write((char *)&map_size, sizeof(map_size));
       w_bytes += sizeof(map_size);
       w_bytes += root->serialize(out);
-      out.write((char *)&stack_size, sizeof(stack_size));
-      w_bytes += sizeof(stack_size);
-      out.write((char *)free_ids.data(), stack_size * sizeof(uint64_t));
-      w_bytes += stack_size * sizeof(uint64_t);
+      out.write((char *)&free_ids_size, sizeof(uint64_t));
+      w_bytes += sizeof(uint64_t);
+      out.write((char *)&first_empty, sizeof(uint64_t));
+      w_bytes += sizeof(uint64_t);
+
+      if (free_ids_size > 0)
+      {
+        // For every empty slot write the next empty
+        for (uint64_t i = 0; i < free_ids_size - 1; i++)
+        {
+          out.write((char *)&id_map[first_empty - 1].next_empty, sizeof(uint64_t));
+          first_empty = id_map[first_empty - 1].next_empty;
+          w_bytes += sizeof(uint64_t);
+        }
+      }
 
       return w_bytes;
     }
@@ -89,13 +99,21 @@ namespace ring
       sdsl::structure_tree_node *child = sdsl::structure_tree::add_child(v, name, "dict_map");
       uint64_t written_bytes = 0;
       size_t map_size = id_map.size();
-      size_t stack_size = free_ids.size();
 
       written_bytes += sdsl::write_member(map_size, out, child, "map_size");
       written_bytes += root->serialize(out);
-      written_bytes += sdsl::write_member(stack_size, out, child, "stack_size");
-      out.write((char *)free_ids.data(), stack_size * sizeof(uint64_t));
-      written_bytes += stack_size * sizeof(uint64_t);
+      written_bytes += sdsl::write_member(free_ids_size, out, child, "free_ids_size");
+      written_bytes += sdsl::write_member(first_empty, out, child, "first_empty");
+      if (free_ids_size > 0)
+      {
+        // For every empty slot write the next empty
+        for (uint64_t i = 0; i < free_ids_size - 1; i++)
+        {
+          out.write((char *)&id_map[first_empty - 1].next_empty, sizeof(uint64_t));
+          first_empty = id_map[first_empty - 1].next_empty;
+          written_bytes += sizeof(uint64_t);
+        }
+      }
       sdsl::structure_tree::add_size(child, written_bytes);
 
       return written_bytes;
@@ -108,15 +126,25 @@ namespace ring
      */
     void load(std::istream &in)
     {
-      size_t map_size, stack_size;
+      size_t map_size;
 
       sdsl::read_member(map_size, in);
-      id_map = std::vector<PFC *>(map_size);
+      id_map = std::vector<EmptyOrPFC>(map_size);
       root = new node();
       root->load(in, id_map);
-      sdsl::read_member(stack_size, in);
-      free_ids = std::vector<uint64_t>(stack_size);
-      in.read((char *)free_ids.data(), stack_size * sizeof(uint64_t));
+      sdsl::read_member(free_ids_size, in);
+      sdsl::read_member(first_empty, in);
+      uint64_t tmp = 0;
+      last_empty = first_empty;
+      if (free_ids_size > 0)
+      {
+        for (uint64_t i = 0; i < free_ids_size - 1; i++)
+        {
+          in.read((char *)&tmp, sizeof(uint64_t));
+          id_map[last_empty - 1].next_empty = tmp;
+          last_empty = tmp;
+        }
+      }
     }
 
     /**
@@ -130,16 +158,24 @@ namespace ring
     uint64_t insert(const std::string &val)
     {
       uint64_t id;
-      if (free_ids.size() == 0)
+      if (free_ids_size == 0)
       {
         id = id_map.size() + 1;
-        id_map.push_back(root->insert(val, id, id_map));
+        id_map.push_back({ .pfc = root->insert(val, id, id_map)});
       }
       else
       {
-        id = free_ids.back();
-        free_ids.pop_back();
-        id_map[id - 1] = root->insert(val, id, id_map);
+        id = first_empty;
+        // Last element on "Symbolic queue"
+        if (free_ids_size == 1)
+        {
+          last_empty = 0;
+          first_empty = 0;
+        } else {
+          first_empty = id_map[id - 1].next_empty;
+        }
+        id_map[id - 1].pfc = root->insert(val, id, id_map);
+        free_ids_size--;
       }
 
       return id;
@@ -155,25 +191,33 @@ namespace ring
     {
       uint64_t id, found_id;
       std::tuple<uint64_t, PFC *> res;
-      if (free_ids.size() == 0)
+      if (free_ids_size == 0)
       {
         id = id_map.size() + 1;
         res = root->get_or_insert(val, id, id_map);
         found_id = std::get<0>(res);
         if (found_id == id)
         {
-          id_map.push_back(std::get<1>(res));
+          id_map.push_back({ .pfc = std::get<1>(res) });
         }
       }
       else
       {
-        id = free_ids.back();
+        id = first_empty;
         res = root->get_or_insert(val, id, id_map);
         found_id = std::get<0>(res);
         if (found_id == id)
         {
-          free_ids.pop_back();
-          id_map[id - 1] = std::get<1>(res);
+          // Last element on "Symbolic queue"
+          if (free_ids_size == 1)
+          {
+            last_empty = 0;
+            first_empty = 0;
+          } else {
+            first_empty = id_map[id - 1].next_empty;
+          }
+          id_map[id - 1].pfc = std::get<1>(res);
+          free_ids_size--;
         }
       }
 
@@ -195,8 +239,18 @@ namespace ring
     uint64_t eliminate(const std::string &val)
     {
       uint64_t elim_id = std::get<0>(root->eliminate(val, id_map));
-      id_map[elim_id - 1] = nullptr;
-      free_ids.push_back(elim_id);
+      // First in "Symbolic queue"
+      if (free_ids_size == 0)
+      {
+        first_empty = elim_id;
+        id_map[elim_id - 1].pfc = nullptr;
+      }
+      else
+      {
+        id_map[last_empty - 1].next_empty = elim_id;
+      }
+      last_empty = elim_id;
+      free_ids_size++;
       return elim_id;
     }
 
@@ -207,9 +261,19 @@ namespace ring
      */
     void eliminate(const uint64_t id)
     {
-      id_map[id - 1]->elim(id);
-      id_map[id - 1] = nullptr;
-      free_ids.push_back(id);
+      id_map[id - 1].pfc->elim(id);
+      id_map[id - 1].pfc = nullptr;
+      // First in "Symbolic queue"
+      if (free_ids_size == 0)
+      {
+        first_empty = id;
+      }
+      else
+      {
+        id_map[last_empty - 1].next_empty = id;
+      }
+      last_empty = id;
+      free_ids_size++;
     }
 
     /**
@@ -232,7 +296,7 @@ namespace ring
     std::string extract(uint64_t id)
     {
       assert(id > 0 && id - 1 < id_map.size());
-      return id_map[id - 1]->extract(id);
+      return id_map[id - 1].pfc->extract(id);
     }
 
     size_t size()
@@ -242,9 +306,8 @@ namespace ring
 
     size_t bit_size() const
     {
-      size_t id_size = 8 * sizeof(id_map) + 8 * id_map.capacity() * sizeof(PFC *);
-      size_t free_id_size = 8 * sizeof(free_ids) + 8 * free_ids.size() * sizeof(uint64_t);
-      return 8 * sizeof(root) + id_size + free_id_size + root->bit_size();
+      size_t id_size = 8 * sizeof(id_map) + 8 * id_map.size() * sizeof(EmptyOrPFC);
+      return 8 * sizeof(root) + id_size + root->bit_size();
     }
 
     std::string root_value()
@@ -260,8 +323,9 @@ namespace ring
   private:
     class node;
     node *root = NULL;
-    std::vector<PFC *> id_map;
-    std::vector<uint64_t> free_ids;
+    std::vector<EmptyOrPFC> id_map;
+    // Values used to represent the Queue of free IDs
+    uint64_t first_empty = 0, last_empty = 0, free_ids_size = 0;
   };
 
   /**
@@ -370,7 +434,7 @@ namespace ring
      * @param id_map Reference to the vector that maps every ID to its corresponding PFC
      * @return PFC* The pointer to the leftmost leaf in the node subtree
      */
-    PFC *load(std::istream &in, std::vector<PFC *> &id_map)
+    PFC *load(std::istream &in, std::vector<EmptyOrPFC> &id_map)
     {
       size_t string_size;
       in.read((char *)&_is_leaf, sizeof(_is_leaf));
@@ -398,7 +462,7 @@ namespace ring
      * @param val value being inserted
      * @param id ID assigned to that value
      */
-    PFC *insert(const std::string &val, const uint64_t &id, std::vector<PFC *> &id_map)
+    PFC *insert(const std::string &val, const uint64_t &id, std::vector<EmptyOrPFC> &id_map)
     {
       if (is_leaf())
       {
@@ -417,7 +481,7 @@ namespace ring
           // Update ID mapping
           for (uint64_t id : pfc->all_ids())
           {
-            id_map[id - 1] = pfc;
+            id_map[id - 1].pfc = pfc;
           }
 
           if (val.compare(pfc->first_word()) >= 0)
@@ -448,7 +512,7 @@ namespace ring
      * @param id  ID assigned to the value if its inserted
      * @return std::tuple<uint64_t, PFC *> a pair containing the ID of the value and the PFC it was found/inserted
      */
-    std::tuple<uint64_t, PFC *> get_or_insert(const std::string &val, const uint64_t &id, std::vector<PFC *> &id_map)
+    std::tuple<uint64_t, PFC *> get_or_insert(const std::string &val, const uint64_t &id, std::vector<EmptyOrPFC> &id_map)
     {
       if (is_leaf())
       {
@@ -467,7 +531,7 @@ namespace ring
           // Update ID mapping
           for (uint64_t id : pfc->all_ids())
           {
-            id_map[id - 1] = pfc;
+            id_map[id - 1].pfc = pfc;
           }
 
           if (val.compare(pfc->first_word()) >= 0)
@@ -504,7 +568,7 @@ namespace ring
      * @return std::tuple<uint64_t, uint64_t> a pair containing
      * the ID of the deleted value and the resulting size of the PFC it was stored in
      */
-    std::tuple<uint64_t, uint64_t> eliminate(const std::string &val, std::vector<PFC *> &id_map)
+    std::tuple<uint64_t, uint64_t> eliminate(const std::string &val, std::vector<EmptyOrPFC> &id_map)
     {
       if (is_leaf())
       {
@@ -539,7 +603,7 @@ namespace ring
           // Update ID mapping
           for (uint64_t id : right->pfc->all_ids())
           {
-            id_map[id - 1] = left->pfc;
+            id_map[id - 1].pfc = left->pfc;
           }
 
           std::string right_string = right->pfc->pfc_string();
@@ -565,7 +629,7 @@ namespace ring
             // Update ID mapping
             for (uint64_t id : pfc->all_ids())
             {
-              id_map[id - 1] = pfc;
+              id_map[id - 1].pfc = pfc;
             }
           }
         }

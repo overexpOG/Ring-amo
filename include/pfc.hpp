@@ -24,6 +24,18 @@
 
 namespace ring
 {
+  class PFC;
+
+  /*
+  * Union type to represent a pointer to a PFC
+  * or the next ID that its free in the array.
+  */
+  union EmptyOrPFC
+  {
+    PFC *pfc;
+    uint64_t next_empty;
+  };
+
   /**
    * @brief Class implementing a Plain Front Coding bucket
    * It accepts IDs of 64 bits except for 0
@@ -79,7 +91,7 @@ namespace ring
      * @param in The in stream where the bytes are coming from
      * @param id_map A vector of PFC pointers to map the IDs
      */
-    void load(std::istream &in, std::vector<PFC *> &id_map)
+    void load(std::istream &in, std::vector<EmptyOrPFC> &id_map)
     {
       size_t string_size;
       in.read((char *)&current_size, sizeof(current_size));
@@ -93,7 +105,7 @@ namespace ring
       // Get first word
       curr_id = decode_number(index);
       index = text_string.find_first_of('\0', index) + 1;
-      id_map[curr_id - 1] = this;
+      id_map[curr_id - 1].pfc = this;
 
       // Go through the PFC loading the ID map
       while (index < text_string.size())
@@ -101,7 +113,7 @@ namespace ring
         curr_id = decode_number(index);
         decode_number(index);
         index = text_string.find_first_of('\0', index) + 1;
-        id_map[curr_id - 1] = this;
+        id_map[curr_id - 1].pfc = this;
       }
     }
 
