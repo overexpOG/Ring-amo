@@ -1,0 +1,3 @@
+[submodule "external/DYNAMIC"]
+	path = external/DYNAMIC
+	url = https://github.com/yuval-linker/DYNAMIC.git
