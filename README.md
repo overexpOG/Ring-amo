@@ -9,6 +9,7 @@ Contains the dynamic implementation of the Ring with a compact dictionary for th
 To run our code, **we have to install an extended version of the library SDSL**. Go to [this repository](https://github.com/darroyue/sdsl-lite) and follow the instructions.
 
 We also need to install the extended version of the **DYNAMIC library**. Go to [this repository](https://github.com/yuval-linker/DYNAMIC) and follow the instructions.
+This repository is included as a github submodule in the `external` folder.
 
 After the extended version of SDSL and DYNAMIC are installed, we have to clone this repository and follow these steps:
 
@@ -16,11 +17,9 @@ After the extended version of SDSL and DYNAMIC are installed, we have to clone t
 ```Bash
 mkdir build
 cd build
-cmake -DDYNAMIC_PATH=<path-to-DYNAMIC> ..
+cmake ..
 make
 ```
-
-Where the path to DYNAMIC is something like `~/path/to/DYNAMIC`.
 
 Check that we do not have any errors.
 
