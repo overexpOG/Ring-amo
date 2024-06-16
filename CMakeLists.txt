@@ -8,7 +8,7 @@ set(CMAKE_PROJECT_NAME "Ring")
 set(CMAKE_BUILD_TYPE "Release")
 # set(CMAKE_BUILD_TYPE "Debug")
 
-option(DYNAMIC_PATH "DYNAMIC_PATH" "~/DYNAMIC/")
+set(DYNAMIC_PATH ${CMAKE_HOME_DIRECTORY}/external/DYNAMIC)
 
 # C++11 compiler Check
 if(NOT CMAKE_CXX_COMPILER_VERSION) # work around for cmake versions smaller than 2.8.10
