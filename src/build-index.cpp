@@ -159,6 +159,11 @@ int main(int argc, char **argv)
         std::string index_name = dataset + ".ring-dyn";
         build_index<ring::medium_ring_dyn>(dataset, index_name);
     }
+    else if (type == "ring-dyn-amo")
+    {
+        std::string index_name = dataset + ".ring-dyn-amo";
+        build_index<ring::ring_dyn_amo>(dataset, index_name);
+    }
     else if (type == "ring-dyn-map")
     {
         std::string index_name = dataset + ".ring-dyn";

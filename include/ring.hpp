@@ -1461,6 +1461,7 @@ namespace ring
     typedef ring<bwt_plain, bwt_plain> ring_sel;     // with select
     typedef ring<bwt_dynamic, bwt_dynamic> ring_dyn; // dynamic
     typedef ring<big_bwt, big_bwt> medium_ring_dyn;  // dynamic
+    typedef ring<bwt_dyn_amo, bwt_dyn_amo> ring_dyn_amo; // dynamic amortizado
 
 }
 

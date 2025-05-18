@@ -17,6 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <regex> 
 #include <iostream>
 #include <utility>
 #include "ring.hpp"
@@ -398,6 +399,10 @@ int main(int argc, char *argv[])
         else if (type == "ring-dyn")
         {
             query<ring::medium_ring_dyn>(index, queries);
+        }
+        else if (type == "ring-dyn-amo")
+        {
+            query<ring::ring_dyn_amo>(index, queries);
         }
         else
         {

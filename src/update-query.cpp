@@ -25,6 +25,7 @@
 #include <triple_pattern.hpp>
 #include <ltj_algorithm.hpp>
 #include "utils.hpp"
+#include <regex>
 
 using namespace std;
 

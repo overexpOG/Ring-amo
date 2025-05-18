@@ -241,6 +241,10 @@ int main(int argc, char *argv[])
         {
             delete_query<ring::medium_ring_dyn>(index, queries);
         }
+        else if (type == "ring-dyn-amo")
+        {
+            delete_query<ring::ring_dyn_amo>(index, queries);
+        }
         else
         {
             std::cout << "Type of index: " << type << " is not supported." << std::endl;

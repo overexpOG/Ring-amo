@@ -25,6 +25,7 @@
 #include <triple_pattern.hpp>
 #include <ltj_algorithm.hpp>
 #include "utils.hpp"
+#include <regex>
 
 using namespace std;
 
@@ -256,6 +257,10 @@ int main(int argc, char *argv[])
         else if (type == "ring-dyn")
         {
             insert_query<ring::medium_ring_dyn>(index, queries);
+        }
+        else if (type == "ring-dyn-amo")
+        {
+            insert_query<ring::ring_dyn_amo>(index, queries);
         }
         else
         {

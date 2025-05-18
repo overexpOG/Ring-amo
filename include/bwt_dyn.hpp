@@ -22,6 +22,7 @@
 
 #include <dynamic/dynamic.hpp>
 #include "configuration.hpp"
+#include "bv_amo.hpp"
 
 using namespace std;
 
@@ -338,6 +339,7 @@ namespace ring
 
   typedef bwt_dyn<> bwt_dynamic;
   typedef bwt_dyn<dyn::suc_bv, chosen_one_bwt> big_bwt;
+  typedef bwt_dyn<amo::HybridBV, dyn::wm_string<amo::HybridBV>> bwt_dyn_amo;
 }
 
 #endif

@@ -3,6 +3,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 include(AppendCompilerFlags)
 project(Ring)
 set(CMAKE_PROJECT_NAME "Ring")
+set(CMAKE_CXX_STANDARD 17)
 
 #Change to "Debug" when you need it
 set(CMAKE_BUILD_TYPE "Release")
