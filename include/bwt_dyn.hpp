@@ -22,7 +22,7 @@
 
 #include <dynamic/dynamic.hpp>
 #include "configuration.hpp"
-#include "bv_amo.hpp"
+#include "bitvector_amortized/hybrid.hpp"
 
 using namespace std;
 
