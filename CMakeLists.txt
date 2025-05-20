@@ -53,21 +53,31 @@ include_directories(~/include
 
 link_directories(~/lib)
 
+add_library(bitvector_amortized_lib STATIC
+    src/bitvector_amortized/static.cpp
+    src/bitvector_amortized/leaf.cpp
+    src/bitvector_amortized/dynamic.cpp
+    src/bitvector_amortized/hybrid.cpp
+)
+
+target_include_directories(bitvector_amortized_lib PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/bitvector_amortized
+)
 
 add_executable(build-index src/build-index.cpp)
-target_link_libraries(build-index sdsl divsufsort divsufsort64)
+target_link_libraries(build-index sdsl divsufsort divsufsort64 bitvector_amortized_lib)
 
 add_executable(query-index src/query-index.cpp)
-target_link_libraries(query-index sdsl divsufsort divsufsort64)
+target_link_libraries(query-index sdsl divsufsort divsufsort64 bitvector_amortized_lib)
 
 add_executable(delete-edge src/delete-edge.cpp)
-target_link_libraries(delete-edge sdsl divsufsort divsufsort64)
+target_link_libraries(delete-edge sdsl divsufsort divsufsort64 bitvector_amortized_lib)
 
 add_executable(delete-node src/delete-node.cpp)
-target_link_libraries(delete-node sdsl divsufsort divsufsort64)
+target_link_libraries(delete-node sdsl divsufsort divsufsort64 bitvector_amortized_lib)
 
 add_executable(insert-edge src/insert-edge.cpp)
-target_link_libraries(insert-edge sdsl divsufsort divsufsort64)
+target_link_libraries(insert-edge sdsl divsufsort divsufsort64 bitvector_amortized_lib)
 
 add_executable(update-query src/update-query.cpp)
 target_link_libraries(update-query sdsl divsufsort divsufsort64)
