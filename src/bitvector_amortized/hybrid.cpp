@@ -37,9 +37,9 @@ namespace amo {
     }
 
     void HybridBV::deleteBV() {
-        if (auto dyn = std::get_if<DynamicBV>(&bv)) {
-            delete dyn->left;
-            delete dyn->right;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            delete (*dyn)->left;
+            delete (*dyn)->right;
         }
 
         std::visit([](auto ptr) {
@@ -71,7 +71,7 @@ namespace amo {
 
     // collects all the descending bits into an array, destroys bv.dyn
     uint64_t* HybridBV::collect (uint64_t len) {
-        auto* dyn = std::get_if<DynamicBV>(&bv);
+        auto* dyn = std::get_if<DynamicBV*>(&bv);
         if (!dyn) {
             throw std::runtime_error("collect() llamado sobre nodo que no es DynamicBV");
         }
@@ -79,9 +79,9 @@ namespace amo {
         uint64_t* D = new uint64_t[(len + w - 1) / w];
         read (0,len,D,0);
 
-        delete dyn->left;
-        delete dyn->right;
-        delete dyn;
+        delete (*dyn)->left;
+        delete (*dyn)->right;
+        delete (*dyn);
 
         return D;
     }
@@ -92,7 +92,7 @@ namespace amo {
         uint64_t len;
         uint64_t *D;
 
-        auto* dyn = std::get_if<DynamicBV>(&bv);
+        auto dyn = std::get_if<DynamicBV*>(&bv);
         if (!dyn) return;
         len = length();
         *delta = - leaves();
@@ -110,24 +110,24 @@ namespace amo {
     // version of hybridRead that does not count accesses, for internal use
     void HybridBV::read (uint64_t i, uint64_t l, uint64_t *D, uint64_t j) { 
         uint64_t lsize;
-        if (auto leaf = std::get_if<LeafBV>(&bv)) { 
-            leaf->read(i,l,D,j); 
+        if (auto leaf = std::get_if<LeafBV*>(&bv)) { 
+            (*leaf)->read(i,l,D,j); 
             return; 
         }
-        if (auto dyn = std::get_if<DynamicBV>(&bv)) { 
-            lsize = dyn->left->length();
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) { 
+            lsize = (*dyn)->left->length();
             if (i+l < lsize) {
-                dyn->left->read(i,l,D,j);
+                (*dyn)->left->read(i,l,D,j);
             } else if (i >= lsize) {
-                dyn->right->read(i-lsize,l,D,j);
+                (*dyn)->right->read(i-lsize,l,D,j);
             } else { 
-                dyn->left->read(i,lsize-i,D,j);
-                dyn->right->read(0,l-(lsize-i),D,j+(lsize-i));
+                (*dyn)->left->read(i,lsize-i,D,j);
+                (*dyn)->right->read(0,l-(lsize-i),D,j+(lsize-i));
             }
             return;
         }
-        if (auto stat = std::get_if<StaticBV>(&bv)) {
-            stat->read(i,l,D,j);
+        if (auto stat = std::get_if<StaticBV*>(&bv)) {
+            (*stat)->read(i,l,D,j);
         }
     }
 
@@ -222,12 +222,12 @@ namespace amo {
         int64_t w_bytes = 0;
         int64_t delta;
         flatten(&delta);
-        if (auto stat = std::get_if<StaticBV>(&bv)) {
-            w_bytes += myfwrite(&stat->size,sizeof(uint64_t),1,out);
-            w_bytes += stat->serialize(out);
-        } else if (auto leaf = std::get_if<LeafBV>(&bv)) { 
-            w_bytes += myfwrite (&leaf->size,sizeof(uint64_t),1,out);
-            w_bytes += leaf->serialize(out);
+        if (auto stat = std::get_if<StaticBV*>(&bv)) {
+            w_bytes += myfwrite(&(*stat)->size,sizeof(uint64_t),1,out);
+            w_bytes += (*stat)->serialize(out);
+        } else if (auto leaf = std::get_if<LeafBV*>(&bv)) { 
+            w_bytes += myfwrite (&(*leaf)->size,sizeof(uint64_t),1,out);
+            w_bytes += (*leaf)->serialize(out);
         } else {
             throw std::runtime_error("HybridBV::save(): tipo inesperado, se esperaba StaticBV o LeafBV");
         }
@@ -258,12 +258,12 @@ namespace amo {
 
     // gives number of leaves
     uint64_t HybridBV::leaves () { 
-        if (auto leaf = std::get_if<LeafBV>(&bv)) {
+        if (auto leaf = std::get_if<LeafBV*>(&bv)) {
             return 1;
-        } else if (auto stat = std::get_if<StaticBV>(&bv)) {
-            return (stat->length()+leafNewSize()*w-1) / (leafNewSize()*w);
-        } else if (auto dyn = std::get_if<DynamicBV>(&bv)) {
-            return dyn->getLeaves();
+        } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
+            return ((*stat)->length()+leafNewSize()*w-1) / (leafNewSize()*w);
+        } else if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            return (*dyn)->getLeaves();
         }
     }
 
@@ -286,22 +286,22 @@ namespace amo {
     int HybridBV::write_(uint64_t i, uint v) { 
         uint64_t lsize;
         int dif;
-        if (auto stat = std::get_if<StaticBV>(&bv)) { 
+        if (auto stat = std::get_if<StaticBV*>(&bv)) { 
             // does not change #leaves!
-            bv = stat->split(i);
-            delete stat;
+            bv = (*stat)->split(i);
+            delete (*stat);
         }
-        if (auto leaf = std::get_if<LeafBV>(&bv)) {
-            return leaf->write_(i,v);
-        } else if (auto dyn = std::get_if<DynamicBV>(&bv)) {
-            dyn->accesses = 0; // reset
-            lsize = dyn->left->length();
+        if (auto leaf = std::get_if<LeafBV*>(&bv)) {
+            return (*leaf)->write_(i,v);
+        } else if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            (*dyn)->accesses = 0; // reset
+            lsize = (*dyn)->left->length();
             if (i < lsize) {
-                dif = dyn->left->write_(i,v);
+                dif = (*dyn)->left->write_(i,v);
             } else {
-                dif = dyn->right->write_(i-lsize,v);
+                dif = (*dyn)->right->write_(i-lsize,v);
             }
-            dyn->ones += dif;
+            (*dyn)->ones += dif;
             return dif;
         }
     }
@@ -310,30 +310,30 @@ namespace amo {
     // leaves. we do our best to avoid this overhead in typical operations
     void HybridBV::irecompute (uint64_t i) { 
         uint64_t lsize;
-        if (auto dyn = std::get_if<DynamicBV>(&bv)) {
-            lsize = dyn->left->length();
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            lsize = (*dyn)->left->length();
             if (i < lsize) {
-                dyn->left->irecompute(i);
+                (*dyn)->left->irecompute(i);
             } else {
-                dyn->right->irecompute(i-lsize);
+                (*dyn)->right->irecompute(i-lsize);
             }
-            dyn->leaves = dyn->left->leaves() + dyn->right->leaves();
+            (*dyn)->leaves = (*dyn)->left->leaves() + (*dyn)->right->leaves();
         }
     }
 
     void HybridBV::rrecompute (uint64_t i, uint64_t l) { 
         uint64_t lsize;
-        if (auto dyn = std::get_if<DynamicBV>(&bv)) {
-            lsize = dyn->left->length();
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            lsize = (*dyn)->left->length();
             if (i+l < lsize) {
-                dyn->left->rrecompute(i,l);
+                (*dyn)->left->rrecompute(i,l);
             } else if (i >= lsize) {
-                dyn->right->rrecompute(i-lsize,l);
+                (*dyn)->right->rrecompute(i-lsize,l);
             } else { 
-                dyn->left->rrecompute(i,lsize-i);
-                dyn->right->rrecompute(0,l-(lsize-i));
+                (*dyn)->left->rrecompute(i,lsize-i);
+                (*dyn)->right->rrecompute(0,l-(lsize-i));
             }
-            dyn->leaves = dyn->left->leaves() + dyn->right->leaves();
+            (*dyn)->leaves = (*dyn)->left->leaves() + (*dyn)->right->leaves();
         }
     }
 
@@ -341,33 +341,33 @@ namespace amo {
     void HybridBV::insert_(uint64_t i, uint v, uint *recalc) { 
         uint64_t lsize,rsize;
         int64_t delta;
-        if (auto stat = std::get_if<StaticBV>(&bv)) { 
+        if (auto stat = std::get_if<StaticBV*>(&bv)) { 
             // does not change #leaves!
-            bv = stat->split(i);
-            delete stat;
+            bv = (*stat)->split(i);
+            delete (*stat);
         }
-        if (auto leaf = std::get_if<LeafBV>(&bv)) {
+        if (auto leaf = std::get_if<LeafBV*>(&bv)) {
             // split
-            if (leaf->length() == leafMaxSize() * w) { 
-                bv = leaf->splitLeaf();
-                delete leaf;
+            if ((*leaf)->length() == leafMaxSize() * w) { 
+                bv = (*leaf)->splitLeaf();
+                delete (*leaf);
                 *recalc = 1; // leaf added
             } else { 
-                leaf->insert_(i,v);
+                (*leaf)->insert_(i,v);
                 return;
             }
         }
-        if (auto dyn = std::get_if<DynamicBV>(&bv)) {
-            dyn->accesses = 0; // reset
-            lsize = dyn->left->length();
-            rsize = dyn->right->length();
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            (*dyn)->accesses = 0; // reset
+            lsize = (*dyn)->left->length();
+            rsize = (*dyn)->right->length();
             // insert on left child
             if (i < lsize) {
                 if ((lsize == leafMaxSize() * w)     // will overflow if leaf
                     && (rsize < leafMaxSize() * w)  // can avoid if leaf
-                    && std::get_if<LeafBV*>(&(dyn->left->bv)) // both are leaves
-                    && std::get_if<LeafBV*>(&(dyn->right->bv)) 
-                    && dyn->transferRight()) // avoided, transferred to right
+                    && std::get_if<LeafBV*>(&((*dyn)->left->bv)) // both are leaves
+                    && std::get_if<LeafBV*>(&((*dyn)->right->bv)) 
+                    && (*dyn)->transferRight()) // avoided, transferred to right
                 {
                     insert_(i,v,recalc); // now could be to the right!
                     return;
@@ -384,14 +384,14 @@ namespace amo {
                     insert_(i,v,recalc); 
                     return;
                 }
-                dyn->left->insert_(i,v,recalc); // normal recursive call 
+                (*dyn)->left->insert_(i,v,recalc); // normal recursive call 
             // insert on right child
             } else {
                 if ((rsize == leafMaxSize() * w)    // will overflow if leaf
                     && (lsize < leafMaxSize() * w) // can avoid if leaf
-                    && std::get_if<LeafBV*>(&(dyn->left->bv)) // both are leaves
-                    && std::get_if<LeafBV*>(&(dyn->right->bv)) 
-                    && dyn->transferLeft()) // avoided, transferred to right
+                    && std::get_if<LeafBV*>(&((*dyn)->left->bv)) // both are leaves
+                    && std::get_if<LeafBV*>(&((*dyn)->right->bv)) 
+                    && (*dyn)->transferLeft()) // avoided, transferred to right
                 {
                     insert_(i,v,recalc); // now could be to the left!
                     return;
@@ -408,10 +408,10 @@ namespace amo {
                     insert_(i,v,recalc);
                     return;
                 }
-                dyn->right->insert_(i-lsize,v,recalc); // normal rec call
+                (*dyn)->right->insert_(i-lsize,v,recalc); // normal rec call
             }
-            dyn->size++;
-            dyn->ones += v;
+            (*dyn)->size++;
+            (*dyn)->ones += v;
         }
     }
 
@@ -431,19 +431,19 @@ namespace amo {
         HybridBV* HB;
         int dif;
         int64_t delta;
-        if (auto stat = std::get_if<StaticBV>(&bv)) { 
+        if (auto stat = std::get_if<StaticBV*>(&bv)) { 
             // does not change #leaves!
-            bv = stat->split(i);
-            delete stat;
+            bv = (*stat)->split(i);
+            delete (*stat);
         }
-        if (auto leaf = std::get_if<LeafBV>(&bv)) {
-            return leaf->remove_(i);
+        if (auto leaf = std::get_if<LeafBV*>(&bv)) {
+            return (*leaf)->remove_(i);
         }
-        if (auto dyn = std::get_if<DynamicBV>(&bv)) {
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
             // reset
-            dyn->accesses = 0;
-            lsize = dyn->left->length();
-            rsize = dyn->right->length();
+            (*dyn)->accesses = 0;
+            lsize = (*dyn)->left->length();
+            rsize = (*dyn)->right->length();
             if (i < lsize) {
                 if ((rsize > AlphaFactor*(lsize+rsize-1))
                 && (lsize+rsize >= MinLeavesToBalance*leafMaxSize()*w) 
@@ -454,14 +454,14 @@ namespace amo {
                     if (delta) *recalc = 1;
                     return remove_(i,recalc); // now could enter in the right child!
                 }
-                dif = dyn->left->remove_(i,recalc); // normal recursive call otherw
+                dif = (*dyn)->left->remove_(i,recalc); // normal recursive call otherw
                 // left child is now of size zero, remove
                 if (lsize == 1) {
-                    bv = dyn->right->bv;
-                    dyn->right->bv = new LeafBV(); 
-                    delete dyn->right;
-                    delete dyn->left;
-                    delete dyn;
+                    bv = (*dyn)->right->bv;
+                    (*dyn)->right->bv = new LeafBV(); 
+                    delete (*dyn)->right;
+                    delete (*dyn)->left;
+                    delete (*dyn);
                     *recalc = 1; 
                     return dif;
                 } 
@@ -475,27 +475,27 @@ namespace amo {
                     if (delta) *recalc = 1; 
                     return remove_(i,recalc); // now could enter in the left child!
                 }
-                dif = dyn->right->remove_(i-lsize,recalc); // normal recursive call
+                dif = (*dyn)->right->remove_(i-lsize,recalc); // normal recursive call
                 // right child now size zero, remove
                 if (rsize == 1) {
-                    bv = dyn->left->bv;
-                    dyn->left->bv = new LeafBV();
-                    delete dyn->right;
-                    delete dyn->left;
-                    delete dyn;
+                    bv = (*dyn)->left->bv;
+                    (*dyn)->left->bv = new LeafBV();
+                    delete (*dyn)->right;
+                    delete (*dyn)->left;
+                    delete (*dyn);
                     *recalc = 1; 
                     return dif;
                 }
             }
-            dyn->size--;
-            dyn->ones += dif;
+            (*dyn)->size--;
+            (*dyn)->ones += dif;
             // merge, must be leaves
-            if (dyn->size <= leafNewSize() * w) {
-                bv = dyn->mergeLeaves();
-                delete dyn;
+            if ((*dyn)->size <= leafNewSize() * w) {
+                bv = (*dyn)->mergeLeaves();
+                delete (*dyn);
                 *recalc = 1; 
             }
-            else if (dyn->size < dyn->leaves * leafNewSize() * w * MinFillFactor) {
+            else if ((*dyn)->size < (*dyn)->leaves * leafNewSize() * w * MinFillFactor) {
                 delta = 0;
                 flatten(&delta); 
                 if (delta) {
@@ -521,43 +521,43 @@ namespace amo {
     // leaves. we do our best to avoid this overhead in typical queries
     void HybridBV::recompute (uint64_t i, int64_t delta) { 
         uint64_t lsize;
-        if (auto dyn = std::get_if<DynamicBV>(&bv)) {
-            dyn->leaves += delta;
-            lsize = dyn->left->length();
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            (*dyn)->leaves += delta;
+            lsize = (*dyn)->left->length();
             if (i < lsize) {
-                dyn->left->recompute(i,delta);
+                (*dyn)->left->recompute(i,delta);
             } else {
-                dyn->right->recompute(i-lsize,delta);
+                (*dyn)->right->recompute(i-lsize,delta);
             }
         }
     }
 
     bool HybridBV::mustFlatten() {
-        if (auto dyn = std::get_if<DynamicBV>(&bv)) {
-            return (dyn->accesses >= FactorBV*dyn->size);
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            return ((*dyn)->accesses >= FactorBV*(*dyn)->size);
         }
     }
 
     // access B[i], assumes i is right
     uint HybridBV::access_ (uint64_t i, int64_t *delta) { 
         uint64_t lsize;
-        if (auto dyn = std::get_if<DynamicBV>(&bv)) { 
-            dyn->accesses++;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) { 
+            (*dyn)->accesses++;
             if (mustFlatten()) {
                 flatten(delta);
             } else { 
-                lsize = dyn->left->length();
+                lsize = (*dyn)->left->length();
                 if (i < lsize) {
-                    return dyn->left->access_(i,delta);
+                    return (*dyn)->left->access_(i,delta);
                 } else {
-                    return dyn->right->access_(i-lsize,delta);
+                    return (*dyn)->right->access_(i-lsize,delta);
                 }
             }
         }
-        if (auto leaf = std::get_if<LeafBV>(&bv)) {
-            return leaf->access_(i);
-        } else if (auto stat = std::get_if<StaticBV>(&bv)) {
-            return stat->access_(i);
+        if (auto leaf = std::get_if<LeafBV*>(&bv)) {
+            return (*leaf)->access_(i);
+        } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
+            return (*stat)->access_(i);
         }
     }
 
@@ -574,30 +574,30 @@ namespace amo {
     void HybridBV::read (uint64_t i, uint64_t l, uint64_t *D, uint64_t j, uint *recomp) { 
         uint64_t lsize;
         int64_t delta;
-        if (auto dyn = std::get_if<DynamicBV>(&bv)) { 
-            dyn->accesses++;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) { 
+            (*dyn)->accesses++;
             if (mustFlatten()) {
                 delta = 0;
                 flatten(&delta); 
                 if (delta) *recomp = 1;
             } else {
-                lsize = dyn->left->length();
+                lsize = (*dyn)->left->length();
                 if (i+l < lsize) {
-                    dyn->left->read(i,l,D,j,recomp);
+                    (*dyn)->left->read(i,l,D,j,recomp);
                 } else if (i>=lsize) {
-                    dyn->right->read(i-lsize,l,D,j,recomp);
+                    (*dyn)->right->read(i-lsize,l,D,j,recomp);
                 } else { 
-                    dyn->left->read(i,lsize-i,D,j,recomp);
-                    dyn->right->read(0,l-(lsize-i),D,j+(lsize-i),recomp);
+                    (*dyn)->left->read(i,lsize-i,D,j,recomp);
+                    (*dyn)->right->read(0,l-(lsize-i),D,j+(lsize-i),recomp);
                 }
                 return;
             }
         }
-        if (auto leaf = std::get_if<LeafBV>(&bv)) { 
-            leaf->read(i,l,D,j);
+        if (auto leaf = std::get_if<LeafBV*>(&bv)) { 
+            (*leaf)->read(i,l,D,j);
             return;
-        } else if (auto stat = std::get_if<StaticBV>(&bv)) {
-            stat->read(i,l,D,j);
+        } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
+            (*stat)->read(i,l,D,j);
         }
     }
 
@@ -612,23 +612,23 @@ namespace amo {
     // computes rank_1(B,i), zero-based, assumes i is right
     uint64_t HybridBV::rank_(uint64_t i, int64_t *delta) { 
         uint64_t lsize;
-        if (auto dyn = std::get_if<DynamicBV>(&bv)) { 
-            dyn->accesses++;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) { 
+            (*dyn)->accesses++;
             if (mustFlatten()) {
                 flatten(delta); 
             } else { 
-                lsize = dyn->left->length();
+                lsize = (*dyn)->left->length();
                 if (i < lsize) { 
-                    return dyn->left->rank_(i,delta);
+                    return (*dyn)->left->rank_(i,delta);
                 } else {
-                return dyn->left->getOnes() + dyn->right->rank_(i-lsize,delta);
+                return (*dyn)->left->getOnes() + (*dyn)->right->rank_(i-lsize,delta);
                 }
             }
         }
-        if (auto leaf = std::get_if<LeafBV>(&bv)) {
-            return leaf->rank_(i);
-        } else if (auto stat = std::get_if<StaticBV>(&bv)) {
-            return stat->rank_(i);
+        if (auto leaf = std::get_if<LeafBV*>(&bv)) {
+            return (*leaf)->rank_(i);
+        } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
+            return (*stat)->rank_(i);
         }
     }
 
@@ -644,44 +644,44 @@ namespace amo {
     // computes select_1(B,j), zero-based, assumes j is right
     uint64_t HybridBV::select1_(uint64_t j, int64_t *delta) { 
         uint64_t lones;
-        if (auto dyn = std::get_if<DynamicBV>(&bv)) { 
-            dyn->accesses++;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) { 
+            (*dyn)->accesses++;
             if (mustFlatten()) {
                 flatten(delta); 
             } else { 
-                lones = dyn->left->getOnes();
+                lones = (*dyn)->left->getOnes();
                 if (j <= lones) {
-                    return dyn->left->select1_(j,delta);
+                    return (*dyn)->left->select1_(j,delta);
                 }
-                return dyn->left->length() + dyn->right->select1_(j-lones,delta);
+                return (*dyn)->left->length() + (*dyn)->right->select1_(j-lones,delta);
             }
         }
-        if (auto leaf = std::get_if<LeafBV>(&bv)) {
-            return leaf->select1_(j);   
-        } else if (auto stat = std::get_if<StaticBV>(&bv)) {
-            return stat->select1_(j);
+        if (auto leaf = std::get_if<LeafBV*>(&bv)) {
+            return (*leaf)->select1_(j);   
+        } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
+            return (*stat)->select1_(j);
         }
     }
 
     // computes select_0(B,j), zero-based, assumes j is right
     uint64_t HybridBV::select0_(uint64_t j, int64_t *delta) { 
         uint64_t lzeros;
-        if (auto dyn = std::get_if<DynamicBV>(&bv)) { 
-            dyn->accesses++;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) { 
+            (*dyn)->accesses++;
             if (mustFlatten()) {
                 flatten(delta); 
             } else { 
-                lzeros = dyn->left->length() - dyn->left->getOnes();
+                lzeros = (*dyn)->left->length() - (*dyn)->left->getOnes();
                 if (j <= lzeros) {
-                    return dyn->left->select0_(j,delta);
+                    return (*dyn)->left->select0_(j,delta);
                 }
-                return dyn->left->length() + dyn->right->select0_(j-lzeros,delta);
+                return (*dyn)->left->length() + (*dyn)->right->select0_(j-lzeros,delta);
             }
         }
-        if (auto leaf = std::get_if<LeafBV>(&bv)) {
-            return leaf->select0_(j);   
-        } else if (auto stat = std::get_if<StaticBV>(&bv)) {
-            return stat->select0_(j);
+        if (auto leaf = std::get_if<LeafBV*>(&bv)) {
+            return (*leaf)->select0_(j);   
+        } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
+            return (*stat)->select0_(j);
         }
     }
 
@@ -723,6 +723,10 @@ namespace amo {
 
     uint64_t HybridBV::select(uint64_t i, bool b) {
         return b ? select1(i) : select0(i);
+    }
+
+    uint64_t HybridBV::size() {
+        return length();
     }
 
     void HybridBV::insert(uint64_t i, uint v) {

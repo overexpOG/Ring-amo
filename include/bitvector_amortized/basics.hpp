@@ -2,28 +2,30 @@
 #define BITVECTOR_AMORTIZED_BASICS
 
 #include <iostream>
+#include <cstdint>
+#include <cstring>
 
 namespace amo {
-    float FactorBV = 1.0; // Factor * length reads => rebuild as static
-    constexpr int MaxBlockWords = 32;
-    constexpr double NewFraction = 0.75;
-    constexpr int w = 64;                           // bits por palabra
-    constexpr int K = 4;                            // block length is w*K
-    constexpr size_t w16 = 8 * sizeof(uint16_t);    // superblock length is 2^w16
-    constexpr float TrfFactor = 0.125;              // TrfFactor * MaxLeafSize to justify transferLeft/Right
-    constexpr float AlphaFactor = 0.65;             // balance factor 3/5 < . < 1
+    static float FactorBV = 1.0; // Factor * length reads => rebuild as static
+    static constexpr int MaxBlockWords = 32;
+    static constexpr double NewFraction = 0.75;
+    static constexpr int w = 64;                           // bits por palabra
+    static constexpr int K = 4;                            // block length is w*K
+    static constexpr size_t w16 = 8 * sizeof(uint16_t);    // superblock length is 2^w16
+    static constexpr float TrfFactor = 0.125;              // TrfFactor * MaxLeafSize to justify transferLeft/Right
+    static constexpr float AlphaFactor = 0.65;             // balance factor 3/5 < . < 1
     static constexpr int MinLeavesToBalance = 5;    // min number of leaves to balance the tree
     static constexpr float MinFillFactor = 0.3;     // less than this involves rebuild. Must be <= NewFraction/2
 
     using uint = uint32_t;
 
-    uint popcount (uint64_t y) { 
+    inline uint popcount (uint64_t y) { 
         y -= ((y >> 1) & 0x5555555555555555ull);
         y = (y & 0x3333333333333333ull) + (y >> 2 & 0x3333333333333333ull);
         return ((y + (y >> 4)) & 0xf0f0f0f0f0f0f0full) * 0x101010101010101ull >> 56;
     }
 
-    void myfread(void* ptr, size_t size, size_t nmemb, std::istream& in) {
+    inline void myfread(void* ptr, size_t size, size_t nmemb, std::istream& in) {
         // Leer del stream
         in.read(static_cast<char*>(ptr), size * nmemb);
 
@@ -34,7 +36,7 @@ namespace amo {
         }
     }
 
-    uint64_t myfwrite(void* ptr, size_t size, size_t nmemb, std::ostream& out) {
+    inline uint64_t myfwrite(void* ptr, size_t size, size_t nmemb, std::ostream& out) {
         // Escribir los datos en el flujo
         out.write(static_cast<char*>(ptr), size * nmemb);
 
@@ -50,7 +52,7 @@ namespace amo {
     // copies len bits starting at *src + psrc
     // to tgt from bit position ptgt
     // WARNING: writes some extra bits after target (but not more words)
-    void copyBits (uint64_t* tgt, uint64_t ptgt, uint64_t* src, uint64_t psrc, uint64_t len) { 
+    inline void copyBits (uint64_t* tgt, uint64_t ptgt, uint64_t* src, uint64_t psrc, uint64_t len) { 
         uint64_t old,mask;
         // easy cases if they are similarly misaligned
         // I didn't align to 8 due to possible endianness issues
@@ -63,7 +65,7 @@ namespace amo {
                 *tgt = (*tgt & mask) + (*src & ~mask);
                 *tgt++; *src++; len -= w-ptgt;
             }
-            std::memcpy (tgt,src,((len+w-1)/w)*sizeof(uint64_t));
+            memcpy(tgt,src,((len+w-1)/w)*sizeof(uint64_t));
             return;
         }
         // general case, we first align the source
@@ -94,12 +96,12 @@ namespace amo {
     }
 
     // Tamaño recomendado para una hoja nueva
-    static uint leafNewSize() {
+    static inline uint leafNewSize() {
         return MaxBlockWords * NewFraction;
     }
 
     // Tamaño máximo para hoja
-    static uint leafMaxSize() {
+    static inline uint leafMaxSize() {
         return MaxBlockWords;
     }
 

@@ -2,15 +2,7 @@
 #define BITVECTOR_AMORTIZED_HYBRID
 
 #include "bitvector_amortized/basics.hpp"
-//#include <variant>
-//#include <iostream>
-//#include <cstdint>
-//#include <cstring>
-//#include <string>
-//#include <fstream>
-//#include <stdexcept>
-//#include <algorithm>
-//#include <ostream>
+#include <variant>
 
 namespace amo {
     class StaticBV;
@@ -72,10 +64,11 @@ namespace amo {
 
             // Convenience methods (wrappers)
             uint64_t at(uint64_t i);
-            uint64_t rank(uint64_t i, bool b);
+            uint64_t rank(uint64_t i, bool b = 1);
             uint64_t select1(uint64_t i);
             uint64_t select0(uint64_t i);
             uint64_t select(uint64_t i, bool b);
+            uint64_t size();
             void insert(uint64_t i, uint v);
             void insert0(uint64_t i);
             void insert1(uint64_t i);

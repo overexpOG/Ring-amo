@@ -28,13 +28,13 @@ namespace amo {
         } else {
             uint64_t nb = (size + 63) / 64;
             data = new uint64_t[nb];
-            std::memcpy(data, other.data, nb * sizeof(uint64_t));
+            memcpy(data, other.data, nb * sizeof(uint64_t));
         }
         // Copiar S (si existe)
         if (other.S != nullptr) {
             uint64_t s_len = (size + (1ULL << w16) - 1) / (1ULL << w16);
             S = new uint64_t[s_len];
-            std::memcpy(S, other.S, s_len * sizeof(uint64_t));
+            memcpy(S, other.S, s_len * sizeof(uint64_t));
         } else {
             S = nullptr;
         }
@@ -42,7 +42,7 @@ namespace amo {
         if (other.B != nullptr) {
             uint64_t b_len = (size + K * w - 1) / (K * w);
             B = new uint16_t[b_len];
-            std::memcpy(B, other.B, b_len * sizeof(uint16_t));
+            memcpy(B, other.B, b_len * sizeof(uint16_t));
         } else {
             B = nullptr;
         }
@@ -213,7 +213,7 @@ namespace amo {
                 i -= d; d <<= 1; 
             }
             // now d is the bottom of the range
-            d = std::max(0LL,i-d);
+            d = std::max(static_cast<int64_t>(0LL),i-d);
             while (d+1<i) { 
                 m = (i+d)>>1;
                 if (S[m] < j) {
@@ -324,7 +324,7 @@ namespace amo {
                 i -= d; d <<= 1; 
             }
             // now d is the bottom of the range
-            d = std::max(0LL,i-d);
+            d = std::max(static_cast<int64_t>(0LL),i-d);
             while (d+1<i) { 
                 m = (i+d)>>1;
                 if (SZeros(m) < j) {

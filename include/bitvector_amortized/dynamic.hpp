@@ -4,6 +4,9 @@
 #include "bitvector_amortized/basics.hpp"
 
 namespace amo {
+    class HybridBV;
+    class LeafBV;
+
     class DynamicBV {
         public:
             uint64_t size;          // the size of the bitvector
@@ -21,7 +24,7 @@ namespace amo {
             DynamicBV(DynamicBV&& other) noexcept;
 
             // Destructor
-            ~DynamicBV();
+            ~DynamicBV() = default;
 
             // Move assignment operator
             DynamicBV& operator=(DynamicBV&& other) noexcept;

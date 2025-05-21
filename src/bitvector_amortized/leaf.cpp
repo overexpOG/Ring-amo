@@ -14,7 +14,7 @@ namespace amo {
 
         // Copiar datos, solo los bytes necesarios
         size_t bytesToCopy = (n + 7) / 8; 
-        std::memcpy(data, inputData, bytesToCopy);
+        memcpy(data, inputData, bytesToCopy);
 
         uint nb = (n + w - 1) / w;
         if (n % w) {
@@ -28,7 +28,7 @@ namespace amo {
     // constructor por copia
     LeafBV::LeafBV(const LeafBV& other) : size(other.size), ones(other.ones) {
         data = new uint64_t[MaxBlockWords];
-        std::memcpy(data, other.data, MaxBlockWords * sizeof(uint64_t));
+        memcpy(data, other.data, MaxBlockWords * sizeof(uint64_t));
     }
 
     // Constructor por movimiento
