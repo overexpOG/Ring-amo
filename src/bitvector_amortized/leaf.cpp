@@ -66,6 +66,8 @@ namespace amo {
         if (this->size != 0) {
             return myfwrite(this->data, sizeof(uint64_t), (this->size+w-1)/w, out);
         }
+
+        return 0;
     }
 
     // Cargar desde archivo (binario)

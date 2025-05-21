@@ -265,6 +265,7 @@ namespace amo {
         } else if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
             return (*dyn)->getLeaves();
         }
+        throw std::runtime_error("HybridBV::leaves(): tipo inesperado, se esperaba StaticBV, LeafBV o DynamicBV");
     }
 
     // gives bit length
@@ -304,6 +305,7 @@ namespace amo {
             (*dyn)->ones += dif;
             return dif;
         }
+        throw std::runtime_error("HybridBV::write_(): tipo inesperado, se esperaba StaticBV, LeafBV o DynamicBV");
     }
 
     // changing leaves is uncommon and only then we need to recompute
@@ -504,6 +506,7 @@ namespace amo {
             }
             return dif;
         }
+        throw std::runtime_error("HybridBV::remove_(): tipo inesperado, se esperaba StaticBV, LeafBV o DynamicBV");
     }
 
     int HybridBV::hybridRemove_(uint64_t i) { 
@@ -536,6 +539,7 @@ namespace amo {
         if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
             return ((*dyn)->accesses >= FactorBV*(*dyn)->size);
         }
+        throw std::runtime_error("HybridBV::mustFlatten(): tipo inesperado, se esperaba DynamicBV");
     }
 
     // access B[i], assumes i is right
@@ -559,6 +563,7 @@ namespace amo {
         } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
             return (*stat)->access_(i);
         }
+        throw std::runtime_error("HybridBV::access_(): tipo inesperado, se esperaba StaticBV, LeafBV o DynamicBV");
     }
 
     uint HybridBV::hybridAccess_(uint64_t i) { 
@@ -630,6 +635,7 @@ namespace amo {
         } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
             return (*stat)->rank_(i);
         }
+        throw std::runtime_error("HybridBV::rank_(): tipo inesperado, se esperaba StaticBV, LeafBV o DynamicBV");
     }
 
     uint64_t HybridBV::hybridRank_(uint64_t i) { 
@@ -661,6 +667,7 @@ namespace amo {
         } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
             return (*stat)->select1_(j);
         }
+        throw std::runtime_error("HybridBV::select1_(): tipo inesperado, se esperaba StaticBV, LeafBV o DynamicBV");
     }
 
     // computes select_0(B,j), zero-based, assumes j is right
@@ -683,6 +690,7 @@ namespace amo {
         } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
             return (*stat)->select0_(j);
         }
+        throw std::runtime_error("HybridBV::select0_(): tipo inesperado, se esperaba StaticBV, LeafBV o DynamicBV");
     }
 
     uint64_t HybridBV::hybridSelect1_(uint64_t j) { 
@@ -749,7 +757,7 @@ namespace amo {
         return hybridRemove_(i);
     }
 
-    int HybridBV::set(uint64_t i, bool b = true) {
+    int HybridBV::set(uint64_t i, bool b) {
         return write_(i, b);
     }
 }

@@ -282,7 +282,7 @@ namespace ring
      * @param val value being searched
      * @return uint64_t ID associated to the value
      */
-    uint64_t locate(const std::string &val)
+    uint64_t locate(const std::string &val) const
     {
       return root->search(val);
     }

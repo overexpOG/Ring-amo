@@ -120,8 +120,10 @@ namespace amo {
     // writes B's data to file, which must be opened for writing 
     uint64_t StaticBV::serialize (std::ostream &out) { 
         if (size != 0) {
-            return myfwrite (data,sizeof(uint64_t),(size+w-1)/w, out);
+            return myfwrite(data,sizeof(uint64_t),(size+w-1)/w, out);
         }
+
+        return 0;
     }
 
     // loads staticBV's data from file, which must be opened for reading

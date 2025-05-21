@@ -255,7 +255,7 @@ namespace ring
         }
 
         //! Serializes the data structure into the given ostream
-        size_type serialize(std::ostream &out, sdsl::structure_tree_node *v = nullptr, std::string name = "") const
+        size_type serialize(std::ostream &out, sdsl::structure_tree_node *v = nullptr, std::string name = "")
         {
             sdsl::structure_tree_node *child = sdsl::structure_tree::add_child(v, name, sdsl::util::class_name(*this));
             size_type written_bytes = 0;
@@ -312,19 +312,19 @@ namespace ring
         }
 
         // Given a Suffix returns its range in BWT O
-        pair<uint64_t, uint64_t> init_S(uint64_t S) const
+        pair<uint64_t, uint64_t> init_S(uint64_t S)
         {
             return m_bwt_o.backward_search_1_interval(S);
         }
 
         // Given a Predicate returns its range in BWT S
-        pair<uint64_t, uint64_t> init_P(uint64_t P) const
+        pair<uint64_t, uint64_t> init_P(uint64_t P)
         {
             return m_bwt_s.backward_search_1_interval(P);
         }
 
         // Given an Object returns its range in BWT P
-        pair<uint64_t, uint64_t> init_O(uint64_t O) const
+        pair<uint64_t, uint64_t> init_O(uint64_t O)
         {
             return m_bwt_p.backward_search_1_interval(O);
         }
@@ -348,14 +348,14 @@ namespace ring
 
 
         // POS -> SPO
-        pair<uint64_t, uint64_t> init_SP(uint64_t S, uint64_t P) const
+        pair<uint64_t, uint64_t> init_SP(uint64_t S, uint64_t P)
         {
             auto I = m_bwt_s.backward_search_1_rank(P, S);   // POS
             return m_bwt_o.backward_search_2_interval(S, I); // SPO
         }
 
         // SPO -> OSP
-        pair<uint64_t, uint64_t> init_SO(uint64_t S, uint64_t O) const
+        pair<uint64_t, uint64_t> init_SO(uint64_t S, uint64_t O)
         {
             auto I = m_bwt_o.backward_search_1_rank(S, O);   // SPO
             return m_bwt_p.backward_search_2_interval(O, I); // OSP
@@ -363,7 +363,7 @@ namespace ring
         }
 
         // OSP -> POS
-        pair<uint64_t, uint64_t> init_PO(uint64_t P, uint64_t O) const
+        pair<uint64_t, uint64_t> init_PO(uint64_t P, uint64_t O)
         {
             auto I = m_bwt_p.backward_search_1_rank(O, P);   // OSP
             return m_bwt_s.backward_search_2_interval(P, I); // POS
@@ -371,7 +371,7 @@ namespace ring
         }
 
         // OSP -> POS -> SPO
-        pair<uint64_t, uint64_t> init_SPO(uint64_t S, uint64_t P, uint64_t O) const
+        pair<uint64_t, uint64_t> init_SPO(uint64_t S, uint64_t P, uint64_t O)
         {
             auto I = m_bwt_p.backward_search_1_rank(O, P);   // OSP
             I = m_bwt_s.backward_search_2_rank(P, S, I);     // POS

@@ -114,7 +114,7 @@ std::vector<std::string> regex_tokenizer(const std::string &input, std::regex re
 }
 
 template <class map_type>
-spo_triple parse_insert(const std::string &input, const map_type &so_mapping, const map_type &p_mapping)
+spo_triple parse_insert(const std::string &input, map_type &so_mapping, map_type &p_mapping)
 {
     vector<string> res;
     size_t start = input.find_first_of("{"),

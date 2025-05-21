@@ -60,7 +60,6 @@ namespace amo {
             // Read bits [i..i+l-1] onto D[j..], assumes it is right
             void read(uint64_t i, uint64_t l, uint64_t* D, uint64_t j);
 
-            DynamicBV* StaticBV::splitFrom (uint64_t *data, uint64_t n, uint64_t ones, uint64_t i);
             DynamicBV* split (uint64_t i);
     };
 }
