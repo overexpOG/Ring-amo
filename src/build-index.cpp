@@ -72,6 +72,7 @@ void build_mapping(const std::string &dataset, std::vector<spo_triple> &D)
     std::sregex_iterator reg_it;
     uint64_t i = 0;
     auto mapping_start = timer::now();
+    size_t count = 0;
     while (ifs.good())
     {
         getline(ifs, line);
@@ -85,6 +86,10 @@ void build_mapping(const std::string &dataset, std::vector<spo_triple> &D)
             so_mapping.get_or_insert(user_input[0]),
             p_mapping.get_or_insert(user_input[1]),
             so_mapping.get_or_insert(user_input[2])));
+        
+        if (++count%1000000 == 0) {
+            cout << "tripleta " << count << ": " << user_input[0] << " " << user_input[1] << " " << user_input[2] << endl;
+        }
     }
     auto mapping_stop = timer::now();
     cout << "  Mapping built" << endl;
@@ -164,10 +169,18 @@ int main(int argc, char **argv)
         std::string index_name = dataset + ".ring-dyn-amo";
         build_index<ring::ring_dyn_amo>(dataset, index_name);
     }
+    else if (type == "ring-map") {
+        std::string index_name = dataset + ".ring";
+        build_index_mapped<ring::ring<>, ring::basic_map>(dataset, index_name);
+    }
     else if (type == "ring-dyn-map")
     {
         std::string index_name = dataset + ".ring-dyn";
         build_index_mapped<ring::medium_ring_dyn, ring::basic_map>(dataset, index_name);
+    }
+    else if (type == "ring-dyn-amo-map") {
+        std::string index_name = dataset + ".ring-dyn";
+        build_index_mapped<ring::ring_dyn_amo, ring::basic_map>(dataset, index_name);
     }
     else
     {
