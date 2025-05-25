@@ -216,11 +216,10 @@ namespace amo {
 
     // splits a full leaf into two
     // returns a dynamicBV
-    DynamicBV* LeafBV::splitLeaf () { //eliminar despues LeafBV
+    DynamicBV* LeafBV::splitLeaf() { //eliminar despues LeafBV
         HybridBV *HB1,*HB2;
         DynamicBV *DB;
-        LeafBV LB;
-        uint bsize; 
+        uint bsize;
 
         // byte size of new left leaf
         bsize = (size/2+7)/8;

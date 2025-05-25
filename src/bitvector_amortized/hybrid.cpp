@@ -29,7 +29,7 @@ namespace amo {
     // constructor por movimiento
     HybridBV::HybridBV(HybridBV&& other) noexcept {
         bv = std::move(other.bv);
-        other.bv = static_cast<DynamicBV*>(nullptr); // dejar en estado válido
+        other.bv = static_cast<LeafBV*>(nullptr); // dejar en estado válido
     }
 
     HybridBV::~HybridBV() {
@@ -64,7 +64,7 @@ namespace amo {
         if (this != &other) {
             deleteBV();
             bv = std::move(other.bv);
-            other.bv = static_cast<DynamicBV*>(nullptr); // dejar en estado válido
+            other.bv = static_cast<LeafBV*>(nullptr); // dejar en estado válido
         }
         return *this;
     }
@@ -350,9 +350,10 @@ namespace amo {
         }
         if (auto leaf = std::get_if<LeafBV*>(&bv)) {
             // split
-            if ((*leaf)->length() == leafMaxSize() * w) { 
+            if ((*leaf)->length() == leafMaxSize() * w) {
+                LeafBV* old_leaf = *leaf;
                 bv = (*leaf)->splitLeaf();
-                delete (*leaf);
+                delete old_leaf;
                 *recalc = 1; // leaf added
             } else { 
                 (*leaf)->insert_(i,v);
@@ -750,7 +751,7 @@ namespace amo {
     }
 
     void HybridBV::push_back(uint i){
-        insert(length(), 1);
+        insert(length(), i);
     }
 
     int HybridBV::remove(uint64_t i) {
