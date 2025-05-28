@@ -38,10 +38,11 @@ namespace amo {
             void balance(uint64_t i, int64_t* delta);
             uint64_t serialize(std::ostream& out);
             void load(std::istream& in);
-            uint64_t space();
-            uint64_t leaves();
-            uint64_t length();
-            uint64_t getOnes();
+            uint64_t space() const;
+            uint64_t leaves() const;
+            uint64_t length() const;
+            uint64_t getOnes() const;
+            const char* getType() const;
             int write_(uint64_t i, uint v);
             void irecompute(uint64_t i);
             void rrecompute(uint64_t i, uint64_t l);

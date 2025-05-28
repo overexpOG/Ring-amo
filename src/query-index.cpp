@@ -317,12 +317,14 @@ void mapped_query(const std::string &file, const std::string &so_mapping_file, c
             vector<string> tokens_query = parse_select(query_string);
 
             start = high_resolution_clock::now();
-
+            cout << "a" << endl;
             for (string &token : tokens_query)
             {
+                cout << "b" << endl;
                 auto triple_pattern = get_user_triple<map_type>(token, hash_table_vars, so_mapping, p_mapping);
                 query.push_back(triple_pattern);
             }
+            cout << "c" << endl;
 
             stop = high_resolution_clock::now();
             time_span = duration_cast<microseconds>(stop - start);
@@ -334,9 +336,10 @@ void mapped_query(const std::string &file, const std::string &so_mapping_file, c
 
             typedef std::vector<typename ring::ltj_algorithm<>::tuple_type> results_type;
             results_type res;
-
+            cout << "d" << endl;
             ltj.join(res, 1000, 600);
 
+            cout << "e" << endl;
             stop = high_resolution_clock::now();
             time_span = duration_cast<microseconds>(stop - start);
             total_time = time_span.count();
@@ -345,10 +348,13 @@ void mapped_query(const std::string &file, const std::string &so_mapping_file, c
 
             if (res.size() > 0)
             {
+                cout << "f" << endl;
                 for (auto r : res)
                 {
+                    cout << "g" << endl;
                     for (auto x : r)
                     {
+                        cout << "h" << endl;
                         so_mapping.extract(get<1>(x));
                     }
                 }
@@ -433,6 +439,10 @@ int main(int argc, char *argv[])
         else if (type == "ring-dyn")
         {
             mapped_query<ring::medium_ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
+        }
+        else if (type == "ring-dyn-amo")
+        {
+            mapped_query<ring::ring_dyn_amo, ring::basic_map>(index, so_mapping, p_mapping, queries);
         }
         else
         {

@@ -179,7 +179,7 @@ int main(int argc, char **argv)
         build_index_mapped<ring::medium_ring_dyn, ring::basic_map>(dataset, index_name);
     }
     else if (type == "ring-dyn-amo-map") {
-        std::string index_name = dataset + ".ring-dyn";
+        std::string index_name = dataset + ".ring-dyn-amo";
         build_index_mapped<ring::ring_dyn_amo, ring::basic_map>(dataset, index_name);
     }
     else

@@ -40,6 +40,8 @@ namespace amo {
             uint64_t length() const;
             // Returns the number of ones
             uint64_t getOnes() const;
+            // Return the type
+            const char* getType() const;
 
             // Returns the value of the bit at position i
             uint access_(uint i) const;

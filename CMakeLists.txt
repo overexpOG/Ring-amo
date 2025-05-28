@@ -79,6 +79,9 @@ target_link_libraries(delete-node sdsl divsufsort divsufsort64 bitvector_amortiz
 add_executable(insert-edge src/insert-edge.cpp)
 target_link_libraries(insert-edge sdsl divsufsort divsufsort64 bitvector_amortized_lib)
 
+add_executable(test-amortized-bitvector src/test-amortized-bitvector)
+target_link_libraries(test-amortized-bitvector bitvector_amortized_lib)
+
 add_executable(update-query src/update-query.cpp)
 target_link_libraries(update-query sdsl divsufsort divsufsort64)
 

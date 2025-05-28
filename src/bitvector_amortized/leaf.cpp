@@ -95,6 +95,10 @@ namespace amo {
         return ones;
     }
 
+    const char* LeafBV::getType() const { 
+        return "LeafBV";
+    }
+
     // Leer bit i
     uint LeafBV::access_(uint i) const {
         return (data[i/w] >> (i%w)) & 1;

@@ -161,6 +161,10 @@ namespace amo {
         return ones;
     }
 
+    const char* StaticBV::getType() const { 
+        return "StaticBV";
+    }
+
     // Devuelve el valor del bit en la posición i
     uint StaticBV::access_(uint64_t i) const {
         return (data[i / w] >> (i % w)) & 1;
@@ -296,7 +300,7 @@ namespace amo {
         // Define función que calcula ceros acumulados hasta el i-esimo superbloque (S)
         auto SZeros = [&](int64_t idx) -> uint64_t {
             // zeros = posiciones - unos acumulados
-            return ((idx + 1) * (1ULL << w16)) - S[idx];
+            return (idx * (1ULL << w16)) - S[idx];
         };
 
         // Cantidad total de ceros
@@ -320,7 +324,7 @@ namespace amo {
                     d = m;
                 }
             }
-        } else { 
+        } else {
             d = 1;
             while ((i-d >= 0) && (SZeros(i-d) >= j)) { 
                 i -= d; d <<= 1; 
@@ -343,7 +347,7 @@ namespace amo {
         // Define función que calcula ceros acumulados hasta el i-esimo bloque (B)
         auto BZeros = [&](int64_t idx) -> uint64_t {
             // zeros = posiciones - unos acumulados
-            return (idx + 1) * (w * K) - B[idx];
+            return idx * (w * K) - B[idx];
         };
 
         j -= SZeros(i);

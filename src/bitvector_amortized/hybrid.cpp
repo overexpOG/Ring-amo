@@ -98,7 +98,7 @@ namespace amo {
         *delta = - leaves();
         D = collect(len);
         // creates a static
-        if (len > leafNewSize()*w) { 
+        if (len > leafNewSize()*w) {
             bv = new StaticBV(D,len);
         } else { 
             bv = new LeafBV(D,len);
@@ -108,7 +108,7 @@ namespace amo {
 
     // creates a static version of B, rewriting it but not its address
     // version of hybridRead that does not count accesses, for internal use
-    void HybridBV::read (uint64_t i, uint64_t l, uint64_t *D, uint64_t j) { 
+    void HybridBV::read (uint64_t i, uint64_t l, uint64_t *D, uint64_t j) {
         uint64_t lsize;
         if (auto leaf = std::get_if<LeafBV*>(&bv)) { 
             (*leaf)->read(i,l,D,j); 
@@ -249,7 +249,7 @@ namespace amo {
     }
 
     // gives space of hybridBV in w-bit words
-    uint64_t HybridBV::space () { 
+    uint64_t HybridBV::space () const { 
         return std::visit([](auto& obj) -> uint64_t {
             uint64_t s = (sizeof(HybridBV) * 8 + w - 1) / w;
             return s + obj->space();
@@ -257,7 +257,7 @@ namespace amo {
     }
 
     // gives number of leaves
-    uint64_t HybridBV::leaves () { 
+    uint64_t HybridBV::leaves () const {
         if (auto leaf = std::get_if<LeafBV*>(&bv)) {
             return 1;
         } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
@@ -269,16 +269,23 @@ namespace amo {
     }
 
     // gives bit length
-    uint64_t HybridBV::length() { 
+    uint64_t HybridBV::length() const { 
         return std::visit([](auto& obj) -> uint64_t {
             return obj->length();
         }, bv);
     }
 
     // gives number of ones
-    uint64_t HybridBV::getOnes() {
+    uint64_t HybridBV::getOnes() const {
         return std::visit([](auto& obj) -> uint64_t {
             return obj->getOnes();
+        }, bv);
+    }
+
+    // gives the type of bv
+    const char* HybridBV::getType() const { 
+        return std::visit([](auto& obj) -> const char* {
+            return obj->getType();
         }, bv);
     }
 
@@ -289,8 +296,9 @@ namespace amo {
         int dif;
         if (auto stat = std::get_if<StaticBV*>(&bv)) { 
             // does not change #leaves!
-            bv = (*stat)->split(i);
-            delete (*stat);
+            StaticBV* ptr = *stat;
+            bv = ptr->split(i);
+            delete ptr;
         }
         if (auto leaf = std::get_if<LeafBV*>(&bv)) {
             return (*leaf)->write_(i,v);
@@ -436,8 +444,9 @@ namespace amo {
         int64_t delta;
         if (auto stat = std::get_if<StaticBV*>(&bv)) { 
             // does not change #leaves!
-            bv = (*stat)->split(i);
-            delete (*stat);
+            StaticBV* ptr = *stat;
+            bv = ptr->split(i);
+            delete ptr;
         }
         if (auto leaf = std::get_if<LeafBV*>(&bv)) {
             return (*leaf)->remove_(i);
@@ -717,9 +726,9 @@ namespace amo {
     }
 
     uint64_t HybridBV::rank(uint64_t i, bool b) {
-        uint64_t r1 = hybridRank_(i);
+        uint64_t r1 = hybridRank_(i + 1);
 
-        return b ? r1 : i - r1;
+        return b ? r1 : i + 1 - r1;
     }
 
     uint64_t HybridBV::select1(uint64_t i) {

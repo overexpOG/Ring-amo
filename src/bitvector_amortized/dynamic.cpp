@@ -164,4 +164,8 @@ namespace amo {
     uint64_t DynamicBV::getOnes() const {
         return ones;
     }
+
+    const char* DynamicBV::getType() const { 
+        return "DynamicBV";
+    }
 }
