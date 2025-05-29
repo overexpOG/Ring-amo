@@ -25,13 +25,14 @@ int main() {
     std::cout << "Quinto elemento (0): " << BV->at(4) << std::endl;
 
     std::cout << "rank (3): " << BV->rank(4) << std::endl;
-    std::cout << "rank_0 (2): " << BV->rank(4, 0) << std::endl;
-    std::cout << "rank_1 (3): " << BV->rank(4, 1) << std::endl;
+    std::cout << "rank_0 (1): " << BV->rank(4, 0) << std::endl;
+    std::cout << "rank_1 (2): " << BV->rank(3, 1) << std::endl;
+    std::cout << "rank (0): " << BV->rank(0) << std::endl;
 
-    std::cout << "select (4): " << BV->select(2, 0) << std::endl;
-    std::cout << "select_0 (4): " << BV->select0(2) << std::endl;
-    std::cout << "select (3): " << BV->select(3, 1) << std::endl;
-    std::cout << "select_1 (3): " << BV->select1(3) << std::endl;
+    std::cout << "select (5): " << BV->select(2, 0) << std::endl;
+    std::cout << "select_0 (5): " << BV->select0(2) << std::endl;
+    std::cout << "select (4): " << BV->select(3, 1) << std::endl;
+    std::cout << "select_1 (4): " << BV->select1(3) << std::endl;
 
     std::cout << "Se remueven los ultimos 2" << std::endl;
     BV->remove(4);
@@ -82,13 +83,14 @@ int main() {
     std::cout << "Quinto elemento (0): " << BV->at(32*64 + 4) << std::endl;
 
     std::cout << "rank (3): " << BV->rank(32*64 + 4) << std::endl;
-    std::cout << "rank_0 (2050): " << BV->rank(32*64 + 4, 0) << std::endl;
-    std::cout << "rank_1 (3): " << BV->rank(32*64 + 4, 1) << std::endl;
+    std::cout << "rank_0 (2049): " << BV->rank(32*64 + 4, 0) << std::endl;
+    std::cout << "rank_1 (2): " << BV->rank(32*64 + 3, 1) << std::endl;
+    std::cout << "rank (0): " << BV->rank(0) << std::endl;
 
-    std::cout << "select (2052): " << BV->select(2050, 0) << std::endl;
-    std::cout << "select_0 (2052): " << BV->select0(2050) << std::endl;
-    std::cout << "select (2051): " << BV->select(3, 1) << std::endl;
-    std::cout << "select_1 (2051): " << BV->select1(3) << std::endl;
+    std::cout << "select (2053): " << BV->select(2050, 0) << std::endl;
+    std::cout << "select_0 (2053): " << BV->select0(2050) << std::endl;
+    std::cout << "select (2052): " << BV->select(3, 1) << std::endl;
+    std::cout << "select_1 (2052): " << BV->select1(3) << std::endl;
 
     std::cout << "Se remueven el primero y ultimo" << std::endl;
     BV->remove(0);
@@ -149,7 +151,7 @@ int main() {
     std::cout << "Cuarto elemento (0): " << BV->at(3) << std::endl;
     std::cout << "Quinto elemento (1): " << BV->at(4) << std::endl;
 
-    std::cout << "rank (3): " << BV->rank(4) << std::endl;
+    std::cout << "rank (2): " << BV->rank(4) << std::endl;
     for (int i = 0; i < 2 * 32 * 64; i++) {
         BV->at(i);
     }
@@ -157,23 +159,27 @@ int main() {
     for (int i = 0; i < 2 * 32 * 64; i++) {
         BV->at(i);
     }
-    std::cout << "rank_1 (3): " << BV->rank(4, 1) << std::endl;
+    std::cout << "rank_1 (3): " << BV->rank(5, 1) << std::endl;
     for (int i = 0; i < 2 * 32 * 64; i++) {
         BV->at(i);
     }
-    std::cout << "select (3): " << BV->select(2, 0) << std::endl;
+    std::cout << "rank (0): " << BV->rank(0) << std::endl;
     for (int i = 0; i < 2 * 32 * 64; i++) {
         BV->at(i);
     }
-    std::cout << "select_0 (3): " << BV->select0(2) << std::endl;
+    std::cout << "select (4): " << BV->select(2, 0) << std::endl;
     for (int i = 0; i < 2 * 32 * 64; i++) {
         BV->at(i);
     }
-    std::cout << "select (4): " << BV->select(3, 1) << std::endl;
+    std::cout << "select_0 (4): " << BV->select0(2) << std::endl;
     for (int i = 0; i < 2 * 32 * 64; i++) {
         BV->at(i);
     }
-    std::cout << "select_1 (4): " << BV->select1(3) << std::endl;
+    std::cout << "select (5): " << BV->select(3, 1) << std::endl;
+    for (int i = 0; i < 2 * 32 * 64; i++) {
+        BV->at(i);
+    }
+    std::cout << "select_1 (5): " << BV->select1(3) << std::endl;
 
     std::cout << "Se remueven el primero elemento" << std::endl;
     BV->remove(0);

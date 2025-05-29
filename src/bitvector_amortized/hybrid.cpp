@@ -625,15 +625,15 @@ namespace amo {
     }
 
     // computes rank_1(B,i), zero-based, assumes i is right
-    uint64_t HybridBV::rank_(uint64_t i, int64_t *delta) { 
+    uint64_t HybridBV::rank_(uint64_t i, int64_t *delta) {
         uint64_t lsize;
-        if (auto dyn = std::get_if<DynamicBV*>(&bv)) { 
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
             (*dyn)->accesses++;
             if (mustFlatten()) {
                 flatten(delta); 
-            } else { 
+            } else {
                 lsize = (*dyn)->left->length();
-                if (i < lsize) { 
+                if (i < lsize) {
                     return (*dyn)->left->rank_(i,delta);
                 } else {
                 return (*dyn)->left->getOnes() + (*dyn)->right->rank_(i-lsize,delta);
@@ -726,17 +726,17 @@ namespace amo {
     }
 
     uint64_t HybridBV::rank(uint64_t i, bool b) {
-        uint64_t r1 = hybridRank_(i + 1);
+        uint64_t r1 = hybridRank_(i);
 
-        return b ? r1 : i + 1 - r1;
+        return b ? r1 : i - r1;
     }
 
     uint64_t HybridBV::select1(uint64_t i) {
-        return hybridSelect1_(i);
+        return hybridSelect1_(i) + 1;
     }
 
     uint64_t HybridBV::select0(uint64_t i) {
-        return hybridSelect0_(i);
+        return hybridSelect0_(i) + 1;
     }
 
     uint64_t HybridBV::select(uint64_t i, bool b) {

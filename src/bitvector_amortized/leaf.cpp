@@ -162,7 +162,7 @@ namespace amo {
     uint LeafBV::rank_(uint i) const {
         int p,ib;
         uint ones = 0;
-        ib = ++i/w;
+        ib = i/w;
         for (p=0;p<ib;p++) ones += popcount(data[p]);
         if (i%w) ones += popcount(data[p] & ((((uint64_t)1)<<(i%w))-1));
         return ones;

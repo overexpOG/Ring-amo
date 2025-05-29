@@ -114,7 +114,7 @@ namespace amo {
                 i++;
             }
         }
-        ones = rank_(n-1);
+        ones = rank_(n);
     }
 
     // writes B's data to file, which must be opened for writing 
@@ -185,7 +185,7 @@ namespace amo {
         for (b=sb;b<i/w;b++) {
             rank += popcount(data[b]);
         }
-        return rank + popcount(data[b] & (((uint64_t)~0) >> (w-1-(i%w))));
+        return rank + ((i % w == 0) ? 0 : popcount(data[b] & (((uint64_t)~0) >> (w - 1 - ((i - 1) % w)))));
     }
 
     // computes select_1(j), zero-based, assumes j is right

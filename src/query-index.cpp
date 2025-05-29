@@ -240,28 +240,34 @@ void query(const std::string &file, const std::string &queries)
 
     if (result)
     {
+        cout << "a" << endl;
         for (string &query_string : dummy_queries)
         {
+            cout << "b" << endl;
             std::unordered_map<std::string, uint8_t> hash_table_vars;
             std::vector<ring::triple_pattern> query;
             vector<string> tokens_query = tokenizer(query_string, '.');
+            cout << "c" << endl;
             for (string &token : tokens_query)
             {
+                cout << "d" << endl;
                 auto triple_pattern = get_triple(token, hash_table_vars);
                 query.push_back(triple_pattern);
+                cout << "e" << endl;
             }
 
             start = high_resolution_clock::now();
 
             ring::ltj_algorithm<ring_type> ltj(&query, &graph);
-
             typedef std::vector<typename ring::ltj_algorithm<>::tuple_type> results_type;
             results_type res;
-
+            
+            cout << "f" << endl;
             ltj.join(res, 1000, 600);
-
+            cout << "g" << endl;
             stop = high_resolution_clock::now();
             time_span = duration_cast<microseconds>(stop - start);
+            cout << "h" << endl;
             total_time = time_span.count();
 
             cout << nQ << ";" << res.size() << ";" << (unsigned long long)(total_time * 1000000000ULL) << endl;
@@ -317,14 +323,11 @@ void mapped_query(const std::string &file, const std::string &so_mapping_file, c
             vector<string> tokens_query = parse_select(query_string);
 
             start = high_resolution_clock::now();
-            cout << "a" << endl;
             for (string &token : tokens_query)
             {
-                cout << "b" << endl;
                 auto triple_pattern = get_user_triple<map_type>(token, hash_table_vars, so_mapping, p_mapping);
                 query.push_back(triple_pattern);
             }
-            cout << "c" << endl;
 
             stop = high_resolution_clock::now();
             time_span = duration_cast<microseconds>(stop - start);
@@ -336,10 +339,8 @@ void mapped_query(const std::string &file, const std::string &so_mapping_file, c
 
             typedef std::vector<typename ring::ltj_algorithm<>::tuple_type> results_type;
             results_type res;
-            cout << "d" << endl;
             ltj.join(res, 1000, 600);
 
-            cout << "e" << endl;
             stop = high_resolution_clock::now();
             time_span = duration_cast<microseconds>(stop - start);
             total_time = time_span.count();
@@ -348,13 +349,10 @@ void mapped_query(const std::string &file, const std::string &so_mapping_file, c
 
             if (res.size() > 0)
             {
-                cout << "f" << endl;
                 for (auto r : res)
                 {
-                    cout << "g" << endl;
                     for (auto x : r)
                     {
-                        cout << "h" << endl;
                         so_mapping.extract(get<1>(x));
                     }
                 }
