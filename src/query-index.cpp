@@ -240,20 +240,15 @@ void query(const std::string &file, const std::string &queries)
 
     if (result)
     {
-        cout << "a" << endl;
         for (string &query_string : dummy_queries)
         {
-            cout << "b" << endl;
             std::unordered_map<std::string, uint8_t> hash_table_vars;
             std::vector<ring::triple_pattern> query;
             vector<string> tokens_query = tokenizer(query_string, '.');
-            cout << "c" << endl;
             for (string &token : tokens_query)
             {
-                cout << "d" << endl;
                 auto triple_pattern = get_triple(token, hash_table_vars);
                 query.push_back(triple_pattern);
-                cout << "e" << endl;
             }
 
             start = high_resolution_clock::now();
@@ -262,12 +257,9 @@ void query(const std::string &file, const std::string &queries)
             typedef std::vector<typename ring::ltj_algorithm<>::tuple_type> results_type;
             results_type res;
             
-            cout << "f" << endl;
             ltj.join(res, 1000, 600);
-            cout << "g" << endl;
             stop = high_resolution_clock::now();
             time_span = duration_cast<microseconds>(stop - start);
-            cout << "h" << endl;
             total_time = time_span.count();
 
             cout << nQ << ";" << res.size() << ";" << (unsigned long long)(total_time * 1000000000ULL) << endl;

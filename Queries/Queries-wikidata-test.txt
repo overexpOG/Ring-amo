@@ -1,112 +1,50 @@
-?x 1819 ?y . ?x 36 ?z
-?y 1179 ?x . ?z 556 ?x . ?u 1164 ?x
-?y 443 ?x . ?z 283 ?x . ?x 282 ?v
-?x 489 ?y . ?x 558 ?z
-?x1 1046 ?x2 . ?x2 432 ?x3 . ?x3 5 ?x4
-?x1 1835 ?x2 . ?x2 432 ?x3 . ?x3 524 ?x4 . ?x1 330 ?x4
-?y 1163 ?x . ?z 787 ?x
-?x 1 ?y . ?x 933 ?z . ?x 524 ?u
-?y 758 ?x . ?z 902 ?x
-?x1 1046 ?x2 . ?x2 432 ?x3 . ?x3 524 ?x4
-?y 704 ?x . ?z 279 ?x . ?u 154 ?x
-?y 1683 ?x . ?z 953 ?x
-?y 1050 ?x . ?z 1771 ?x
-?y 731 ?x . ?z 1850 ?x
-?x 814 ?y . ?x 44 ?z
-?y 352 ?x . ?z 1766 ?x
-?y 261 ?x . ?z 2080 ?x . ?u 546 ?x
-?y 1508 ?x . ?z 1595 ?x
-?x 28 ?y . ?x 75 ?z . ?x 737 ?u
-?x 14 ?y . ?x 209 ?z . ?x 1 ?u
-?x 767 ?y . ?x 95 ?z . ?x 750 ?u . ?x 713 ?v
-?y 2001 ?x . ?z 2045 ?x
-?x 1568 ?y . ?x 31 ?z . ?x 371 ?u
-?x1 1491 ?x2 . ?x1 1083 ?x3 . ?x4 2088 ?x2 . ?x4 1100 ?x3
-?y 1353 ?x . ?z 229 ?x
-?y 1802 ?x . ?z 809 ?x . ?u 1732 ?x
-?y 1766 ?x . ?z 691 ?x . ?u 1340 ?x
-?y 1130 ?x . ?z 177 ?x . ?u 768 ?x
-?y 689 ?x . ?z 759 ?x . ?u 1712 ?x
-?y 1108 ?x . ?z 924 ?x . ?u 626 ?x
-?x 1850 ?y . ?x 1828 ?z . ?x 20 ?u . ?x 728 ?v
-?x 142 ?y . ?x 1005 ?z . ?x 38 ?u
-?x1 1441 ?x2 . ?x2 2091 ?x3 . ?x3 1013 ?x1
-?x 1134 ?y . ?x 425 ?z
-?y 412 ?x . ?z 406 ?x . ?x 713 ?v
-?y 1477 ?x . ?z 1632 ?x . ?u 714 ?x . ?v 540 ?x
-?x 465 ?y . ?x 217 ?z . ?x 2025 ?u
-?y 169 ?x . ?z 673 ?x . ?u 1630 ?x . ?v 1207 ?x
-?x1 1291 ?x2 . ?x2 106 ?x3
-?x 1635 ?y . ?x 696 ?z
-?y 724 ?x . ?z 1938 ?x . ?x 1197 ?u . ?x 713 ?v
-?x1 132 ?x2 . ?x2 217 ?x3
-?x1 760 ?x2 . ?x2 931 ?x3 . ?x3 2036 ?x4
-?x1 1800 ?x2 . ?x2 1088 ?x3
-?x1 838 ?x2 . ?x2 357 ?x3 . ?x3 719 ?x4
-?x1 1441 ?x2 . ?x2 2091 ?x3 . ?x3 1013 ?x1
-?y 211 ?x . ?z 1977 ?x
-?y 285 ?x . ?z 565 ?x . ?u 2076 ?x
-?x 1353 ?y . ?x 1355 ?z . ?x 38 ?u
-?x1 1219 ?x2 . ?x2 1635 ?x3
-?y 289 ?x . ?z 565 ?x . ?u 2076 ?x
-?x 2020 ?y . ?x 425 ?z
-?x1 948 ?x2 . ?x2 2098 ?x3 . ?x3 98 ?x4 . ?x4 202 ?x5
-?y 432 ?x . ?z 576 ?x . ?x 713 ?v
-?x1 356 ?x2 . ?x2 233 ?x3 . ?x3 2059 ?x4
-?x 300 ?y . ?x 38 ?z . ?x 713 ?u . ?x 317 ?v
-?x1 2092 ?x2 . ?x1 497 ?x3 . ?x4 55 ?x2 . ?x4 444 ?x3
-?x 584 ?y . ?x 546 ?z . ?x 676 ?u . ?x 1491 ?v
-?y 1914 ?x . ?z 1088 ?x . ?u 995 ?x . ?v 1676 ?x
-?x1 1458 ?x2 . ?x2 2059 ?x3 . ?x3 1013 ?x4 . ?x4 38 ?x5
-?y 2085 ?x . ?z 1882 ?x . ?u 713 ?x
-?x1 1976 ?x2 . ?x2 1640 ?x3
-?y 300 ?x . ?z 1978 ?x . ?x 343 ?v
-?x1 1700 ?x2 . ?x2 750 ?x3 . ?x3 1236 ?x4 . ?x4 59 ?x5
-?x 1571 ?y . ?x 2078 ?z . ?x 1370 ?u
-?x1 966 ?x2 . ?x1 233 ?x3 . ?x2 420 ?x4 . ?x3 432 ?x4
-?x 1427 ?y . ?x 283 ?z
-?y 699 ?x . ?z 1037 ?x . ?u 998 ?x
-?y 1673 ?x . ?z 560 ?x . ?u 1735 ?x . ?v 1423 ?x
-?x1 537 ?x2 . ?x2 518 ?x3
-?x 1291 ?y . ?x 95 ?z
-?y 538 ?x . ?z 191 ?x . ?x 1634 ?u . ?x 91 ?v
-?x1 420 ?x2 . ?x2 541 ?x3 . ?x3 301 ?x4 . ?x4 317 ?x5
-?x 1962 ?y . ?x 639 ?z . ?x 642 ?u . ?x 341 ?v
-?y 850 ?x . ?z 497 ?x
-?x 29 ?y . ?x 521 ?z . ?x 1144 ?u . ?x 2075 ?v
-?x1 2018 ?x2 . ?x2 1559 ?x3
-?x1 973 ?x2 . ?x1 1942 ?x3 . ?x4 443 ?x2 . ?x4 226 ?x3
-?y 771 ?x . ?z 1090 ?x . ?u 2053 ?x
-?x1 753 ?x2 . ?x2 952 ?x3 . ?x3 2067 ?x4
-?y 1449 ?x . ?z 1397 ?x . ?u 1489 ?x
-?y 1865 ?x . ?z 556 ?x
-?x1 323 ?x2 . ?x2 886 ?x3 . ?x3 1980 ?x4
-?x1 1321 ?x2 . ?x2 322 ?x3 . ?x3 2066 ?x4 . ?x4 2077 ?x5
-?y 99 ?x . ?z 316 ?x . ?u 292 ?x
-?y 984 ?x . ?z 96 ?x . ?u 425 ?x
-?y 1754 ?x . ?z 1320 ?x
-?x 964 ?y . ?x 1942 ?z . ?x 1950 ?u . ?x 1909 ?v
-?y 629 ?x . ?z 1144 ?x . ?u 1247 ?x
-?x 487 ?y . ?x 997 ?z . ?x 2059 ?u . ?x 1773 ?v
-?y 701 ?x . ?z 406 ?x . ?x 443 ?v
-?y 1216 ?x . ?z 583 ?x
-?x1 1809 ?x2 . ?x1 1090 ?x3 . ?x4 1184 ?x2 . ?x4 1088 ?x3
-?x 1249 ?y . ?x 36 ?z
-?x 1111 ?y . ?x 746 ?z . ?x 446 ?u . ?x 1050 ?v
-?y 753 ?x . ?z 373 ?x . ?u 367 ?x
-?y 1393 ?x . ?z 1531 ?x
-?y 1720 ?x . ?z 2042 ?x . ?u 1388 ?x . ?v 633 ?x
-?y 714 ?x . ?z 2067 ?x . ?u 1477 ?x . ?v 1303 ?x
-?y 1619 ?x . ?z 1263 ?x . ?u 1293 ?x
-?x 1243 ?y . ?x 539 ?z . ?x 1186 ?u
-?y 1724 ?x . ?z 633 ?x . ?u 1184 ?x . ?v 1090 ?x
-?x1 826 ?x2 . ?x2 2059 ?x3
-?y 825 ?x . ?z 1408 ?x . ?x 469 ?u . ?x 1329 ?v
-?x 1185 ?y . ?x 416 ?z
-?y 1911 ?x . ?z 555 ?x . ?x 1689 ?v
-?x1 246 ?x2 . ?x2 1615 ?x3 . ?x1 933 ?x3
-?y 834 ?x . ?z 998 ?x . ?u 1350 ?x . ?v 1303 ?x
-?y 891 ?x . ?z 1988 ?x . ?u 89 ?x
-?x 1005 ?y . ?x 241 ?z
-?y 1736 ?x . ?z 377 ?x . ?x 1640 ?v
-?y 314 ?x . ?z 1796 ?x . ?x 421 ?v
+?y <http://www.wikidata.org/prop/direct/P197> ?x . ?z <http://www.wikidata.org/prop/direct/P800> ?x . ?x <http://www.wikidata.org/prop/direct/P1366> ?v
+?y <http://www.wikidata.org/prop/direct/P206> ?x . ?z <http://www.wikidata.org/prop/direct/P138> ?x . ?x <http://www.wikidata.org/prop/direct/P4839> ?v
+?y <http://www.wikidata.org/prop/direct/P4132> ?x . ?z <http://www.wikidata.org/prop/direct/P461> ?x . ?x <http://www.wikidata.org/prop/direct/P4342> ?v
+?y <http://www.wikidata.org/prop/direct/P141> ?x . ?z <http://www.wikidata.org/prop/direct/P301> ?x . ?x <http://www.wikidata.org/prop/direct/P4746> ?v
+?y <http://www.wikidata.org/prop/direct/P1313> ?x . ?z <http://www.wikidata.org/prop/direct/P301> ?x . ?x <http://www.wikidata.org/prop/direct/P541> ?v
+?y <http://www.wikidata.org/prop/direct/P736> ?x . ?z <http://www.wikidata.org/prop/direct/P1040> ?x . ?x <http://www.wikidata.org/prop/direct/P648> ?v
+?y <http://www.wikidata.org/prop/direct/P750> ?x . ?z <http://www.wikidata.org/prop/direct/P98> ?x . ?x <http://www.wikidata.org/prop/direct/P3984> ?v
+?y <http://www.wikidata.org/prop/direct/P2302> ?x . ?z <http://www.wikidata.org/prop/direct/P1366> ?x . ?x <http://www.wikidata.org/prop/direct/P461> ?v
+?y <http://www.wikidata.org/prop/direct/P61> ?x . ?z <http://www.wikidata.org/prop/direct/P547> ?x . ?x <http://www.wikidata.org/prop/direct/P2435> ?v
+?y <http://www.wikidata.org/prop/direct/P1855> ?x . ?z <http://www.wikidata.org/prop/direct/P138> ?x . ?x <http://www.wikidata.org/prop/direct/P1444> ?v
+?y <http://www.wikidata.org/prop/direct/P1389> ?x . ?z <http://www.wikidata.org/prop/direct/P747> ?x . ?x <http://www.wikidata.org/prop/direct/P1462> ?v
+?y <http://www.wikidata.org/prop/direct/P780> ?x . ?z <http://www.wikidata.org/prop/direct/P682> ?x . ?x <http://www.wikidata.org/prop/direct/P1056> ?v
+?y <http://www.wikidata.org/prop/direct/P2293> ?x . ?z <http://www.wikidata.org/prop/direct/P509> ?x . ?x <http://www.wikidata.org/prop/direct/P1256> ?v
+?y <http://www.wikidata.org/prop/direct/P647> ?x . ?z <http://www.wikidata.org/prop/direct/P1923> ?x . ?x <http://www.wikidata.org/prop/direct/P505> ?v
+?y <http://www.wikidata.org/prop/direct/P3912> ?x . ?z <http://www.wikidata.org/prop/direct/P159> ?x . ?x <http://www.wikidata.org/prop/direct/P4854> ?v
+?y <http://www.wikidata.org/prop/direct/P1687> ?x . ?z <http://www.wikidata.org/prop/direct/P1963> ?x . ?x <http://www.wikidata.org/prop/direct/P227> ?v
+?y <http://www.wikidata.org/prop/direct/P127> ?x . ?z <http://www.wikidata.org/prop/direct/P451> ?x . ?x <http://www.wikidata.org/prop/direct/P428> ?v
+?y <http://www.wikidata.org/prop/direct/P509> ?x . ?z <http://www.wikidata.org/prop/direct/P1376> ?x . ?x <http://www.wikidata.org/prop/direct/P36> ?v
+?y <http://www.wikidata.org/prop/direct/P608> ?x . ?z <http://www.wikidata.org/prop/direct/P156> ?x . ?x <http://www.wikidata.org/prop/direct-normalized/P269> ?v
+?y <http://www.wikidata.org/prop/direct/P200> ?x . ?z <http://www.wikidata.org/prop/direct/P248> ?x . ?x <http://www.wikidata.org/prop/direct/P1424> ?v
+?y <http://www.wikidata.org/prop/direct/P398> ?x . ?z <http://www.wikidata.org/prop/direct/P183> ?x . ?x <http://www.wikidata.org/prop/direct/P2572> ?v
+?y <http://www.wikidata.org/prop/direct/P1990> ?x . ?z <http://www.wikidata.org/prop/direct/P101> ?x . ?x <http://www.wikidata.org/prop/direct/P4746> ?v
+?y <http://www.wikidata.org/prop/direct/P3450> ?x . ?z <http://www.wikidata.org/prop/direct/P463> ?x . ?x <http://www.wikidata.org/prop/direct/P1661> ?v
+?y <http://www.wikidata.org/prop/direct/P344> ?x . ?z <http://www.wikidata.org/prop/direct/P1056> ?x . ?x <http://www.wikidata.org/prop/direct/P1552> ?v
+?y <http://www.wikidata.org/prop/direct/P3602> ?x . ?z <http://www.wikidata.org/prop/direct/P1423> ?x . ?x <http://www.wikidata.org/prop/direct/P1308> ?v
+?y <http://www.wikidata.org/prop/direct/P914> ?x . ?z <http://www.wikidata.org/prop/direct/P155> ?x . ?x <http://www.wikidata.org/prop/direct/P910> ?v
+?y <http://www.wikidata.org/prop/direct/P669> ?x . ?z <http://www.wikidata.org/prop/direct/P915> ?x . ?x <http://www.wikidata.org/prop/direct/P4244> ?v
+?y <http://www.wikidata.org/prop/direct/P1387> ?x . ?z <http://www.wikidata.org/prop/direct/P461> ?x . ?x <http://www.wikidata.org/prop/direct/P3916> ?v
+?y <http://www.wikidata.org/prop/direct/P511> ?x . ?z <http://www.wikidata.org/prop/direct/P101> ?x . ?x <http://www.wikidata.org/prop/direct/P902> ?v
+?y <http://www.wikidata.org/prop/direct/P1950> ?x . ?z <http://www.wikidata.org/prop/direct/P460> ?x . ?x <http://www.wikidata.org/prop/direct/P495> ?v
+?y <http://www.wikidata.org/prop/direct/P2239> ?x . ?z <http://www.wikidata.org/prop/direct/P1629> ?x . ?x <http://www.wikidata.org/prop/direct/P1709> ?v
+?y <http://www.wikidata.org/prop/direct/P206> ?x . ?z <http://www.wikidata.org/prop/direct/P138> ?x . ?x <http://www.wikidata.org/prop/direct/P4672> ?v
+?y <http://www.wikidata.org/prop/direct/P344> ?x . ?z <http://www.wikidata.org/prop/direct/P195> ?x . ?x <http://www.wikidata.org/prop/direct/P535> ?v
+?y <http://www.wikidata.org/prop/direct/P5280> ?x . ?z <http://www.wikidata.org/prop/direct/P156> ?x . ?x <http://www.wikidata.org/prop/direct/P487> ?v
+?y <http://www.wikidata.org/prop/direct/P3781> ?x . ?z <http://www.wikidata.org/prop/direct/P186> ?x . ?x <http://www.wikidata.org/prop/direct-normalized/P508> ?v
+?y <http://www.wikidata.org/prop/direct/P163> ?x . ?z <http://www.wikidata.org/prop/direct/P1629> ?x . ?x <http://www.wikidata.org/prop/direct/P227> ?v
+?y <http://www.wikidata.org/prop/direct/P1709> ?x . ?z <http://www.wikidata.org/prop/direct/P1366> ?x . ?x <http://www.wikidata.org/prop/direct/P1365> ?v
+?y <http://www.wikidata.org/prop/direct/P184> ?x . ?z <http://www.wikidata.org/prop/direct/P25> ?x . ?x <http://www.wikidata.org/prop/direct/P1615> ?v
+?y <http://www.wikidata.org/prop/direct/P264> ?x . ?z <http://www.wikidata.org/prop/direct/P725> ?x . ?x <http://www.wikidata.org/prop/direct/P3136> ?v
+?y <http://www.wikidata.org/prop/direct/P688> ?x . ?z <http://www.wikidata.org/prop/direct/P3781> ?x . ?x <http://www.wikidata.org/prop/direct/P1748> ?v
+?y <http://www.wikidata.org/prop/direct/P655> ?x . ?z <http://www.wikidata.org/prop/direct/P175> ?x . ?x <http://www.wikidata.org/prop/direct/P3040> ?v
+?y <http://www.wikidata.org/prop/direct/P1414> ?x . ?z <http://www.wikidata.org/prop/direct/P553> ?x . ?x <http://www.wikidata.org/prop/direct/P1661> ?v
+?y <http://www.wikidata.org/prop/direct/P1313> ?x . ?z <http://www.wikidata.org/prop/direct/P460> ?x . ?x <http://www.wikidata.org/prop/direct/P935> ?v
+?y <http://www.wikidata.org/prop/direct/P870> ?x . ?z <http://www.wikidata.org/prop/direct/P828> ?x . ?x <http://www.wikidata.org/prop/direct/P1417> ?v
+?y <http://www.wikidata.org/prop/direct/P1830> ?x . ?z <http://www.wikidata.org/prop/direct/P750> ?x . ?x <http://www.wikidata.org/prop/direct/P166> ?v
+?y <http://www.wikidata.org/prop/direct/P36> ?x . ?z <http://www.wikidata.org/prop/direct/P301> ?x . ?x <http://www.wikidata.org/prop/direct/P69> ?v
+?y <http://www.wikidata.org/prop/direct/P3494> ?x . ?z <http://www.wikidata.org/prop/direct/P1346> ?x . ?x <http://www.wikidata.org/prop/direct/P2601> ?v
+?y <http://www.wikidata.org/prop/direct/P1591> ?x . ?z <http://www.wikidata.org/prop/direct/P710> ?x . ?x <http://www.wikidata.org/prop/direct-normalized/P1015> ?v
+?y <http://www.wikidata.org/prop/direct/P1347> ?x . ?z <http://www.wikidata.org/prop/direct/P607> ?x . ?x <http://www.wikidata.org/prop/direct-normalized/P1014> ?v
+?y <http://www.wikidata.org/prop/direct/P530> ?x . ?z <http://www.wikidata.org/prop/direct/P205> ?x . ?x <http://www.wikidata.org/prop/direct/P2427> ?v

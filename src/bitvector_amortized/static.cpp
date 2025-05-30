@@ -311,12 +311,12 @@ namespace amo {
 
         if (SZeros(i) < j) { 
             d = 1;
-            while ((i+d < s) && (SZeros(i+d) < j)) { 
+            while ((i+d < s) && (SZeros(i+d) < j)) {
                 i += d; d <<= 1; 
             }
             // now d is the top of the range
             d = std::min(static_cast<int64_t>(s),i+d); // (uint64_t, int64_t)
-            while (i+1<d) { 
+            while (i+1<d) {
                 m = (i+d)>>1;
                 if (SZeros(m) < j) {
                     i = m;
@@ -326,7 +326,7 @@ namespace amo {
             }
         } else {
             d = 1;
-            while ((i-d >= 0) && (SZeros(i-d) >= j)) { 
+            while ((i-d >= 0) && (SZeros(i-d) >= j)) {
                 i -= d; d <<= 1; 
             }
             // now d is the bottom of the range
@@ -344,26 +344,27 @@ namespace amo {
         // now the same inside the superblock
         // what remains to be found inside the superblock
 
-        // Define función que calcula ceros acumulados hasta el i-esimo bloque (B)
+        // Define función que calcula ceros acumulados hasta el i-esimo bloque desde el inicio del superbloque (B)
         auto BZeros = [&](int64_t idx) -> uint64_t {
             // zeros = posiciones - unos acumulados
-            return idx * (w * K) - B[idx];
+            return (idx & 255) * (w * K) - B[idx];
         };
 
+
         j -= SZeros(i);
-        p = i < s-1 ? SZeros(i+1)-SZeros(i) : zeros-SZeros(i);
-        b = (i << w16) / (w*K);
-        s = std::min(static_cast<uint64_t>(b+(1<<w16)/(w*K)),(n+w*K-1)/(w*K));
+        p = i < s-1 ? SZeros(i+1)-SZeros(i) : zeros-SZeros(i); //cantidad de ceros en superbloque
+        b = (i << w16) / (w*K); // indice bot
+        s = std::min(static_cast<uint64_t>(b+(1<<w16)/(w*K)),(n+w*K-1)/(w*K)); // indice top
         i = b + ((j * (s-b)*(w*K) / (float)p)) / (w*K);
         if (i == s) i--;
         if (BZeros(i) < j) { 
             d = 1;
-            while ((i+d < s) && (BZeros(i+d) < j)) { 
+            while ((i+d < s) && (BZeros(i+d) < j)) {
                 i += d; d <<= 1; 
             }
             // now d is the top of the range
             d = std::min(static_cast<int64_t>(s),i+d); // (uint64_t, int64_t)
-            while (i+1<d) { 
+            while (i+1<d) {
                 m = (i+d)>>1;
                 if (BZeros(m) < j) {
                     i = m;
@@ -373,12 +374,12 @@ namespace amo {
             }
         } else { 
             d = 1;
-            while ((i-d >= b) && (BZeros(i-d) >= j)) { 
+            while ((i-d >= b) && (BZeros(i-d) >= j)) {
                 i -= d; d <<= 1; 
             }
             // now d is the bottom of the range
             d = std::max(b,i-d);
-            while (d+1<i) { 
+            while (d+1<i) {
                 m = (i+d)>>1;
                 if (BZeros(m) < j) {
                     d = m;
@@ -391,7 +392,7 @@ namespace amo {
         // now it's confined to K blocks
         j -= BZeros(i);
         i *= K;
-        while ((i+1)*w < n) { 
+        while ((i+1)*w < n) {
             p = w - popcount(data[i]);
             if (p >= j) break;
             j -= p;
@@ -399,13 +400,13 @@ namespace amo {
         }
         word = data[i];
         i *= w;
-        while (1) { 
+        while (1) {
             j -= 1 - (word & 1);
             if (j == 0) return i;
             word >>= 1;
             i++;
         }
-    };
+    }
 
     //eliminar despues StaticBV
     DynamicBV* StaticBV::split (uint64_t i) {

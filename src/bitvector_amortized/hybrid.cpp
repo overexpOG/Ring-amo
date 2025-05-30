@@ -658,7 +658,7 @@ namespace amo {
     }
 
     // computes select_1(B,j), zero-based, assumes j is right
-    uint64_t HybridBV::select1_(uint64_t j, int64_t *delta) { 
+    uint64_t HybridBV::select1_(uint64_t j, int64_t *delta) {
         uint64_t lones;
         if (auto dyn = std::get_if<DynamicBV*>(&bv)) { 
             (*dyn)->accesses++;
@@ -683,7 +683,7 @@ namespace amo {
     // computes select_0(B,j), zero-based, assumes j is right
     uint64_t HybridBV::select0_(uint64_t j, int64_t *delta) { 
         uint64_t lzeros;
-        if (auto dyn = std::get_if<DynamicBV*>(&bv)) { 
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
             (*dyn)->accesses++;
             if (mustFlatten()) {
                 flatten(delta); 
@@ -696,7 +696,7 @@ namespace amo {
             }
         }
         if (auto leaf = std::get_if<LeafBV*>(&bv)) {
-            return (*leaf)->select0_(j);   
+            return (*leaf)->select0_(j);
         } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
             return (*stat)->select0_(j);
         }
@@ -732,11 +732,11 @@ namespace amo {
     }
 
     uint64_t HybridBV::select1(uint64_t i) {
-        return hybridSelect1_(i) + 1;
+        return hybridSelect1_(i + 1);
     }
 
     uint64_t HybridBV::select0(uint64_t i) {
-        return hybridSelect0_(i) + 1;
+        return hybridSelect0_(i + 1);
     }
 
     uint64_t HybridBV::select(uint64_t i, bool b) {

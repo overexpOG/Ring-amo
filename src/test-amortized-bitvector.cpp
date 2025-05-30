@@ -29,10 +29,10 @@ int main() {
     std::cout << "rank_1 (2): " << BV->rank(3, 1) << std::endl;
     std::cout << "rank (0): " << BV->rank(0) << std::endl;
 
-    std::cout << "select (5): " << BV->select(2, 0) << std::endl;
-    std::cout << "select_0 (5): " << BV->select0(2) << std::endl;
-    std::cout << "select (4): " << BV->select(3, 1) << std::endl;
-    std::cout << "select_1 (4): " << BV->select1(3) << std::endl;
+    std::cout << "select (4): " << BV->select(1, 0) << std::endl;
+    std::cout << "select_0 (4): " << BV->select0(1) << std::endl;
+    std::cout << "select (3): " << BV->select(2, 1) << std::endl;
+    std::cout << "select_1 (3): " << BV->select1(2) << std::endl;
 
     std::cout << "Se remueven los ultimos 2" << std::endl;
     BV->remove(4);
@@ -87,14 +87,14 @@ int main() {
     std::cout << "rank_1 (2): " << BV->rank(32*64 + 3, 1) << std::endl;
     std::cout << "rank (0): " << BV->rank(0) << std::endl;
 
-    std::cout << "select (2053): " << BV->select(2050, 0) << std::endl;
-    std::cout << "select_0 (2053): " << BV->select0(2050) << std::endl;
-    std::cout << "select (2052): " << BV->select(3, 1) << std::endl;
-    std::cout << "select_1 (2052): " << BV->select1(3) << std::endl;
+    std::cout << "select (2052): " << BV->select(2049, 0) << std::endl;
+    std::cout << "select_0 (2052): " << BV->select0(2049) << std::endl;
+    std::cout << "select (2051): " << BV->select(2, 1) << std::endl;
+    std::cout << "select_1 (2051): " << BV->select1(2) << std::endl;
 
     std::cout << "Se remueven el primero y ultimo" << std::endl;
     BV->remove(0);
-    BV->remove(32*64 + 4);
+    BV->remove(32*64 + 3);
 
     std::cout << "Tamaño (2051): " << BV->size() << std::endl;
     std::cout << "Cero elemento (1): " << BV->at(32*64 - 1) << std::endl;
@@ -167,19 +167,19 @@ int main() {
     for (int i = 0; i < 2 * 32 * 64; i++) {
         BV->at(i);
     }
-    std::cout << "select (4): " << BV->select(2, 0) << std::endl;
+    std::cout << "select (3): " << BV->select(1, 0) << std::endl;
     for (int i = 0; i < 2 * 32 * 64; i++) {
         BV->at(i);
     }
-    std::cout << "select_0 (4): " << BV->select0(2) << std::endl;
+    std::cout << "select_0 (3): " << BV->select0(1) << std::endl;
     for (int i = 0; i < 2 * 32 * 64; i++) {
         BV->at(i);
     }
-    std::cout << "select (5): " << BV->select(3, 1) << std::endl;
+    std::cout << "select (4): " << BV->select(2, 1) << std::endl;
     for (int i = 0; i < 2 * 32 * 64; i++) {
         BV->at(i);
     }
-    std::cout << "select_1 (5): " << BV->select1(3) << std::endl;
+    std::cout << "select_1 (4): " << BV->select1(2) << std::endl;
 
     std::cout << "Se remueven el primero elemento" << std::endl;
     BV->remove(0);
