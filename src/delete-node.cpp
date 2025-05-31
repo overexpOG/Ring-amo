@@ -189,7 +189,9 @@ void mapped_delete_query(const std::string &file, const std::string &so_mapping_
 
             start = high_resolution_clock::now();
 
+            cout << "a" << endl;
             uint64_t total_removed = graph.remove_node_with_check(node_id, so_removed_ids, p_removed_ids);
+            cout << "b" << endl;
 
             stop = high_resolution_clock::now();
             time_span = duration_cast<microseconds>(stop - start);
@@ -199,12 +201,16 @@ void mapped_delete_query(const std::string &file, const std::string &so_mapping_
 
             for (uint64_t id : so_removed_ids)
             {
+                cout << "c" << endl;
                 so_mapping.eliminate(id);
+                cout << "d" << endl;
             }
 
             for (uint64_t id : p_removed_ids)
             {
+                cout << "e" << endl;
                 p_mapping.eliminate(id);
+                cout << "f" << endl;
             }
 
             stop = high_resolution_clock::now();
@@ -262,6 +268,10 @@ int main(int argc, char *argv[])
         else if (type == "ring-dyn")
         {
             mapped_delete_query<ring::medium_ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
+        }
+        else if (type == "ring-dyn-amo")
+        {
+            mapped_delete_query<ring::ring_dyn_amo, ring::basic_map>(index, so_mapping, p_mapping, queries);
         }
         else
         {

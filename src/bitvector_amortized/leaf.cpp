@@ -238,4 +238,11 @@ namespace amo {
         DB->right = HB2;
         return DB;
     }
+
+    std::ostream& operator<<(std::ostream& os, const LeafBV& bv) {
+        os << "[LeafBV] size: " << bv.size
+        << ", ones: " << bv.ones
+        << ", data ptr: " << static_cast<const void*>(bv.data);
+        return os;
+    }
 }

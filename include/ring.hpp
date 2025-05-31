@@ -1306,7 +1306,6 @@ namespace ring
     template <class bwt_so_t, class bwt_p_t>
     uint64_t ring<bwt_so_t, bwt_p_t>::remove_node(uint64_t x)
     {
-
         tuple<uint64_t, uint64_t> restricted_range = {m_bwt_o.get_C(x), m_bwt_o.get_C(x + 1) - 1};
         uint64_t low = get<0>(restricted_range), high = get<1>(restricted_range);
         uint64_t ret_value = 0;
@@ -1374,7 +1373,6 @@ namespace ring
     template <class bwt_so_t, class bwt_p_t>
     uint64_t ring<bwt_so_t, bwt_p_t>::remove_node_with_check(uint64_t x, std::vector<uint64_t> &so_removed, std::vector<uint64_t> &p_removed)
     {
-
         tuple<uint64_t, uint64_t> restricted_range = {m_bwt_o.get_C(x), m_bwt_o.get_C(x + 1) - 1};
         uint64_t low = get<0>(restricted_range), high = get<1>(restricted_range);
         uint64_t ret_value = 0;

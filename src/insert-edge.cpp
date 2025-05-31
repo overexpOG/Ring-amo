@@ -280,6 +280,10 @@ int main(int argc, char *argv[])
         {
             mapped_insert_query<ring::medium_ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
         }
+        else if (type == "ring-dyn-amo")
+        {
+            mapped_insert_query<ring::ring_dyn_amo, ring::basic_map>(index, so_mapping, p_mapping, queries);
+        }
         else
         {
             std::cout << "Type of index: " << type << " is not supported." << std::endl;

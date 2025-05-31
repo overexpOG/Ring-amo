@@ -340,6 +340,10 @@ int main(int argc, char *argv[])
     {
         mapped_delete_insert<ring::medium_ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries, triples);
     }
+    else if (type == "ring-dyn-amo")
+    {
+        mapped_delete_insert<ring::ring_dyn_amo, ring::basic_map>(index, so_mapping, p_mapping, queries, triples);
+    }
     else
     {
         std::cout << "Type of index: " << type << " is not supported." << std::endl;

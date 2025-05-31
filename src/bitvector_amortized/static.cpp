@@ -102,7 +102,7 @@ namespace amo {
         S = new uint64_t[(n + (1 << w16) - 1) / (1 << w16)];
         sacc = acc = 0;
         i = 0;
-        while (i<(n+w-1)/w) { 
+        while (i<(n+w-1)/w) {
             uint64_t top = std::min((n+w-1)/w,i+(1<<w16)/w);
             sacc += acc; acc = 0;
             S[(i*w) >> w16] = sacc;
@@ -114,7 +114,7 @@ namespace amo {
                 i++;
             }
         }
-        ones = rank_(n);
+        ones = rank_(n-1);
     }
 
     // writes B's data to file, which must be opened for writing 
@@ -200,12 +200,12 @@ namespace amo {
         if (i == s) i--;
         if (S[i] < j) { 
             d = 1;
-            while ((i+d < s) && (S[i+d] < j)) { 
+            while ((i+d < s) && (S[i+d] < j)) {
                 i += d; d <<= 1; 
             }
             // now d is the top of the range
             d = std::min(static_cast<int64_t>(s),i+d); // (uint64_t, int64_t)
-            while (i+1<d) { 
+            while (i+1<d) {
                 m = (i+d)>>1;
                 if (S[m] < j) {
                     i = m;
@@ -213,14 +213,14 @@ namespace amo {
                     d = m;
                 }
             }
-        } else { 
+        } else {
             d = 1;
-            while ((i-d >= 0) && (S[i-d] >= j)) { 
+            while ((i-d >= 0) && (S[i-d] >= j)) {
                 i -= d; d <<= 1; 
             }
             // now d is the bottom of the range
             d = std::max(static_cast<int64_t>(0LL),i-d);
-            while (d+1<i) { 
+            while (d+1<i) {
                 m = (i+d)>>1;
                 if (S[m] < j) {
                     d = m;
@@ -240,12 +240,12 @@ namespace amo {
         if (i == s) i--;
         if (B[i] < j) { 
             d = 1;
-            while ((i+d < s) && (B[i+d] < j)) { 
+            while ((i+d < s) && (B[i+d] < j)) {
                 i += d; d <<= 1; 
             }
             // now d is the top of the range
             d = std::min(static_cast<int64_t>(s),i+d); // (uint64_t, int64_t)
-            while (i+1<d) { 
+            while (i+1<d) {
                 m = (i+d)>>1;
                 if (B[m] < j) {
                     i = m;
@@ -255,12 +255,12 @@ namespace amo {
             }
         } else { 
             d = 1;
-            while ((i-d >= b) && (B[i-d] >= j)) { 
+            while ((i-d >= b) && (B[i-d] >= j)) {
                 i -= d; d <<= 1; 
             }
             // now d is the bottom of the range
             d = std::max(b,i-d);
-            while (d+1<i) { 
+            while (d+1<i) {
                 m = (i+d)>>1;
                 if (B[m] < j) {
                     d = m;
@@ -273,7 +273,7 @@ namespace amo {
         // now it's confined to K blocks
         j -= B[i];
         i *= K;
-        while ((i+1)*w < n) { 
+        while ((i+1)*w < n) {
             p = popcount(data[i]);
             if (p >= j) break;
             j -= p;
@@ -281,7 +281,7 @@ namespace amo {
         }
         word = data[i];
         i *= w;
-        while (1) { 
+        while (1) {
             j -= word & 1;
             if (j == 0) return i;
             word >>= 1;

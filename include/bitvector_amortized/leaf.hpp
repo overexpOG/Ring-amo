@@ -60,6 +60,7 @@ namespace amo {
 
             // Read bits [i..i+l-1] into D starting at D[j]
             void read(uint i, uint l, uint64_t* D, uint64_t j) const;
+            friend std::ostream& operator<<(std::ostream& os, const LeafBV& bv);
 
             DynamicBV* splitLeaf();
     };
