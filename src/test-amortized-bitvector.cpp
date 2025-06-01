@@ -127,6 +127,7 @@ int main() {
         BV->push_back(i % 2);
     }
     std::cout << "Tamaño (4096): " << BV->size() << std::endl;
+    std::cout << "cantidad de unos: " << BV->getOnes() << std::endl;
     std::cout << "Tipo (DynamicBV): " << BV->getType() << std::endl;
     std::cout << "Leaves (2): " << BV->leaves() << std::endl;
 
@@ -142,6 +143,7 @@ int main() {
     }
 
     std::cout << "Tamaño (4096): " << BV->size() << std::endl;
+    std::cout << "cantidad de unos: " << BV->getOnes() << std::endl;
     std::cout << "Tipo (StaticBV): " << BV->getType() << std::endl;
     std::cout << "Leaves (3?): " << BV->leaves() << std::endl;
 

@@ -8,12 +8,21 @@ namespace amo {
     StaticBV::StaticBV() {}
 
     // Constructor a partir de datos existentes (data se transfiere, no copia)
-    StaticBV::StaticBV(uint64_t* input_data, uint64_t n) : size(n) {
+    StaticBV::StaticBV(uint64_t* inputData, uint64_t n) : size(n) {
         size = n;
         if (n == 0) {
             data = nullptr;
         } else {
-            data = input_data;
+            uint words = (n + w - 1) / w;
+            data = new uint64_t[words];
+
+            // Copiar datos, solo los bytes necesarios
+            size_t bytesToCopy = (n + 7) / 8;
+            memcpy(data, inputData, bytesToCopy);
+
+            if (n % w) {
+                data[words - 1] &= (((uint64_t)1) << (n % w)) - 1;
+            }
         }
         S = nullptr;
         B = nullptr;
@@ -114,7 +123,7 @@ namespace amo {
                 i++;
             }
         }
-        ones = rank_(n-1);
+        ones = sacc + acc;
     }
 
     // writes B's data to file, which must be opened for writing 
@@ -177,6 +186,7 @@ namespace amo {
 
     // computes rank(i), zero-based, assumes i is right
     uint64_t StaticBV::rank_(uint64_t i) {
+        if (i == size) return ones;
         uint64_t b,sb;
         uint64_t rank;
         sb = i/(K*w);

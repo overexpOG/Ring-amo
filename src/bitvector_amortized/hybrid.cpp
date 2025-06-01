@@ -138,6 +138,7 @@ namespace amo {
         DynamicBV *DB,*finalDB;
         uint bsize; // byte size of blocks to create
         uint blen; // bit size of block to create
+        uint subBits;
         uint64_t *segment;
         uint64_t nblock;
         unsigned char *start,*mid,*end;
@@ -162,16 +163,15 @@ namespace amo {
             mid = start+(nblock/2)*bsize;
             // split the left half
             if (i < (nblock/2)*blen) {
+                subBits = n - (nblock/2)*blen;
                 // create right half
                 DB->right = HB = new HybridBV();
                 // create a static
                 if (n - (nblock/2)*blen > leafNewSize() * w) {
-                    segment = new uint64_t[(end - mid + sizeof(uint64_t) - 1) / sizeof(uint64_t)];
-                    memcpy(segment,mid,end-mid);
-                    HB->bv = new StaticBV(segment,n-(nblock/2)*blen);
+                    HB->bv = new StaticBV((uint64_t*)mid, subBits);
                 // create a leaf
                 } else {
-                    HB->bv = new LeafBV((uint64_t*)mid,n-(nblock/2)*blen);
+                    HB->bv = new LeafBV((uint64_t*)mid, subBits);
                 }
                 // continue on left half
                 end = mid;
@@ -181,16 +181,15 @@ namespace amo {
                 DB->left = HB = new HybridBV();
             // split the right half
             } else {
+                subBits =(nblock/2)*blen;
                 // create left half
                 DB->left = HB = new HybridBV();
                 // create a static
                 if ((nblock/2)*blen > leafNewSize() * w) {
-                    segment = new uint64_t[(mid - start + sizeof(uint64_t) - 1) / sizeof(uint64_t)];
-                    memcpy(segment,start,mid-start);
-                    HB->bv = new StaticBV(segment,(nblock/2)*blen);
+                    HB->bv = new StaticBV((uint64_t*)start,subBits);
                 // create a leaf
                 } else {
-                    HB->bv = new LeafBV((uint64_t*)start,(nblock/2)*blen);
+                    HB->bv = new LeafBV((uint64_t*)start,subBits);
                 }
                 // continue for right half
                 start = mid;
@@ -667,7 +666,7 @@ namespace amo {
         if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
             (*dyn)->accesses++;
             if (mustFlatten()) {
-                flatten(delta); 
+                flatten(delta);
             } else { 
                 lones = (*dyn)->left->getOnes();
                 if (j <= lones) {

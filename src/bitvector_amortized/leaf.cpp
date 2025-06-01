@@ -13,7 +13,7 @@ namespace amo {
         data = new uint64_t[MaxBlockWords];
 
         // Copiar datos, solo los bytes necesarios
-        size_t bytesToCopy = (n + 7) / 8; 
+        size_t bytesToCopy = (n + 7) / 8;
         memcpy(data, inputData, bytesToCopy);
 
         uint nb = (n + w - 1) / w;

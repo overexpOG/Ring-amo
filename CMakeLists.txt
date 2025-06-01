@@ -58,7 +58,6 @@ add_library(bitvector_amortized_lib STATIC
     src/bitvector_amortized/leaf.cpp
     src/bitvector_amortized/dynamic.cpp
     src/bitvector_amortized/hybrid.cpp
-    src/bitvector_amortized/test-amortized-bitvector.cpp
 )
 
 target_include_directories(bitvector_amortized_lib PUBLIC
@@ -85,3 +84,6 @@ target_link_libraries(update-query sdsl divsufsort divsufsort64 bitvector_amorti
 
 add_executable(test-B src/test-B.cpp)
 target_link_libraries(test-B sdsl divsufsort divsufsort64 bitvector_amortized_lib)
+
+add_executable(test-amortized-bitvector src/test-amortized-bitvector.cpp)
+target_link_libraries(test-amortized-bitvector sdsl divsufsort divsufsort64 bitvector_amortized_lib)
