@@ -320,6 +320,10 @@ namespace ring
       return root->get_pfc();
     }
 
+    int get_height() const {
+      return root ? root->get_height() : 0;
+  }
+
   private:
     class node;
     node *root = NULL;
@@ -666,6 +670,13 @@ namespace ring
           return right->search(val);
         }
       }
+    }
+
+    int get_height() const {
+      if (_is_leaf) {
+        return 1;
+      }
+      return 1 + std::max(left->get_height(), right->get_height());
     }
 
   private:

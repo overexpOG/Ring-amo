@@ -87,3 +87,6 @@ target_link_libraries(test-B sdsl divsufsort divsufsort64 bitvector_amortized_li
 
 add_executable(test-amortized-bitvector src/test-amortized-bitvector.cpp)
 target_link_libraries(test-amortized-bitvector sdsl divsufsort divsufsort64 bitvector_amortized_lib)
+
+add_executable(test-dict-map-avl src/test-dict-map-avl.cpp)
+target_link_libraries(test-dict-map-avl sdsl divsufsort divsufsort64 bitvector_amortized_lib)

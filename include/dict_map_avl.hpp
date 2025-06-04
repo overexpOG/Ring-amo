@@ -17,8 +17,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DICT_MAP_HPP
-#define DICT_MAP_HPP
+#ifndef DICT_MAP_AVL_HPP
+#define DICT_MAP_AVL_HPP
 
 #include "pfc.hpp"
 
@@ -37,24 +37,24 @@ namespace ring
   class dict_map_avl
   {
   public:
-    dict_map()
+    dict_map_avl()
     {
-      root = new node();
+      root = new node_avl();
     }
 
-    dict_map(std::string val)
+    dict_map_avl(std::string val)
     {
-      root = new node(val, 1);
+      root = new node_avl(val, 1);
       id_map.push_back({ .pfc = root->get_pfc()});
     }
 
     // Move constructor
-    dict_map(dict_map &&o)
+    dict_map_avl(dict_map_avl &&o)
     {
       *this = std::move(o);
     }
 
-    ~dict_map()
+    ~dict_map_avl()
     {
       root->free_mem();
       delete root;
@@ -96,7 +96,7 @@ namespace ring
     //! Serializes the data structure into the given ostream
     uint64_t serialize(ostream &out, sdsl::structure_tree_node *v = nullptr, string name = "") const
     {
-      sdsl::structure_tree_node *child = sdsl::structure_tree::add_child(v, name, "dict_map");
+      sdsl::structure_tree_node *child = sdsl::structure_tree::add_child(v, name, "dict_map_avl");
       uint64_t written_bytes = 0;
       size_t map_size = id_map.size();
 
@@ -130,7 +130,7 @@ namespace ring
 
       sdsl::read_member(map_size, in);
       id_map = std::vector<EmptyOrPFC>(map_size);
-      root = new node();
+      root = new node_avl();
       root->load(in, id_map);
       sdsl::read_member(free_ids_size, in);
       sdsl::read_member(first_empty, in);
@@ -158,7 +158,7 @@ namespace ring
     uint64_t insert(const std::string &val)
     {
       uint64_t id;
-      std::pair<node *, PFC *> result_from_node_insert;
+      std::pair<node_avl *, PFC *> result_from_node_insert;
 
       if (free_ids_size == 0)
       {
@@ -197,7 +197,7 @@ namespace ring
     uint64_t get_or_insert(const std::string &val)
     {
       uint64_t id, found_id;
-      std::tuple<uint64_t, node *, PFC *> result_from_node_insert;
+      std::tuple<uint64_t, node_avl *, PFC *> result_from_node_insert;
       if (free_ids_size == 0)
       {
         id = id_map.size() + 1;
@@ -247,7 +247,7 @@ namespace ring
      */
     uint64_t eliminate(const std::string &val)
     {
-      std::tuple<node *, uint64_t, uint64_t> res = root->eliminate(val, id_map);
+      std::tuple<node_avl *, uint64_t, uint64_t> res = root->eliminate(val, id_map);
       root = std::get<0>(res);
       uint64_t elim_id = std::get<1>(res);
       // First in "Symbolic queue"
@@ -331,9 +331,14 @@ namespace ring
       return root->get_pfc();
     }
 
+    int get_height()
+    {
+      return root->get_height();
+    }
+
   private:
-    class node;
-    node *root = NULL;
+    class node_avl;
+    node_avl *root = NULL;
     std::vector<EmptyOrPFC> id_map;
     // Values used to represent the Queue of free IDs
     uint64_t first_empty = 0, last_empty = 0, free_ids_size = 0;
@@ -347,17 +352,17 @@ namespace ring
    * @tparam MAXSIZE The maximum words a PFC can have before splitting
    */
   template <uint64_t MINSIZE, uint64_t MAXSIZE>
-  class dict_map_avl<MINSIZE, MAXSIZE>::node
+  class dict_map_avl<MINSIZE, MAXSIZE>::node_avl
   {
   public:
-    node()
+    node_avl()
     {
       _is_leaf = true;
       pfc = new PFC();
       height = 1;
     }
 
-    node(std::string val, uint64_t id)
+    node_avl(std::string val, uint64_t id)
     {
       _is_leaf = true;
       pfc = new PFC();
@@ -365,7 +370,7 @@ namespace ring
       height = 1;
     }
 
-    node(PFC *p)
+    node_avl(PFC *p)
     {
       _is_leaf = true;
       pfc = p;
@@ -399,6 +404,7 @@ namespace ring
       size_t bs = 8 * sizeof(left) * 2;
       bs += 8 * sizeof(pfc);
       bs += 8 * sizeof(bool);
+      bs += 8 * sizeof(int);
       if (_is_leaf)
       {
         return bs + pfc->bit_size();
@@ -426,7 +432,7 @@ namespace ring
 
       out.write((char *)&_is_leaf, sizeof(_is_leaf));
       w_bytes += sizeof(_is_leaf);
-      out.write((int *)&height, sizeof(height));
+      out.write((char *)&height, sizeof(height));
       w_bytes += sizeof(height);
 
       if (_is_leaf)
@@ -454,7 +460,7 @@ namespace ring
     {
       size_t string_size;
       in.read((char *)&_is_leaf, sizeof(_is_leaf));
-      in.read((int *)&height, sizeof(height));
+      in.read((char *)&height, sizeof(height));
 
       if (_is_leaf)
       {
@@ -464,9 +470,9 @@ namespace ring
       }
       else
       {
-        left = new node();
+        left = new node_avl();
         PFC *left_pfc = left->load(in, id_map);
-        right = new node();
+        right = new node_avl();
         pfc = right->load(in, id_map);
         return left_pfc;
       }
@@ -479,7 +485,7 @@ namespace ring
      * @param val value being inserted
      * @param id ID assigned to that value
      */
-    std::pair<node *, PFC *> insert(const std::string &val, const uint64_t &id, std::vector<EmptyOrPFC> &id_map)
+    std::pair<node_avl *, PFC *> insert(const std::string &val, const uint64_t &id, std::vector<EmptyOrPFC> &id_map)
     {
       PFC* pfc_for_return = nullptr;
 
@@ -495,8 +501,8 @@ namespace ring
           std::tuple<std::string, uint64_t> res = pfc->split();
           PFC *new_pfc = new PFC(std::get<0>(res), std::get<1>(res));
           _is_leaf = false;
-          right = new node(new_pfc);
-          left = new node(pfc);
+          right = new node_avl(new_pfc);
+          left = new node_avl(pfc);
           pfc = new_pfc;
 
           // Update ID mapping
@@ -515,7 +521,7 @@ namespace ring
       }
       else
       {
-        std::pair<node *, PFC *> result_child;
+        std::pair<node_avl *, PFC *> result_child;
         // Go to correct children
         if (val.compare(pfc->first_word()) > 0)
         {
@@ -525,10 +531,10 @@ namespace ring
         else
         {
             result_child = left->insert(val, id, id_map);
-            left = result_child.first
+            left = result_child.first;
         }
         return {balance_node(), result_child.second};
-    }
+      }
     }
 
     /**
@@ -538,7 +544,7 @@ namespace ring
      * @param id  ID assigned to the value if its inserted
      * @return std::tuple<uint64_t, node *, PFC *> a pair containing the ID of the value and the PFC it was found/inserted
      */
-    std::tuple<uint64_t,node *, PFC *> get_or_insert(const std::string &val, const uint64_t &id, std::vector<EmptyOrPFC> &id_map)
+    std::tuple<uint64_t,node_avl *, PFC *> get_or_insert(const std::string &val, const uint64_t &id, std::vector<EmptyOrPFC> &id_map)
     {
       PFC* pfc_for_return = nullptr;
 
@@ -554,8 +560,8 @@ namespace ring
           std::tuple<std::string, uint64_t> res = pfc->split();
           PFC *new_pfc = new PFC(std::get<0>(res), std::get<1>(res));
           _is_leaf = false;
-          right = new node(new_pfc);
-          left = new node(pfc);
+          right = new node_avl(new_pfc);
+          left = new node_avl(pfc);
           pfc = new_pfc;
 
           // Update ID mapping
@@ -576,7 +582,7 @@ namespace ring
       {
         // Go to correct children
         int r = val.compare(pfc->first_word()); 
-        std::tuple<uint64_t, PFC *, node *> res_child;
+        std::tuple<uint64_t, PFC *, node_avl *> res_child;
 
         if (r == 0)
         {
@@ -605,7 +611,7 @@ namespace ring
      * @return std::tuple<node *, uint64_t, uint64_t> a pair containing
      * the ID of the deleted value and the resulting size of the PFC it was stored in
      */
-    std::tuple<node *, uint64_t, uint64_t> eliminate(const std::string &val, std::vector<EmptyOrPFC> &id_map)
+    std::tuple<node_avl *, uint64_t, uint64_t> eliminate(const std::string &val, std::vector<EmptyOrPFC> &id_map)
     {
       uint64_t eliminated_id = 0;
       uint64_t pfc_final_size = MAXSIZE;
@@ -617,7 +623,7 @@ namespace ring
       else
       {
         int r = val.compare(pfc->first_word());
-        std::tuple<node *, uint64_t, uint64_t> res;
+        std::tuple<node_avl *, uint64_t, uint64_t> res;
         uint64_t child_size = MAXSIZE;
         // Go to correct children
         if (r < 0)
@@ -656,8 +662,8 @@ namespace ring
             std::tuple<std::string, uint64_t> split_res = pfc->split();
             PFC *new_pfc = new PFC(std::get<0>(split_res), std::get<1>(split_res));
             _is_leaf = false;
-            right = new node(new_pfc);
-            left = new node(pfc);
+            right = new node_avl(new_pfc);
+            left = new node_avl(pfc);
             pfc = new_pfc;
 
             // Update ID mapping
@@ -702,16 +708,16 @@ namespace ring
       }
     }
 
-  private:
-    bool _is_leaf = false;
-    node *left = NULL;
-    node *right = NULL;
-    PFC *pfc = NULL;
-    int height = 0;
-
     int get_height() {
         return this->height;
     }
+
+  private:
+    bool _is_leaf = false;
+    node_avl *left = NULL;
+    node_avl *right = NULL;
+    PFC *pfc = NULL;
+    int height = 0;
 
     void update_height() {
         int left_height = (left != nullptr) ? left->get_height() : 0;
@@ -727,9 +733,9 @@ namespace ring
         return left_height - right_height;
     }
 
-    node *rotate_right() {
-        node *x = left;
-        node *T2 = x->right;
+    node_avl *rotate_right() {
+        node_avl *x = left;
+        node_avl *T2 = x->right;
 
         x->right = this;
         left = T2;
@@ -740,9 +746,9 @@ namespace ring
         return x;
     }
 
-    node *rotate_left() {
-        node *y = right;
-        node *T2 = y->left;
+    node_avl *rotate_left() {
+        node_avl *y = right;
+        node_avl *T2 = y->left;
 
         y->left = this;
         right = T2;
@@ -753,7 +759,7 @@ namespace ring
         return y;
     }
 
-    node *balance_node() {
+    node_avl *balance_node() {
         update_height();
 
         int balance = get_balance_factor();
@@ -778,7 +784,7 @@ namespace ring
     }
   };
 
-  typedef dict_map_avl<32, 128> basic_map;
+  typedef dict_map_avl<32, 128> basic_map_avl;
 }
 
 #endif
