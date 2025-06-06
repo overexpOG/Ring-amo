@@ -57,6 +57,8 @@ namespace amo {
             uint select1_(uint j) const;
             // Computes select_0(j), zero-based, assumes j is right
             uint select0_(uint j) const;
+            int next1(uint i);
+            int next0(uint i);
 
             // Read bits [i..i+l-1] into D starting at D[j]
             void read(uint i, uint l, uint64_t* D, uint64_t j) const;

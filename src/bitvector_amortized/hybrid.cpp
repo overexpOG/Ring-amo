@@ -108,7 +108,7 @@ namespace amo {
 
     // creates a static version of B, rewriting it but not its address
     // version of hybridRead that does not count accesses, for internal use
-    void HybridBV::read (uint64_t i, uint64_t l, uint64_t *D, uint64_t j) {
+    void HybridBV::read(uint64_t i, uint64_t l, uint64_t *D, uint64_t j) {
         uint64_t lsize;
         if (auto leaf = std::get_if<LeafBV*>(&bv)) { 
             (*leaf)->read(i,l,D,j); 
@@ -548,26 +548,26 @@ namespace amo {
         }
     }
 
-    bool HybridBV::mustFlatten() {
+    bool HybridBV::mustFlatten(uint64_t n) {
         if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
-            return ((*dyn)->accesses >= FactorBV*(*dyn)->size);
+            return (((*dyn)->size <= Epsilon * n) && ((*dyn)->accesses >= Theta*(*dyn)->size));
         }
         throw std::runtime_error("HybridBV::mustFlatten(): tipo inesperado, se esperaba DynamicBV");
     }
 
     // access B[i], assumes i is right
-    uint HybridBV::access_ (uint64_t i, int64_t *delta) { 
+    uint HybridBV::access_ (uint64_t i, int64_t *delta, uint64_t n) { 
         uint64_t lsize;
         if (auto dyn = std::get_if<DynamicBV*>(&bv)) { 
             (*dyn)->accesses++;
-            if (mustFlatten()) {
+            if (mustFlatten(n)) {
                 flatten(delta);
             } else { 
                 lsize = (*dyn)->left->length();
                 if (i < lsize) {
-                    return (*dyn)->left->access_(i,delta);
+                    return (*dyn)->left->access_(i,delta, n);
                 } else {
-                    return (*dyn)->right->access_(i-lsize,delta);
+                    return (*dyn)->right->access_(i-lsize,delta, n);
                 }
             }
         }
@@ -581,7 +581,11 @@ namespace amo {
 
     uint HybridBV::hybridAccess_(uint64_t i) { 
         int64_t delta = 0;
-        uint answ = access_(i,&delta);
+        uint64_t n = 0;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            n = (*dyn)->size;
+        }
+        uint answ = access_(i,&delta, n);
         if (delta) {
             recompute(i,delta);
         }
@@ -589,24 +593,24 @@ namespace amo {
     }
 
     // read bits [i..i+l-1], onto D[j...]
-    void HybridBV::read (uint64_t i, uint64_t l, uint64_t *D, uint64_t j, uint *recomp) { 
+    void HybridBV::read(uint64_t i, uint64_t l, uint64_t *D, uint64_t j, uint *recomp, uint64_t n) { 
         uint64_t lsize;
         int64_t delta;
         if (auto dyn = std::get_if<DynamicBV*>(&bv)) { 
             (*dyn)->accesses++;
-            if (mustFlatten()) {
+            if (mustFlatten(n)) {
                 delta = 0;
                 flatten(&delta); 
                 if (delta) *recomp = 1;
             } else {
                 lsize = (*dyn)->left->length();
                 if (i+l < lsize) {
-                    (*dyn)->left->read(i,l,D,j,recomp);
+                    (*dyn)->left->read(i,l,D,j,recomp, n);
                 } else if (i>=lsize) {
-                    (*dyn)->right->read(i-lsize,l,D,j,recomp);
+                    (*dyn)->right->read(i-lsize,l,D,j,recomp, n);
                 } else { 
-                    (*dyn)->left->read(i,lsize-i,D,j,recomp);
-                    (*dyn)->right->read(0,l-(lsize-i),D,j+(lsize-i),recomp);
+                    (*dyn)->left->read(i,lsize-i,D,j,recomp, n);
+                    (*dyn)->right->read(0,l-(lsize-i),D,j+(lsize-i),recomp, n);
                 }
                 return;
             }
@@ -621,25 +625,29 @@ namespace amo {
 
     void HybridBV::hybridRead (uint64_t i, uint64_t l, uint64_t *D, uint64_t j) { 
         uint recomp = 0;
-        read(i,l,D,j,&recomp);
+        uint64_t n = 0;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            n = (*dyn)->size;
+        }
+        read(i,l,D,j,&recomp, n);
         if (recomp) {
             rrecompute(i,l);
         }
     }
 
     // computes rank_1(B,i), zero-based, assumes i is right
-    uint64_t HybridBV::rank_(uint64_t i, int64_t *delta) {
+    uint64_t HybridBV::rank_(uint64_t i, int64_t *delta, uint64_t n) {
         uint64_t lsize;
         if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
             (*dyn)->accesses++;
-            if (mustFlatten()) {
+            if (mustFlatten(n)) {
                 flatten(delta); 
             } else {
                 lsize = (*dyn)->left->length();
                 if (i < lsize) {
-                    return (*dyn)->left->rank_(i,delta);
+                    return (*dyn)->left->rank_(i,delta, n);
                 } else {
-                return (*dyn)->left->getOnes() + (*dyn)->right->rank_(i-lsize,delta);
+                return (*dyn)->left->getOnes() + (*dyn)->right->rank_(i-lsize,delta, n);
                 }
             }
         }
@@ -653,7 +661,11 @@ namespace amo {
 
     uint64_t HybridBV::hybridRank_(uint64_t i) { 
         int64_t delta = 0;
-        uint64_t answ = rank_(i,&delta);
+        uint64_t n = 0;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            n = (*dyn)->size;
+        }
+        uint64_t answ = rank_(i,&delta, n);
         if (delta) {
             recompute(i,delta);
         }
@@ -661,18 +673,18 @@ namespace amo {
     }
 
     // computes select_1(B,j), zero-based, assumes j is right
-    uint64_t HybridBV::select1_(uint64_t j, int64_t *delta) {
+    uint64_t HybridBV::select1_(uint64_t j, int64_t *delta, uint64_t n) {
         uint64_t lones;
         if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
             (*dyn)->accesses++;
-            if (mustFlatten()) {
+            if (mustFlatten(n)) {
                 flatten(delta);
             } else { 
                 lones = (*dyn)->left->getOnes();
                 if (j <= lones) {
-                    return (*dyn)->left->select1_(j,delta);
+                    return (*dyn)->left->select1_(j,delta, n);
                 }
-                return (*dyn)->left->length() + (*dyn)->right->select1_(j-lones,delta);
+                return (*dyn)->left->length() + (*dyn)->right->select1_(j-lones,delta, n);
             }
         }
         if (auto leaf = std::get_if<LeafBV*>(&bv)) {
@@ -684,18 +696,18 @@ namespace amo {
     }
 
     // computes select_0(B,j), zero-based, assumes j is right
-    uint64_t HybridBV::select0_(uint64_t j, int64_t *delta) { 
+    uint64_t HybridBV::select0_(uint64_t j, int64_t *delta, uint64_t n) { 
         uint64_t lzeros;
         if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
             (*dyn)->accesses++;
-            if (mustFlatten()) {
+            if (mustFlatten(n)) {
                 flatten(delta); 
             } else { 
                 lzeros = (*dyn)->left->length() - (*dyn)->left->getOnes();
                 if (j <= lzeros) {
-                    return (*dyn)->left->select0_(j,delta);
+                    return (*dyn)->left->select0_(j,delta, n);
                 }
-                return (*dyn)->left->length() + (*dyn)->right->select0_(j-lzeros,delta);
+                return (*dyn)->left->length() + (*dyn)->right->select0_(j-lzeros,delta, n);
             }
         }
         if (auto leaf = std::get_if<LeafBV*>(&bv)) {
@@ -706,9 +718,95 @@ namespace amo {
         throw std::runtime_error("HybridBV::select0_(): tipo inesperado, se esperaba StaticBV, LeafBV o DynamicBV");
     }
 
+    // computes next_1(B,i), zero-based and including i
+    // returns -1 if no answer
+    int64_t HybridBV::next1 (uint64_t i, int64_t *delta, uint64_t n) { 
+        uint64_t lsize;
+        int64_t next;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) { 
+            if (getOnes() == 0) return -1; // not considered an access!
+            (*dyn)->accesses++;
+            if (mustFlatten(n)){
+                flatten(delta); 
+            } else { 
+                lsize =(*dyn)->left->length();
+                if (i < lsize) {
+                    next = (*dyn)->left->next1(i,delta,n);
+                    if (next != -1) return next;
+                    i = lsize;
+                }
+                next = (*dyn)->right->next1(i-lsize,delta,n);
+                if (next == -1) return -1;
+                return lsize + next;
+            }
+        }
+        if (auto leaf = std::get_if<LeafBV*>(&bv)) {
+            return (*leaf)->next1(i);
+        } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
+            return (*stat)->next1(i);
+        }
+        throw std::runtime_error("HybridBV::select0_(): tipo inesperado, se esperaba StaticBV, LeafBV o DynamicBV");
+    }
+
+    // computes next_0(B,i), zero-based and including i
+    // returns -1 if no answer
+    int64_t HybridBV::next0(uint64_t i, int64_t *delta, uint64_t n) {
+        uint64_t lsize;
+        int64_t next;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) { 
+            if (getOnes() == length()) return -1; // not an access
+            (*dyn)->accesses++;
+            if (mustFlatten(n)) {
+                flatten(delta);
+            } else { 
+                lsize = (*dyn)->left->length();
+                if (i < lsize) { 
+                    next = (*dyn)->left->next0(i,delta,n);
+                    if (next != -1) return next;
+                    i = lsize;
+                }
+                next = (*dyn)->right->next0(i-lsize,delta,n);
+                if (next == -1) return -1;
+                return lsize + next;
+            }
+        }
+        if (auto leaf = std::get_if<LeafBV*>(&bv)) {
+            return (*leaf)->next0(i);
+        } else if (auto stat = std::get_if<StaticBV*>(&bv)) {
+            return (*stat)->next0(i);
+        }
+        throw std::runtime_error("HybridBV::select0_(): tipo inesperado, se esperaba StaticBV, LeafBV o DynamicBV");
+    }
+
+    int64_t HybridBV::hybridNext1(uint64_t i) { 
+        int64_t delta = 0;
+        uint64_t n = 0;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            n = (*dyn)->size;
+        }
+        int64_t answ = next1(i,&delta,n);
+        if (delta) recompute(i,delta);
+        return answ;
+    }
+
+    int64_t HybridBV::hybridNext0(uint64_t i) { 
+        int64_t delta = 0;
+        uint64_t n = 0;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            n = (*dyn)->size;
+        }
+        int64_t answ = next0(i,&delta,n);
+        if (delta) recompute(i,delta);
+        return answ;
+    }
+
     uint64_t HybridBV::hybridSelect1_(uint64_t j) { 
         int64_t delta = 0;
-        uint64_t answ = select1_(j,&delta);
+        uint64_t n = 0;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            n = (*dyn)->size;
+        }
+        uint64_t answ = select1_(j,&delta, n);
         if (delta) {
             recompute(answ,delta);
         }
@@ -717,7 +815,11 @@ namespace amo {
 
     uint64_t HybridBV::hybridSelect0_(uint64_t j) { 
         int64_t delta = 0;
-        uint64_t answ = select0_(j,&delta);
+        uint64_t n = 0;
+        if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+            n = (*dyn)->size;
+        }
+        uint64_t answ = select0_(j,&delta, n);
         if (delta) {
             recompute(answ,delta);
         }

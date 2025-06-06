@@ -58,6 +58,8 @@ namespace amo {
             uint64_t select1_(uint64_t j);
             // Computes select_0(j), zero-based, assumes j is right
             uint64_t select0_(uint64_t j);
+            int64_t next1(uint64_t i);
+            int64_t next0(uint64_t i);
 
             // Read bits [i..i+l-1] onto D[j..], assumes it is right
             void read(uint64_t i, uint64_t l, uint64_t* D, uint64_t j);

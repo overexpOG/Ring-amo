@@ -6,7 +6,8 @@
 #include <cstring>
 
 namespace amo {
-    static float FactorBV = 1.0; // Factor * length reads => rebuild as static
+    static float Theta = 0.01;                             // Theta * length reads => rebuild as static
+    static float Epsilon = 0.1;                            // do not flatten leaves of size over Epsilon * n
     static constexpr int MaxBlockWords = 32;
     static constexpr double NewFraction = 0.75;
     static constexpr int w = 64;                           // bits por palabra
@@ -14,8 +15,8 @@ namespace amo {
     static constexpr size_t w16 = 8 * sizeof(uint16_t);    // superblock length is 2^w16
     static constexpr float TrfFactor = 0.125;              // TrfFactor * MaxLeafSize to justify transferLeft/Right
     static constexpr float AlphaFactor = 0.65;             // balance factor 3/5 < . < 1
-    static constexpr int MinLeavesToBalance = 5;    // min number of leaves to balance the tree
-    static constexpr float MinFillFactor = 0.3;     // less than this involves rebuild. Must be <= NewFraction/2
+    static constexpr int MinLeavesToBalance = 5;            // min number of leaves to balance the tree
+    static constexpr float MinFillFactor = 0.3;             // less than this involves rebuild. Must be <= NewFraction/2
 
     using uint = uint32_t;
 

@@ -51,17 +51,21 @@ namespace amo {
             int remove_(uint64_t i, uint* recalc);
             int hybridRemove_(uint64_t i);
             void recompute(uint64_t i, int64_t delta);
-            bool mustFlatten();
-            uint access_(uint64_t i, int64_t* delta);
+            bool mustFlatten(uint64_t n);
+            uint access_(uint64_t i, int64_t* delta, uint64_t n);
             uint hybridAccess_(uint64_t i);
-            void read(uint64_t i, uint64_t l, uint64_t* D, uint64_t j, uint* recomp); // external read
+            void read(uint64_t i, uint64_t l, uint64_t* D, uint64_t j, uint* recomp, uint64_t n); // external read
             void hybridRead(uint64_t i, uint64_t l, uint64_t* D, uint64_t j);
-            uint64_t rank_(uint64_t i, int64_t* delta);
+            uint64_t rank_(uint64_t i, int64_t* delta, uint64_t n);
             uint64_t hybridRank_(uint64_t i);
-            uint64_t select1_(uint64_t j, int64_t* delta);
-            uint64_t select0_(uint64_t j, int64_t* delta);
+            uint64_t select1_(uint64_t j, int64_t* delta, uint64_t n);
+            uint64_t select0_(uint64_t j, int64_t* delta, uint64_t n);
             uint64_t hybridSelect1_(uint64_t j);
             uint64_t hybridSelect0_(uint64_t j);
+            int64_t next1(uint64_t i, int64_t *delta, uint64_t n);
+            int64_t next0(uint64_t i, int64_t *delta, uint64_t n);
+            int64_t hybridNext1(uint64_t i);
+            int64_t hybridNext0(uint64_t i);
 
             // Convenience methods (wrappers)
             uint64_t at(uint64_t i);
