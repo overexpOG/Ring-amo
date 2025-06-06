@@ -20,6 +20,7 @@
 #include <iostream>
 #include "ring.hpp"
 #include "dict_map.hpp"
+#include "dict_map_avl.hpp"
 #include <fstream>
 #include <regex>
 #include <sdsl/construct.hpp>
@@ -60,7 +61,7 @@ void build_index(const std::string &dataset, const std::string &output)
 }
 
 template <class map>
-void build_mapping(const std::string &dataset, std::vector<spo_triple> &D)
+void build_mapping(const std::string &dataset, std::vector<spo_triple> &D, const std::string &output)
 {
     map so_mapping;
     map p_mapping;
@@ -97,11 +98,11 @@ void build_mapping(const std::string &dataset, std::vector<spo_triple> &D)
     cout << "    P mapping " << p_mapping.bit_size() / 8 << " bytes" << endl;
     cout << "  Mapping took " << duration_cast<seconds>(mapping_stop - mapping_start).count() << " seconds." << endl;
 
-    osfstream so_out(dataset + ".so.mapping", std::ios::binary | std::ios::trunc | std::ios::out);
+    osfstream so_out(output + ".so.mapping", std::ios::binary | std::ios::trunc | std::ios::out);
     so_mapping.serialize(so_out);
     cout << "SO Mapping saved" << endl;
 
-    osfstream p_out(dataset + ".p.mapping", std::ios::binary | std::ios::trunc | std::ios::out);
+    osfstream p_out(output + ".p.mapping", std::ios::binary | std::ios::trunc | std::ios::out);
     p_mapping.serialize(p_out);
     cout << "P Mapping saved" << endl;
 }
@@ -111,7 +112,7 @@ void build_index_mapped(const std::string &dataset, const std::string &output)
 {
     vector<spo_triple> D, E;
 
-    build_mapping<map>(dataset, D);
+    build_mapping<map>(dataset, D, output);
 
     D.shrink_to_fit();
 
@@ -131,60 +132,74 @@ void build_index_mapped(const std::string &dataset, const std::string &output)
 int main(int argc, char **argv)
 {
 
-    if (argc != 3)
+    if (argc != 4)
     {
-        std::cout << "Usage: " << argv[0] << " <dataset> [ring|c-ring|ring-sel]" << std::endl;
+        std::cout << "Usage: " << argv[0] << " <dataset> <type> <output>" << std::endl;
         return 0;
     }
 
     std::string dataset = argv[1];
     std::string type = argv[2];
+    std::string output = argv[3];
+
     if (type == "ring")
     {
-        std::string index_name = dataset + ".ring";
+        std::string index_name = output + "ring.ring";
         build_index<ring::ring<>>(dataset, index_name);
     }
     else if (type == "c-ring")
     {
-        std::string index_name = dataset + ".c-ring";
+        std::string index_name = output + "c-ring.ring";
         build_index<ring::c_ring>(dataset, index_name);
     }
     else if (type == "ring-sel")
     {
-        std::string index_name = dataset + ".ring-sel";
+        std::string index_name = output + "ring-sel.ring";
         build_index<ring::ring_sel>(dataset, index_name);
     }
     else if (type == "ring-dyn-basic")
     {
-        std::string index_name = dataset + ".ring-dyn-basic";
+        std::string index_name = output + "ring-dyn-basic.ring";
         build_index<ring::ring_dyn>(dataset, index_name);
     }
     else if (type == "ring-dyn")
     {
-        std::string index_name = dataset + ".ring-dyn";
+        std::string index_name = output + "ring-dyn.ring";
         build_index<ring::medium_ring_dyn>(dataset, index_name);
     }
     else if (type == "ring-dyn-amo")
     {
-        std::string index_name = dataset + ".ring-dyn-amo";
+        std::string index_name = output + "ring-dyn-amo.ring";
         build_index<ring::ring_dyn_amo>(dataset, index_name);
     }
     else if (type == "ring-map") {
-        std::string index_name = dataset + ".ring";
+        std::string index_name = output + "ring-map.ring";
         build_index_mapped<ring::ring<>, ring::basic_map>(dataset, index_name);
     }
     else if (type == "ring-dyn-map")
     {
-        std::string index_name = dataset + ".ring-dyn";
+        std::string index_name = output + "ring-dyn-map.ring";
         build_index_mapped<ring::medium_ring_dyn, ring::basic_map>(dataset, index_name);
     }
     else if (type == "ring-dyn-amo-map") {
-        std::string index_name = dataset + ".ring-dyn-amo";
+        std::string index_name = output + "ring-dyn-amo-map.ring";
         build_index_mapped<ring::ring_dyn_amo, ring::basic_map>(dataset, index_name);
+    }
+    else if (type == "ring-map-avl") {
+        std::string index_name = output + "ring-map-avl.ring";
+        build_index_mapped<ring::ring<>, ring::basic_map_avl>(dataset, index_name);
+    }
+    else if (type == "ring-dyn-map-avl") {
+        std::string index_name = output + "ring-dyn-map-avl.ring";
+        build_index_mapped<ring::medium_ring_dyn, ring::basic_map_avl>(dataset, index_name);
+    }
+    else if (type == "ring-dyn-amo-map-avl") {
+        std::string index_name = output + "ring-dyn-amo-map-avl.ring";
+        build_index_mapped<ring::ring_dyn_amo, ring::basic_map_avl>(dataset, index_name);
     }
     else
     {
-        std::cout << "Usage: " << argv[0] << " <dataset> [ring|c-ring|ring-sel|ring-dyn|ring-dyn-map]" << std::endl;
+        std::cout << "Usage: " << argv[0] << " <dataset> <type> <output>" << std::endl;
     }
 
     return 0;

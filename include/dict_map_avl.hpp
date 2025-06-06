@@ -203,7 +203,7 @@ namespace ring
         id = id_map.size() + 1;
         result_from_node_insert = root->get_or_insert(val, id, id_map);
         root = std::get<1>(result_from_node_insert);
-        found_id = std::get<1>(result_from_node_insert);
+        found_id = std::get<0>(result_from_node_insert);
         if (found_id == id)
         {
           id_map.push_back({ .pfc = std::get<2>(result_from_node_insert) });
@@ -544,7 +544,7 @@ namespace ring
      * @param id  ID assigned to the value if its inserted
      * @return std::tuple<uint64_t, node *, PFC *> a pair containing the ID of the value and the PFC it was found/inserted
      */
-    std::tuple<uint64_t,node_avl *, PFC *> get_or_insert(const std::string &val, const uint64_t &id, std::vector<EmptyOrPFC> &id_map)
+    std::tuple<uint64_t, node_avl *, PFC *> get_or_insert(const std::string &val, const uint64_t &id, std::vector<EmptyOrPFC> &id_map)
     {
       PFC* pfc_for_return = nullptr;
 
@@ -582,7 +582,7 @@ namespace ring
       {
         // Go to correct children
         int r = val.compare(pfc->first_word()); 
-        std::tuple<uint64_t, PFC *, node_avl *> res_child;
+        std::tuple<uint64_t, node_avl *, PFC *> res_child;
 
         if (r == 0)
         {

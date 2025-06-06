@@ -154,6 +154,11 @@ std::pair<QueryType, std::vector<std::string>> parse_query(const std::string &in
     throw std::runtime_error("parse_query: consulta no reconocida: " + input);
 }
 
+bool is_variable(string &s)
+{
+    return (s.at(0) == '?');
+}
+
 uint8_t get_variable(string &s, std::unordered_map<std::string, uint8_t> &hash_table_vars)
 {
     auto var = s.substr(1);
@@ -211,7 +216,7 @@ std::string get_type(const std::string &file)
 }
 
 template <class ring_type, class map_type>
-void query_select(ring_type &graph, map_type &so_mapping, map_type &p_mapping, const vector<string> &tokens_query, uint64_t nQ)
+void query_select(ring_type &graph, map_type &so_mapping, map_type &p_mapping, vector<string> &tokens_query, const uint64_t nQ)
 {
     chrono::high_resolution_clock::time_point start, stop;
     double total_time = 0.0, forward_trad = 0.0, backward_trad = 0.0;
@@ -239,7 +244,7 @@ void query_select(ring_type &graph, map_type &so_mapping, map_type &p_mapping, c
     ltj.join(res, 1000, 600);
 
     stop = chrono::high_resolution_clock::now();
-    time_span = duration_cast<microseconds>(stop - start);
+    time_span = chrono::duration_cast<chrono::microseconds>(stop - start);
     total_time = time_span.count();
 
     start = chrono::high_resolution_clock::now();
@@ -256,7 +261,7 @@ void query_select(ring_type &graph, map_type &so_mapping, map_type &p_mapping, c
     }
 
     stop = chrono::high_resolution_clock::now();
-    time_span = duration_cast<microseconds>(stop - start);
+    time_span = chrono::duration_cast<chrono::microseconds>(stop - start);
     backward_trad = time_span.count();
 
     cout << "Select;" <<  nQ << ";" << res.size() << ";" << (unsigned long long)(total_time * 1000000000ULL);
@@ -265,26 +270,26 @@ void query_select(ring_type &graph, map_type &so_mapping, map_type &p_mapping, c
 }
 
 template <class ring_type, class map_type>
-void query_insert(ring_type &graph, map_type &so_mapping, map_type &p_mapping, const vector<string> &tokens_query, const uint64_t nQ)
+void query_insert(ring_type &graph, map_type &so_mapping, map_type &p_mapping, vector<string> &tokens_query, const uint64_t nQ)
 {
-    high_resolution_clock::time_point start, stop;
+    chrono::high_resolution_clock::time_point start, stop;
     double total_time = 0.0, forward_trad = 0.0;
-    duration<double> time_span;
+    chrono::duration<double> time_span;
 
-    start = high_resolution_clock::now();
+    start = chrono::high_resolution_clock::now();
 
     spo_triple query_triple = {so_mapping.get_or_insert(tokens_query[0]), p_mapping.get_or_insert(tokens_query[1]), so_mapping.get_or_insert(tokens_query[2])};
     
-    stop = high_resolution_clock::now();
-    time_span = duration_cast<microseconds>(stop - start);
+    stop = chrono::high_resolution_clock::now();
+    time_span = chrono::duration_cast<chrono::microseconds>(stop - start);
     forward_trad = time_span.count();
 
-    start = high_resolution_clock::now();
+    start = chrono::high_resolution_clock::now();
 
     graph.insert(query_triple);
 
-    stop = high_resolution_clock::now();
-    time_span = duration_cast<microseconds>(stop - start);
+    stop = chrono::high_resolution_clock::now();
+    time_span = chrono::duration_cast<chrono::microseconds>(stop - start);
     total_time = time_span.count();
 
     cout << "Insert;" <<  nQ << ";" << (unsigned long long)(total_time * 1000000000ULL);
@@ -292,25 +297,29 @@ void query_insert(ring_type &graph, map_type &so_mapping, map_type &p_mapping, c
 }
 
 template <class ring_type, class map_type>
-void query_delete_edge(ring_type &graph, map_type &so_mapping, map_type &p_mapping, const vector<string> &tokens_query, const uint64_t nQ)
+void query_delete_edge(ring_type &graph, map_type &so_mapping, map_type &p_mapping, vector<string> &tokens_query, const uint64_t nQ)
 {
-    start = high_resolution_clock::now();
+    chrono::high_resolution_clock::time_point start, stop;
+    double total_time = 0.0, forward_trad = 0.0, backward_time = 0.0;
+    chrono::duration<double> time_span;
+
+    start = chrono::high_resolution_clock::now();
 
     spo_triple query_triple = {so_mapping.locate(tokens_query[0]), p_mapping.locate(tokens_query[1]), so_mapping.locate(tokens_query[2])};
 
-    stop = high_resolution_clock::now();
-    time_span = duration_cast<microseconds>(stop - start);
+    stop = chrono::high_resolution_clock::now();
+    time_span = chrono::duration_cast<chrono::microseconds>(stop - start);
     forward_trad = time_span.count();
 
-    start = high_resolution_clock::now();
+    start = chrono::high_resolution_clock::now();
 
     spo_valid_triple valid = graph.remove_edge_and_check(query_triple);
 
-    stop = high_resolution_clock::now();
-    time_span = duration_cast<microseconds>(stop - start);
+    stop = chrono::high_resolution_clock::now();
+    time_span = chrono::duration_cast<chrono::microseconds>(stop - start);
     total_time = time_span.count();
 
-    start = high_resolution_clock::now();
+    start = chrono::high_resolution_clock::now();
 
     // Is S still in use? If not delete it from the mapping
     if (!get<0>(valid))
@@ -330,8 +339,8 @@ void query_delete_edge(ring_type &graph, map_type &so_mapping, map_type &p_mappi
         so_mapping.eliminate(get<2>(query_triple));
     }
 
-    stop = high_resolution_clock::now();
-    time_span = duration_cast<microseconds>(stop - start);
+    stop = chrono::high_resolution_clock::now();
+    time_span = chrono::duration_cast<chrono::microseconds>(stop - start);
     backward_time = time_span.count();
 
     cout << "Delete edge;" <<  nQ << ";" << (unsigned long long)(total_time * 1000000000ULL);
@@ -340,28 +349,32 @@ void query_delete_edge(ring_type &graph, map_type &so_mapping, map_type &p_mappi
 }
 
 template <class ring_type, class map_type>
-void query_delete_node(ring_type &graph, map_type &so_mapping, map_type &p_mapping, const vector<string> &tokens_query, const uint64_t nQ)
+void query_delete_node(ring_type &graph, map_type &so_mapping, map_type &p_mapping, vector<string> &tokens_query, const uint64_t nQ)
 {
-    start = high_resolution_clock::now();
+    chrono::high_resolution_clock::time_point start, stop;
+    double total_time = 0.0, forward_trad = 0.0, backward_time = 0.0;
+    chrono::duration<double> time_span;
+
+    start = chrono::high_resolution_clock::now();
 
     uint64_t node_id = so_mapping.eliminate(tokens_query[0]);
 
-    stop = high_resolution_clock::now();
-    time_span = duration_cast<microseconds>(stop - start);
+    stop = chrono::high_resolution_clock::now();
+    time_span = chrono::duration_cast<chrono::microseconds>(stop - start);
     forward_trad = time_span.count();
 
     vector<uint64_t> so_removed_ids;
     vector<uint64_t> p_removed_ids;
 
-    start = high_resolution_clock::now();
+    start = chrono::high_resolution_clock::now();
 
     uint64_t total_removed = graph.remove_node_with_check(node_id, so_removed_ids, p_removed_ids);
 
-    stop = high_resolution_clock::now();
-    time_span = duration_cast<microseconds>(stop - start);
+    stop = chrono::high_resolution_clock::now();
+    time_span = chrono::duration_cast<chrono::microseconds>(stop - start);
     total_time = time_span.count();
 
-    start = high_resolution_clock::now();
+    start = chrono::high_resolution_clock::now();
 
     for (uint64_t id : so_removed_ids)
     {
@@ -373,8 +386,8 @@ void query_delete_node(ring_type &graph, map_type &so_mapping, map_type &p_mappi
         p_mapping.eliminate(id);
     }
 
-    stop = high_resolution_clock::now();
-    time_span = duration_cast<microseconds>(stop - start);
+    stop = chrono::high_resolution_clock::now();
+    time_span = chrono::duration_cast<chrono::microseconds>(stop - start);
     backward_time = time_span.count();
 
     cout << "Delete node;" << nQ << ";" << total_removed << ";" << (unsigned long long)(total_time * 1000000000ULL);
@@ -415,9 +428,9 @@ void mapped_ring(const string &file, const string &so_mapping_file, const string
     ifstream ifs;
     uint64_t nQ = 0;
 
-    high_resolution_clock::time_point start, stop;
+    chrono::high_resolution_clock::time_point start, stop;
     double total_time = 0.0, forward_trad = 0.0, backward_trad = 0.0;
-    duration<double> time_span;
+    chrono::duration<double> time_span;
 
     if (result)
     {
@@ -427,19 +440,19 @@ void mapped_ring(const string &file, const string &so_mapping_file, const string
 
             if (tokens_query.first == QueryType::SELECT)
             {
-                query_select<ring_type, map_type>(graph, so_mapping_file, p_mapping_file, tokens_query.second, nQ);
+                query_select<ring_type, map_type>(graph, so_mapping, p_mapping, tokens_query.second, nQ);
             }
             else if (tokens_query.first == QueryType::INSERT)
             {
-                query_insert<ring_type, map_type>(graph, so_mapping_file, p_mapping_file, tokens_query.second, nQ);
+                query_insert<ring_type, map_type>(graph, so_mapping, p_mapping, tokens_query.second, nQ);
             }
             else if (tokens_query.first == QueryType::DELETE_EDGE)
             {
-                query_delete_edge<ring_type, map_type>(graph, so_mapping_file, p_mapping_file, tokens_query.second, nQ);
+                query_delete_edge<ring_type, map_type>(graph, so_mapping, p_mapping, tokens_query.second, nQ);
             }
             else if (tokens_query.first == QueryType::DELETE_NODE)
             {
-                query_delete_node<ring_type, map_type>(graph, so_mapping_file, p_mapping_file, tokens_query.second, nQ);
+                query_delete_node<ring_type, map_type>(graph, so_mapping, p_mapping, tokens_query.second, nQ);
             }
             else
             {
