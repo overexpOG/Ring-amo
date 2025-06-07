@@ -291,9 +291,9 @@ namespace ring
      * @brief Search a value in the binary tree of the structure and get its ID
      *
      * @param val value being searched
-     * @return uint64_t ID associated to the value
+     * @return std::pair<bool, uint64_t> True if the string exits and the ID of the string otherwise false and 0
      */
-    uint64_t locate(const std::string &val) const
+    std::pair<bool, uint64_t> locate(const std::string &val) const
     {
       return root->search(val);
     }
@@ -682,20 +682,20 @@ namespace ring
      * @brief Search a value in the Binary Tree
      *
      * @param val value being searched
-     * @return uint64_t ID associated to the value given
+     * @return std::pair<bool, uint64_t> True if the string exits and the ID of the string otherwise false and 0
      */
-    uint64_t search(const std::string &val)
+    std::pair<bool, uint64_t> search(const std::string &val)
     {
       if (is_leaf())
       {
-        return pfc->locate(val);
+        return pfc->locate_if_exists(val);
       }
       else
       {
         int r = val.compare(pfc->first_word());
         if (r == 0)
         {
-          return pfc->locate(val);
+          return pfc->locate_if_exists(val);
         }
         else if (r < 0)
         {

@@ -189,7 +189,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_s(so_mapping.locate(terms[0]));
+        triple.const_s(so_mapping.locate(terms[0]).second);
     }
     if (is_variable(terms[1]))
     {
@@ -197,7 +197,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_p(p_mapping.locate(terms[1]));
+        triple.const_p(p_mapping.locate(terms[1]).second);
     }
     if (is_variable(terms[2]))
     {
@@ -205,7 +205,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_o(so_mapping.locate(terms[2]));
+        triple.const_o(so_mapping.locate(terms[2]).second);
     }
     return triple;
 }

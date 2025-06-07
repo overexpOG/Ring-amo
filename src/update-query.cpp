@@ -118,7 +118,7 @@ void parse_triples(std::vector<std::string> &lines, std::vector<spo_triple> &res
             tmp_index = line.find(" . ", index);
 
             vector<string> terms = regex_tokenizer(line.substr(index, tmp_index - index), token_regex);
-            res.emplace_back(spo_triple(so_mapping.locate(terms[0]), p_mapping.locate(terms[1]), so_mapping.locate(terms[2])));
+            res.emplace_back(spo_triple(so_mapping.locate(terms[0]).second, p_mapping.locate(terms[1]).second, so_mapping.locate(terms[2]).second));
             index = tmp_index + 2;
         }
     }
@@ -163,7 +163,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_s(so_mapping.locate(terms[0]));
+        triple.const_s(so_mapping.locate(terms[0]).second);
     }
     if (is_variable(terms[1]))
     {
@@ -171,7 +171,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_p(p_mapping.locate(terms[1]));
+        triple.const_p(p_mapping.locate(terms[1]).second);
     }
     if (is_variable(terms[2]))
     {
@@ -179,7 +179,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_o(so_mapping.locate(terms[2]));
+        triple.const_o(so_mapping.locate(terms[2]).second);
     }
     return triple;
 }

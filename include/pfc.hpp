@@ -295,6 +295,43 @@ namespace ring
     }
 
     /**
+     * @brief Search the string in the PFC and return its ID
+     * If its not found it throws an invalid_argument error
+     *
+     * @param s The string bieng searched
+     * @return std::pair<bool, uint64_t> True if the string exits and the ID of the string otherwise false and 0
+     */
+    std::pair<bool, uint64_t> locate_if_exists(const std::string &s)
+    {
+      uint64_t index = 0;
+      std::string prev, curr;
+      uint64_t curr_id;
+
+      // Linear search
+      curr_id = decode_number(index);
+      read_string(index, curr);
+      prev = curr;
+      while (index < text_string.size())
+      {
+        if (curr == s)
+        {
+          return {true, curr_id};
+        }
+        curr_id = decode_number(index);
+        uint64_t lcp = decode_number(index);
+        read_string(index, curr, prev, lcp);
+        prev = curr;
+      }
+
+      if (curr == s)
+      {
+        return {true, curr_id};
+      }
+
+      return {false, 0};
+    }
+
+    /**
      * @brief Search a string with the given ID
      * If its not found it throws an invalid_argument error
      *

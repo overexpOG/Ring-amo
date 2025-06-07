@@ -188,7 +188,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_s(so_mapping.locate(terms[0]));
+        triple.const_s(so_mapping.locate(terms[0]).second);
     }
     if (is_variable(terms[1]))
     {
@@ -196,7 +196,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_p(p_mapping.locate(terms[1]));
+        triple.const_p(p_mapping.locate(terms[1]).second);
     }
     if (is_variable(terms[2]))
     {
@@ -204,7 +204,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_o(so_mapping.locate(terms[2]));
+        triple.const_o(so_mapping.locate(terms[2]).second);
     }
     return triple;
 }
@@ -305,7 +305,13 @@ void query_delete_edge(ring_type &graph, map_type &so_mapping, map_type &p_mappi
 
     start = chrono::high_resolution_clock::now();
 
-    spo_triple query_triple = {so_mapping.locate(tokens_query[0]), p_mapping.locate(tokens_query[1]), so_mapping.locate(tokens_query[2])};
+    std::pair<bool, uint64_t> so_id = so_mapping.locate(tokens_query[0]);
+    std::pair<bool, uint64_t> p_id = p_mapping.locate(tokens_query[1]);
+    std::pair<bool, uint64_t> so_id2 = so_mapping.locate(tokens_query[2]);
+
+    if (! so_id.first && ! p_id.first && ! so_id2.first) return;
+
+    spo_triple query_triple = {so_id.second, p_id.second, so_id2.second};
 
     stop = chrono::high_resolution_clock::now();
     time_span = chrono::duration_cast<chrono::microseconds>(stop - start);
