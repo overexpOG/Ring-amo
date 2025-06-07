@@ -144,57 +144,57 @@ int main(int argc, char **argv)
 
     if (type == "ring")
     {
-        std::string index_name = output + "ring.ring";
+        std::string index_name = output + "/ring.ring";
         build_index<ring::ring<>>(dataset, index_name);
     }
     else if (type == "c-ring")
     {
-        std::string index_name = output + "c-ring.ring";
+        std::string index_name = output + "/c-ring.ring";
         build_index<ring::c_ring>(dataset, index_name);
     }
     else if (type == "ring-sel")
     {
-        std::string index_name = output + "ring-sel.ring";
+        std::string index_name = output + "/ring-sel.ring";
         build_index<ring::ring_sel>(dataset, index_name);
     }
     else if (type == "ring-dyn-basic")
     {
-        std::string index_name = output + "ring-dyn-basic.ring";
+        std::string index_name = output + "/ring-dyn-basic.ring";
         build_index<ring::ring_dyn>(dataset, index_name);
     }
     else if (type == "ring-dyn")
     {
-        std::string index_name = output + "ring-dyn.ring";
+        std::string index_name = output + "/ring-dyn.ring";
         build_index<ring::medium_ring_dyn>(dataset, index_name);
     }
     else if (type == "ring-dyn-amo")
     {
-        std::string index_name = output + "ring-dyn-amo.ring";
+        std::string index_name = output + "/ring-dyn-amo.ring";
         build_index<ring::ring_dyn_amo>(dataset, index_name);
     }
     else if (type == "ring-map") {
-        std::string index_name = output + "ring-map.ring";
+        std::string index_name = output + "/ring-map.ring";
         build_index_mapped<ring::ring<>, ring::basic_map>(dataset, index_name);
     }
     else if (type == "ring-dyn-map")
     {
-        std::string index_name = output + "ring-dyn-map.ring";
+        std::string index_name = output + "/ring-dyn-map.ring";
         build_index_mapped<ring::medium_ring_dyn, ring::basic_map>(dataset, index_name);
     }
     else if (type == "ring-dyn-amo-map") {
-        std::string index_name = output + "ring-dyn-amo-map.ring";
+        std::string index_name = output + "/ring-dyn-amo-map.ring";
         build_index_mapped<ring::ring_dyn_amo, ring::basic_map>(dataset, index_name);
     }
     else if (type == "ring-map-avl") {
-        std::string index_name = output + "ring-map-avl.ring";
+        std::string index_name = output + "/ring-map-avl.ring";
         build_index_mapped<ring::ring<>, ring::basic_map_avl>(dataset, index_name);
     }
     else if (type == "ring-dyn-map-avl") {
-        std::string index_name = output + "ring-dyn-map-avl.ring";
+        std::string index_name = output + "/ring-dyn-map-avl.ring";
         build_index_mapped<ring::medium_ring_dyn, ring::basic_map_avl>(dataset, index_name);
     }
     else if (type == "ring-dyn-amo-map-avl") {
-        std::string index_name = output + "ring-dyn-amo-map-avl.ring";
+        std::string index_name = output + "/ring-dyn-amo-map-avl.ring";
         build_index_mapped<ring::ring_dyn_amo, ring::basic_map_avl>(dataset, index_name);
     }
     else

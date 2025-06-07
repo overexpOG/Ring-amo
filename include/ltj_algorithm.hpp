@@ -86,7 +86,7 @@ namespace ring {
             size_type i = 0;
             m_iterators.resize(m_ptr_triple_patterns->size());
             for(const auto& triple : *m_ptr_triple_patterns){
-                //Bulding iterators
+                //Building iterators
                 m_iterators[i] = ltj_iter_type(&triple, m_ptr_ring);
                 if(m_iterators[i].is_empty){
                     m_is_empty = true;

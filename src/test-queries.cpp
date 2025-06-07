@@ -463,6 +463,17 @@ void mapped_ring(const string &file, const string &so_mapping_file, const string
     }
 }
 
+string get_name(const string &path)
+{
+    size_t lastSlash = path.find_last_of("/\\");
+    std::string filename = path.substr(lastSlash + 1);
+
+    size_t lastDot = filename.find_last_of('.');
+    std::string filenameFinal = filename.substr(0, lastDot);
+
+    return filenameFinal;
+}
+
 int main(int argc, char *argv[])
 {
     if (argc != 5)
@@ -475,25 +486,25 @@ int main(int argc, char *argv[])
     std::string queries = argv[2];
     std::string so_mapping = argv[3];
     std::string p_mapping = argv[4];
-    std::string type = get_type(index);
+    std::string type = get_name(index);
 
     if (type == "ring-dyn-basic")
     {
         mapped_ring<ring::ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
     }
-    else if (type == "ring-dyn")
+    else if (type == "ring-dyn-map")
     {
         mapped_ring<ring::medium_ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
     }
-    else if (type == "ring-dyn-avl")
+    else if (type == "ring-dyn-map-avl")
     {
         mapped_ring<ring::medium_ring_dyn, ring::basic_map_avl>(index, so_mapping, p_mapping, queries);
     }
-    else if (type == "ring-dyn-amo")
+    else if (type == "ring-dyn-amo-map")
     {
         mapped_ring<ring::ring_dyn_amo, ring::basic_map>(index, so_mapping, p_mapping, queries);
     }
-    else if (type == "ring-dyn-amo-avl")
+    else if (type == "ring-dyn-amo-map-avl")
     {
         mapped_ring<ring::ring_dyn_amo, ring::basic_map_avl>(index, so_mapping, p_mapping, queries);
     }

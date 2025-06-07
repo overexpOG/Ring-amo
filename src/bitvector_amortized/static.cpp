@@ -102,7 +102,7 @@ namespace amo {
     }
 
     // preprocesses for rank, with parameter K
-    void StaticBV::staticPreprocess () { 
+    void StaticBV::staticPreprocess() { 
         uint64_t i,n;
         uint64_t sacc,acc;
         n = size;

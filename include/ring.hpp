@@ -1062,7 +1062,8 @@ namespace ring
             insert_index = m_bwt_p.get_C(o) + m_bwt_o.ranky(insert_index, o);
             m_bwt_p.insert_WT(insert_index, p);
             m_bwt_s.insert_C(m_bwt_s.select_C(p + 1), 0);
-            
+            m_n_triples++;
+
             return;
         }
 
@@ -1081,6 +1082,7 @@ namespace ring
             insert_index = m_bwt_s.get_C(p) + m_bwt_p.ranky(insert_index, p);
             m_bwt_s.insert_WT(insert_index, s); // POS
             m_bwt_o.insert_C(m_bwt_o.select_C(s + 1), 0);
+            m_n_triples++;
 
             return;
         }
@@ -1100,6 +1102,7 @@ namespace ring
             insert_index = m_bwt_o.get_C(s) + m_bwt_s.ranky(insert_index, s);
             m_bwt_o.insert_WT(insert_index, o);
             m_bwt_p.insert_C(m_bwt_p.select_C(o + 1), 0);
+            m_n_triples++;
 
             return;
         }
@@ -1148,6 +1151,8 @@ namespace ring
             bool p_is_used = m_bwt_s.nElems(p);
             bool o_is_used = m_bwt_p.nElems(o);
 
+            m_n_triples--;
+
             return {s_is_used, p_is_used, o_is_used};
         }
 
@@ -1175,6 +1180,8 @@ namespace ring
             bool p_is_used = m_bwt_s.nElems(p);
             bool o_is_used = m_bwt_p.nElems(o);
 
+            m_n_triples--;
+
             return {s_is_used, p_is_used, o_is_used};
         }
 
@@ -1201,6 +1208,8 @@ namespace ring
             bool s_is_used = m_bwt_o.nElems(s);
             bool p_is_used = m_bwt_s.nElems(p);
             bool o_is_used = m_bwt_p.nElems(o);
+
+            m_n_triples--;
 
             return {s_is_used, p_is_used, o_is_used};
         }
@@ -1291,6 +1300,8 @@ namespace ring
 
             return;
         }
+
+        m_n_triples--;
     }
 
     /**
@@ -1353,6 +1364,7 @@ namespace ring
             new_index = m_bwt_p.get_C(ret_value) + m_bwt_o.ranky(new_index, ret_value);
             m_bwt_p.remove_C(m_bwt_p.select_C(ret_value + 1) - 1);
         }
+        m_n_triples -= total_removed;
 
         return total_removed;
     }
@@ -1441,6 +1453,8 @@ namespace ring
                 m_bwt_p.remove_C(m_bwt_p.select_C(ret_value + 1) - 1);
             }
         }
+        m_n_triples -= total_removed;
+
         return total_removed;
     }
 
