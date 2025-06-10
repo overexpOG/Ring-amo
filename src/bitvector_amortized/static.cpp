@@ -142,6 +142,7 @@ namespace amo {
         myfread (data,sizeof(uint64_t),(size + w - 1)/w,in);
         
         StaticBV *stat = new StaticBV(data, size);
+        delete[] data;
         return stat;
     }
 
