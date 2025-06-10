@@ -70,14 +70,14 @@ namespace amo {
     }
 
     // collects all the descending bits into an array, destroys bv.dyn
-    uint64_t* HybridBV::collect (uint64_t len) {
+    uint64_t* HybridBV::collect(uint64_t len) {
         auto* dyn = std::get_if<DynamicBV*>(&bv);
         if (!dyn) {
             throw std::runtime_error("collect() llamado sobre nodo que no es DynamicBV");
         }
 
-        uint64_t* D = new uint64_t[(len + w - 1) / w];
-        read (0,len,D,0);
+        uint64_t* D = new uint64_t[(len + w - 1) / w]();
+        read(0,len,D,0);
 
         delete (*dyn)->left;
         delete (*dyn)->right;
@@ -88,7 +88,7 @@ namespace amo {
 
     // converts into a leaf if it's short or into a static otherwise
     // delta gives the difference in leaves (new - old)
-    void HybridBV::flatten (int64_t *delta) { 
+    void HybridBV::flatten(int64_t *delta) {
         uint64_t len;
         uint64_t *D;
 
@@ -103,6 +103,7 @@ namespace amo {
         } else { 
             bv = new LeafBV(D,len);
         }
+        delete[] D;
         *delta += leaves();
     }
 
@@ -205,7 +206,7 @@ namespace amo {
         return finalDB;
     }
 
-    void HybridBV::balance (uint64_t i, int64_t *delta) { 
+    void HybridBV::balance(uint64_t i, int64_t *delta) { 
         uint64_t len = length();
         uint64_t ones = getOnes();
         uint64_t *D;

@@ -309,7 +309,7 @@ void query_delete_edge(ring_type &graph, map_type &so_mapping, map_type &p_mappi
     std::pair<bool, uint64_t> p_id = p_mapping.locate(tokens_query[1]);
     std::pair<bool, uint64_t> so_id2 = so_mapping.locate(tokens_query[2]);
 
-    if (! so_id.first && ! p_id.first && ! so_id2.first) return;
+    if (! so_id.first || ! p_id.first || ! so_id2.first) return;
 
     spo_triple query_triple = {so_id.second, p_id.second, so_id2.second};
 
