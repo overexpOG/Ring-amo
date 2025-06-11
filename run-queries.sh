@@ -2,7 +2,7 @@
 
 if [ $# -ne 5 ]
 then
-    echo "Not enough arguments. Usage: bash run-benchmark-dyn-amo <index> <SO mapping> <P mapping> <queries_folder> <results_folder>"
+    echo "Not enough arguments. Usage: bash run-queries <index> <SO mapping> <P mapping> <queries_folder> <results_folder>"
     exit 1
 fi
 
@@ -12,8 +12,13 @@ if [ ! -f "$3" ]; then echo "P mapping file doesn't exist."; exit 1; fi
 if [ ! -d "$4" ]; then echo "Queries folder doesn't exist."; exit 1; fi
 if [ ! -d "$5" ]; then echo "Results folder doesn't exist."; exit 1; fi
 
+cd build
+
 for file in "$4"/*.txt
 do
     queryName=$(basename "$file")
+    echo "testing $queryName"
     ./test-queries "$1" "$file" "$2" "$3" > "$5/$queryName"
 done
+
+cd ..

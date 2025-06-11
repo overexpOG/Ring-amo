@@ -1,20 +1,27 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]
+if [ $# -ne 3 ]
 then
-	echo "Not enough arguments. Usage: bash build-rings <data_folder> <results_folder> <queries_folder>"
+	echo "Not enough arguments. Usage: bash run-queries-all-rings <data_file> <results_folder> <queries_folder>"
 	exit 1
 fi
 
-if [ ! -d $1 ]; then echo "Data folder doesn't exist."; exit 1; fi
-if [ ! -d $2 ]; then echo "Results folder doesn't exist."; exit 1; fi
-if [ ! -d "$3" ]; then echo "Queries folder doesn't exist."; exit 1; fi
-if [ ! -d "$4" ]; then echo "Results folder doesn't exist."; exit 1; fi
+data_file=$(realpath "$1")
+results_dir=$(realpath "$2")
+queries_dir=$(realpath "$3")
 
-./build-dynamic-rings.sh $1 $2
+if [ ! -f "$data_file" ]; then echo "Data file doesn't exist."; exit 1; fi
+if [ ! -d "$results_dir" ]; then echo "Results folder doesn't exist."; exit 1; fi
+if [ ! -d "$queries_dir" ]; then echo "Queries folder doesn't exist."; exit 1; fi
 
-for dir in $2/*/
+./build-dynamic-rings.sh "$data_file" "$results_dir"
+
+for subdir in "$results_dir"/buildOutput/*/
 do
-    echo "Processing $dir"
-    ./run-queries.sh $2/$dir/$dir.ring $2/$dir/$dir.ring.so.mapping $2/$dir/$dir.ring.p.mapping $3 $2/$dir
+    subdir=$(realpath "$subdir")
+    index_name=$(basename "$subdir")
+
+    echo "Processing $index_name"
+
+    ./run-queries.sh "$subdir/$index_name.ring" "$subdir/$index_name.ring.so.mapping" "$subdir/$index_name.ring.p.mapping" "$queries_dir" "$subdir"
 done

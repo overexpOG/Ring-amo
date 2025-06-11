@@ -1,32 +1,54 @@
 #!/bin/bash
 
+# Lista de rings a probar
+configs=(
+    "ring-dyn-map"
+    "ring-dyn-map-avl"
+    "ring-dyn-amo-map"
+    "ring-dyn-amo-map-avl"
+)
+
+# Función para verificar archivos
+check_files() {
+    local dir="$1"
+    local base_name=$(basename "$dir")
+
+    if [ -f "$dir/$base_name.ring" ] && \
+       [ -f "$dir/$base_name.ring.so.mapping" ] && \
+       [ -f "$dir/$base_name.ring.p.mapping" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 if [ $# -ne 2 ]
 then
-	echo "Not enough arguments. Usage: bash build-rings <data_folder> <results_folder>"
+	echo "Not enough arguments. Usage: bash build-dynamic-rings <data_file> <results_folder>"
 	exit 1
 fi
 
-if [ ! -d $1 ]; then echo "Data folder doesn't exist."; exit 1; fi
-if [ ! -d $2 ]; then echo "Results folder doesn't exist."; exit 1; fi
+data_file=$(realpath "$1")
+results_dir=$(realpath "$2")	
 
-mkdir $2/buildOutput
-mkdir $2/buildOutput/ring-dyn-map
-mkdir $2/buildOutput/ring-dyn-map-avl
-mkdir $2/buildOutput/ring-dyn-amo-map
-mkdir $2/buildOutput/ring-dyn-amo-map-avl
+if [ ! -f "$data_file" ]; then echo "Data file doesn't exist."; exit 1; fi
+if [ ! -d "$results_dir" ]; then echo "Results folder doesn't exist."; exit 1; fi
 
-cd build
-echo "Building ring dyn with basic mapping"
-./build-index ../$1/wikidata-wcg-filtered.nt ring-dyn-map ../$2/buildOutput/ring-dyn-map > ../$2/buildOutput/ring-dyn-map/ring-dyn-map.txt
-echo "[Done]"
-echo "Building ring dyn with avl mapping"
-./build-index ../$1/wikidata-wcg-filtered.nt ring-dyn-map-avl ../$2/buildOutput/ring-dyn-map-avl > ../$2/buildOutput/ring-dyn-map-avl/ring-dyn-map-avl.txt
-echo "[Done]"
-echo "Building ring dyn amo with basic mapping"
-./build-index ../$1/wikidata-wcg-filtered.nt ring-dyn-amo-map ../$2/buildOutput/ring-dyn-amo-map > ../$2/buildOutput/ring-dyn-amo-map/ring-dyn-amo-map.txt
-echo "[Done]"
-echo "Building ring dyn amo with avl mapping"
-./build-index ../$1/wikidata-wcg-filtered.nt ring-dyn-amo-map-avl ../$2/buildOutput/ring-dyn-amo-map-avl > ../$2/buildOutput/ring-dyn-amo-map-avl/ring-dyn-amo-map-avl.txt
-echo "[Done]"
+mkdir "$results_dir/buildOutput"
+
+cd build || exit 1
+
+for name in "${configs[@]}"; do
+	out_dir="$results_dir/buildOutput/$name"
+	mkdir -p "$out_dir"
+
+	echo "Building $name"
+	if check_files "$out_dir"; then
+        echo "Files already exist in $out_dir, skipping..."
+    else
+        ./build-index "$data_file" "$name" "$out_dir" > "$out_dir/$name.txt"
+        echo "[Done]"
+    fi
+done
 
 cd ..
