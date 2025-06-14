@@ -84,7 +84,7 @@ namespace amo {
         uint64_t *segment;
 
         auto leftLeaf = std::get_if<LeafBV*>(&left->bv);
-        auto rightLeaf = std::get_if<LeafBV*>(&left->bv);
+        auto rightLeaf = std::get_if<LeafBV*>(&right->bv);
         if (!leftLeaf || !rightLeaf) {
             throw std::runtime_error("El variant no contiene un LeafBV en left o right");
         }
@@ -118,7 +118,7 @@ namespace amo {
         uint64_t *segment;
 
         auto leftLeaf = std::get_if<LeafBV*>(&left->bv);
-        auto rightLeaf = std::get_if<LeafBV*>(&left->bv);
+        auto rightLeaf = std::get_if<LeafBV*>(&right->bv);
         if (!leftLeaf || !rightLeaf) {
             throw std::runtime_error("El variant no contiene un LeafBV en left o right");
         }

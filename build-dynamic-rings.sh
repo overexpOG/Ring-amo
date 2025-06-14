@@ -46,8 +46,12 @@ for name in "${configs[@]}"; do
 	if check_files "$out_dir"; then
         echo "Files already exist in $out_dir, skipping..."
     else
-        ./build-index "$data_file" "$name" "$out_dir" > "$out_dir/$name.txt"
-        echo "[Done]"
+        if ./build-index "$data_file" "$name" "$out_dir" > "$out_dir/$name.txt"; then
+            echo "[Done]"
+        else
+            echo "Error while building $name" >&2
+            echo "$name" >> "$results_dir/build_errors.log"
+        fi
     fi
 done
 

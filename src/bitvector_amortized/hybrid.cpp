@@ -472,7 +472,7 @@ namespace amo {
                 if (lsize == 1) {
                     DynamicBV* old_dynamic = *dyn;
                     bv = old_dynamic->right->bv;
-                    old_dynamic->right->bv = new LeafBV();
+                    old_dynamic->right->bv = static_cast<LeafBV*>(nullptr);
                     delete old_dynamic->right;
                     delete old_dynamic->left;
                     delete old_dynamic;
@@ -494,7 +494,7 @@ namespace amo {
                 if (rsize == 1) {
                     DynamicBV* old_dynamic = *dyn;
                     bv = old_dynamic->left->bv;
-                    old_dynamic->left->bv = new LeafBV();
+                    old_dynamic->left->bv = static_cast<LeafBV*>(nullptr);
                     delete old_dynamic->right;
                     delete old_dynamic->left;
                     delete old_dynamic;
