@@ -1176,9 +1176,9 @@ namespace ring
             m_bwt_p.remove_C(m_bwt_p.select_C(o + 1) - 1);
 
             // Check if the elements s,p,o are still in use
-            bool s_is_used = m_bwt_o.nElems(s);
+            bool s_is_used = m_bwt_o.nElems(s) || m_bwt_p.nElems(s);
             bool p_is_used = m_bwt_s.nElems(p);
-            bool o_is_used = m_bwt_p.nElems(o);
+            bool o_is_used = m_bwt_p.nElems(o) || m_bwt_o.nElems(o);
 
             m_n_triples--;
 
