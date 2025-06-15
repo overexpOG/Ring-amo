@@ -309,7 +309,15 @@ void query_delete_edge(ring_type &graph, map_type &so_mapping, map_type &p_mappi
     std::pair<bool, uint64_t> p_id = p_mapping.locate(tokens_query[1]);
     std::pair<bool, uint64_t> so_id2 = so_mapping.locate(tokens_query[2]);
 
-    if (! so_id.first || ! p_id.first || ! so_id2.first) return;
+    // The node or the edge doesn't exist  in the dictionary
+    if (! so_id.first || ! p_id.first || ! so_id2.first)
+    {
+        cout << "Edge doesn't exist;" <<  nQ << ";0";
+        cout << ";" << (unsigned long long)(total_time * 1000000000ULL);
+        cout << ";" << (unsigned long long)(forward_trad * 1000000000ULL);
+        cout << ";" << (unsigned long long)(backward_time * 1000000000ULL) << endl;
+        return;
+    }
 
     spo_triple query_triple = {so_id.second, p_id.second, so_id2.second};
 
@@ -326,6 +334,16 @@ void query_delete_edge(ring_type &graph, map_type &so_mapping, map_type &p_mappi
     total_time = time_span.count();
 
     start = chrono::high_resolution_clock::now();
+
+    // The given triple doesn't exist in the graph
+    if (!get<3>(valid))
+    {
+        cout << "Edge doesn't exist;" << nQ << ";0";
+        cout << ";" << (unsigned long long)(total_time * 1000000000ULL);
+        cout << ";" << (unsigned long long)(forward_trad * 1000000000ULL);
+        cout << ";" << (unsigned long long)(backward_time * 1000000000ULL) << endl;
+        return;
+    }
 
     // Is S still in use? If not delete it from the mapping
     if (!get<0>(valid))
@@ -349,7 +367,8 @@ void query_delete_edge(ring_type &graph, map_type &so_mapping, map_type &p_mappi
     time_span = chrono::duration_cast<chrono::microseconds>(stop - start);
     backward_time = time_span.count();
 
-    cout << "Delete edge;" <<  nQ << ";" << (unsigned long long)(total_time * 1000000000ULL);
+    cout << "Delete edge;" <<  nQ << ";" << "1;";
+    cout << (unsigned long long)(total_time * 1000000000ULL);
     cout << ";" << (unsigned long long)(forward_trad * 1000000000ULL);
     cout << ";" << (unsigned long long)(backward_time * 1000000000ULL) << endl;
 }
@@ -357,13 +376,22 @@ void query_delete_edge(ring_type &graph, map_type &so_mapping, map_type &p_mappi
 template <class ring_type, class map_type>
 void query_delete_node(ring_type &graph, map_type &so_mapping, map_type &p_mapping, vector<string> &tokens_query, const uint64_t nQ)
 {
+    uint64_t node_id = 0;
     chrono::high_resolution_clock::time_point start, stop;
     double total_time = 0.0, forward_trad = 0.0, backward_time = 0.0;
     chrono::duration<double> time_span;
 
     start = chrono::high_resolution_clock::now();
 
-    uint64_t node_id = so_mapping.eliminate(tokens_query[0]);
+    try {
+        node_id = so_mapping.eliminate(tokens_query[0]);
+    } catch (const std::invalid_argument& e) {
+        cout << "Node doesn't exist;" << nQ << ";" << 0;
+        cout << ";" << (unsigned long long)(total_time * 1000000000ULL);
+        cout << ";" << (unsigned long long)(forward_trad * 1000000000ULL);
+        cout << ";" << (unsigned long long)(backward_time * 1000000000ULL) << endl;
+        return;
+    }
 
     stop = chrono::high_resolution_clock::now();
     time_span = chrono::duration_cast<chrono::microseconds>(stop - start);

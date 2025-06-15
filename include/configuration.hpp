@@ -34,6 +34,6 @@ using namespace sdsl;
 using namespace std;
 
 typedef std::tuple<uint32_t, uint32_t, uint32_t> spo_triple;
-typedef std::tuple<bool, bool, bool> spo_valid_triple;
+typedef std::tuple<bool, bool, bool, bool> spo_valid_triple;
 
 #endif

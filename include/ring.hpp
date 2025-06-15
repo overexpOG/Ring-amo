@@ -1147,13 +1147,13 @@ namespace ring
             m_bwt_p.remove_C(m_bwt_p.select_C(o + 1) - 1);
 
             // Check if the elements s,p,o are still in use
-            bool s_is_used = m_bwt_o.nElems(s);
+            bool s_is_used = m_bwt_o.nElems(s) || m_bwt_p.nElems(s);
             bool p_is_used = m_bwt_s.nElems(p);
-            bool o_is_used = m_bwt_p.nElems(o);
+            bool o_is_used = m_bwt_p.nElems(o) || m_bwt_o.nElems(o);
 
             m_n_triples--;
 
-            return {s_is_used, p_is_used, o_is_used};
+            return {s_is_used, p_is_used, o_is_used, 1};
         }
 
         low = m_bwt_o.get_C(s) - 1 + m_bwt_s.ranky(low, s) + 1;
@@ -1182,7 +1182,7 @@ namespace ring
 
             m_n_triples--;
 
-            return {s_is_used, p_is_used, o_is_used};
+            return {s_is_used, p_is_used, o_is_used, 1};
         }
 
         low = m_bwt_p.get_C(o) - 1 + m_bwt_o.ranky(low, o) + 1;
@@ -1205,18 +1205,17 @@ namespace ring
             m_bwt_p.remove_C(m_bwt_p.select_C(o + 1) - 1);
 
             // Check if the elements s,p,o are still in use
-            bool s_is_used = m_bwt_o.nElems(s);
+            bool s_is_used = m_bwt_o.nElems(s) || m_bwt_p.nElems(s);
             bool p_is_used = m_bwt_s.nElems(p);
-            bool o_is_used = m_bwt_p.nElems(o);
+            bool o_is_used = m_bwt_p.nElems(o) || m_bwt_o.nElems(o);
 
             m_n_triples--;
 
-            return {s_is_used, p_is_used, o_is_used};
+            return {s_is_used, p_is_used, o_is_used, 1};
         }
-        else
-        {
-            throw std::invalid_argument("The given triple doesnt exist in the graph");
-        }
+        
+        // The given triple doesnt exist in the graph
+        return {1, 1, 1, 0};
     }
 
     /**
