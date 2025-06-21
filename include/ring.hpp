@@ -1128,69 +1128,20 @@ namespace ring
         uint64_t low = 0, high = 0;
 
         // Find triple
+        // find triple with p
         low = m_bwt_s.get_C(p);
         high = m_bwt_s.get_C(p + 1) - 1;
-
-        // Deleting in S first
-        if (low == high)
-        {
-            uint64_t o_remove_index = m_bwt_o.get_C(s) + m_bwt_s.ranky(low, s);
-            uint64_t p_remove_index = m_bwt_p.get_C(o) + m_bwt_o.ranky(o_remove_index, o);
-
-            m_bwt_s.remove_WT(low);
-            m_bwt_o.remove_WT(o_remove_index);
-            m_bwt_p.remove_WT(p_remove_index);
-
-            // Update the bitvectors
-            m_bwt_o.remove_C(m_bwt_o.select_C(s + 1) - 1);
-            m_bwt_s.remove_C(m_bwt_s.select_C(p + 1) - 1);
-            m_bwt_p.remove_C(m_bwt_p.select_C(o + 1) - 1);
-
-            // Check if the elements s,p,o are still in use
-            bool s_is_used = m_bwt_o.nElems(s) || m_bwt_p.nElems(s);
-            bool p_is_used = m_bwt_s.nElems(p);
-            bool o_is_used = m_bwt_p.nElems(o) || m_bwt_o.nElems(o);
-
-            m_n_triples--;
-
-            return {s_is_used, p_is_used, o_is_used, 1};
-        }
-
+        // find triple with p and s
         low = m_bwt_o.get_C(s) - 1 + m_bwt_s.ranky(low, s) + 1;
         high = m_bwt_o.get_C(s) - 1 + m_bwt_s.ranky(high + 1, s);
-
-
-        // Deleting in O first
-        if (low == high)
-        {
-            uint64_t p_remove_index = m_bwt_p.get_C(o) + m_bwt_o.ranky(low, o);
-            uint64_t s_remove_index = m_bwt_s.get_C(p) + m_bwt_p.ranky(p_remove_index, p);
-
-            m_bwt_o.remove_WT(low);
-            m_bwt_p.remove_WT(p_remove_index);
-            m_bwt_s.remove_WT(s_remove_index);
-
-            // Update the bitvectors
-            m_bwt_o.remove_C(m_bwt_o.select_C(s + 1) - 1);
-            m_bwt_s.remove_C(m_bwt_s.select_C(p + 1) - 1);
-            m_bwt_p.remove_C(m_bwt_p.select_C(o + 1) - 1);
-
-            // Check if the elements s,p,o are still in use
-            bool s_is_used = m_bwt_o.nElems(s) || m_bwt_p.nElems(s);
-            bool p_is_used = m_bwt_s.nElems(p);
-            bool o_is_used = m_bwt_p.nElems(o) || m_bwt_o.nElems(o);
-
-            m_n_triples--;
-
-            return {s_is_used, p_is_used, o_is_used, 1};
-        }
-
+        // find triple with p, s and o
         low = m_bwt_p.get_C(o) - 1 + m_bwt_o.ranky(low, o) + 1;
         high = m_bwt_p.get_C(o) - 1 + m_bwt_o.ranky(high + 1, o);
 
-
+        // if low == high the triple exists, else if low < high the triple doesn't exist
+        // if low > high the triple is repeated
         // Deleting in P
-        if (low <= high)
+        if (low == high)
         {
             uint64_t s_remove_index = m_bwt_s.get_C(p) + m_bwt_p.ranky(low, p);
             uint64_t o_remove_index = m_bwt_o.get_C(s) + m_bwt_s.ranky(s_remove_index, s);
