@@ -110,9 +110,17 @@ void build_mapping(const std::string &dataset, std::vector<spo_triple> &D, const
 template <class ring, class map>
 void build_index_mapped(const std::string &dataset, const std::string &output)
 {
-    vector<spo_triple> D, E;
+    vector<spo_triple> D;
 
     build_mapping<map>(dataset, D, output);
+
+    std::sort(D.begin(), D.end());
+    auto original_size = D.size();
+    std::cout << "original size: " << original_size << std::endl;
+    auto new_end = std::unique(D.begin(), D.end());
+    auto new_size = std::distance(D.begin(), new_end);
+    std::cout << "filtered size: " << new_size << std::endl;
+    D.erase(new_end, D.end());
 
     D.shrink_to_fit();
 
