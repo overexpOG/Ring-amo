@@ -45,7 +45,7 @@ namespace ring
     dict_map_avl(std::string val)
     {
       root = new node_avl(val, 1);
-      id_map.push_back({ .pfc = root->get_pfc()});
+      id_map.push_back(EmptyOrPFC(root->get_pfc()));
     }
 
     // Move constructor
@@ -84,8 +84,9 @@ namespace ring
         // For every empty slot write the next empty
         for (uint64_t i = 0; i < free_ids_size - 1; i++)
         {
-          out.write((char *)&id_map[first_empty - 1].next_empty, sizeof(uint64_t));
-          first_empty = id_map[first_empty - 1].next_empty;
+          uint64_t next = id_map[first_empty - 1].get_next_empty();
+          out.write((char *)&next, sizeof(uint64_t));
+          first_empty = id_map[first_empty - 1].get_next_empty();
           w_bytes += sizeof(uint64_t);
         }
       }
@@ -109,8 +110,9 @@ namespace ring
         // For every empty slot write the next empty
         for (uint64_t i = 0; i < free_ids_size - 1; i++)
         {
-          out.write((char *)&id_map[first_empty - 1].next_empty, sizeof(uint64_t));
-          first_empty = id_map[first_empty - 1].next_empty;
+          uint64_t next = id_map[first_empty - 1].get_next_empty();
+          out.write((char *)&next, sizeof(uint64_t));
+          first_empty = id_map[first_empty - 1].get_next_empty();
           written_bytes += sizeof(uint64_t);
         }
       }
@@ -141,7 +143,7 @@ namespace ring
         for (uint64_t i = 0; i < free_ids_size - 1; i++)
         {
           in.read((char *)&tmp, sizeof(uint64_t));
-          id_map[last_empty - 1].next_empty = tmp;
+          id_map[last_empty - 1].set_next_empty(tmp);
           last_empty = tmp;
         }
       }
@@ -165,7 +167,7 @@ namespace ring
         id = id_map.size() + 1;
         result_from_node_insert = root->insert(val, id, id_map);
         root = result_from_node_insert.first;
-        id_map.push_back({ .pfc = result_from_node_insert.second});
+        id_map.push_back(EmptyOrPFC(result_from_node_insert.second));
       }
       else
       {
@@ -179,9 +181,9 @@ namespace ring
           last_empty = 0;
           first_empty = 0;
         } else {
-          first_empty = id_map[id - 1].next_empty;
+          first_empty = id_map[id - 1].get_next_empty();
         }
-        id_map[id - 1].pfc = result_from_node_insert.second;
+        id_map[id - 1].set_pfc(result_from_node_insert.second);
         free_ids_size--;
       }
 
@@ -206,7 +208,7 @@ namespace ring
         found_id = std::get<0>(result_from_node_insert);
         if (found_id == id)
         {
-          id_map.push_back({ .pfc = std::get<2>(result_from_node_insert) });
+          id_map.push_back(EmptyOrPFC(std::get<2>(result_from_node_insert)));
         }
       }
       else
@@ -223,9 +225,9 @@ namespace ring
             last_empty = 0;
             first_empty = 0;
           } else {
-            first_empty = id_map[id - 1].next_empty;
+            first_empty = id_map[id - 1].get_next_empty();
           }
-          id_map[id - 1].pfc = std::get<2>(result_from_node_insert);
+          id_map[id - 1].set_pfc(std::get<2>(result_from_node_insert));
           free_ids_size--;
         }
       }
@@ -254,11 +256,11 @@ namespace ring
       if (free_ids_size == 0)
       {
         first_empty = elim_id;
-        id_map[elim_id - 1].pfc = nullptr;
+        id_map[elim_id - 1].set_pfc(nullptr);
       }
       else
       {
-        id_map[last_empty - 1].next_empty = elim_id;
+        id_map[last_empty - 1].set_next_empty(elim_id);
       }
       last_empty = elim_id;
       free_ids_size++;
@@ -272,8 +274,8 @@ namespace ring
      */
     void eliminate(const uint64_t id)
     {
-      id_map[id - 1].pfc->elim(id);
-      id_map[id - 1].pfc = nullptr;
+      id_map[id - 1].get_pfc()->elim(id);
+      id_map[id - 1].set_pfc(nullptr);
       // First in "Symbolic queue"
       if (free_ids_size == 0)
       {
@@ -281,7 +283,7 @@ namespace ring
       }
       else
       {
-        id_map[last_empty - 1].next_empty = id;
+        id_map[last_empty - 1].set_next_empty(id);
       }
       last_empty = id;
       free_ids_size++;
@@ -307,7 +309,7 @@ namespace ring
     std::string extract(uint64_t id)
     {
       assert(id > 0 && id - 1 < id_map.size());
-      return id_map[id - 1].pfc->extract(id);
+      return id_map[id - 1].get_pfc()->extract(id);
     }
 
     size_t size()
@@ -508,7 +510,9 @@ namespace ring
           // Update ID mapping
           for (uint64_t id : pfc->all_ids())
           {
-            id_map[id - 1].pfc = pfc;
+            if (id_map[id - 1].has_pfc()) {
+              id_map[id - 1].set_pfc(pfc);
+            }
           }
           
           if (val.compare(pfc->first_word()) >= 0)
@@ -567,7 +571,9 @@ namespace ring
           // Update ID mapping
           for (uint64_t id : pfc->all_ids())
           {
-            id_map[id - 1].pfc = pfc;
+            if (id_map[id - 1].has_pfc()) {
+              id_map[id - 1].set_pfc(pfc);
+            }
           }
 
           if (val.compare(pfc->first_word()) >= 0)
@@ -643,7 +649,9 @@ namespace ring
           // Update ID mapping
           for (uint64_t id : right->pfc->all_ids())
           {
-            id_map[id - 1].pfc = left->pfc;
+            if (id_map[id - 1].has_pfc()) {
+              id_map[id - 1].set_pfc(left->pfc);
+            }
           }
 
           std::string right_string = right->pfc->pfc_string();
@@ -669,7 +677,9 @@ namespace ring
             // Update ID mapping
             for (uint64_t id : pfc->all_ids())
             {
-              id_map[id - 1].pfc = pfc;
+              if (id_map[id - 1].has_pfc()) {
+                id_map[id - 1].set_pfc(pfc);
+              }
             }
           }
         }
