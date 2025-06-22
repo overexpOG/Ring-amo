@@ -1,4 +1,5 @@
-#include <regex> 
+#include <regex>
+#include <unordered_set>
 #include <iostream>
 #include <utility>
 #include "ring.hpp"
@@ -17,6 +18,8 @@ enum class QueryType {
     DELETE_EDGE,
     DELETE_NODE
 };
+
+std::unordered_set<std::string> select_type = {"J3", "J4", "P2", "P3", "P4", "S1", "S2", "S3", "S4", "T2", "T3", "T4", "TI2", "TI3", "TI4", "Tr1", "Tr2"};
 
 bool get_file_content(string filename, vector<string> &vector_of_strings)
 {
@@ -89,6 +92,14 @@ std::vector<std::string> parse_select(const std::string &input)
         tmp_index = query.find(" . ", index);
         res.emplace_back(query.substr(index, tmp_index - index));
         index = tmp_index + 2;
+    }
+
+    size_t bracket_start = input.find('[');
+    size_t bracket_end = input.find(']');
+    if (bracket_start != std::string::npos && bracket_end != std::string::npos && bracket_end > bracket_start)
+    {
+        std::string tag = input.substr(bracket_start + 1, bracket_end - bracket_start - 1);
+        res.emplace_back(tag);
     }
 
     return res;
@@ -224,6 +235,12 @@ void query_select(ring_type &graph, map_type &so_mapping, map_type &p_mapping, v
     unordered_map<string, uint8_t> hash_table_vars;
     vector<ring::triple_pattern> query;
 
+    // tipo de query select
+    std::string type = tokens_query.back();
+    if (select_type.count(type)) {
+        tokens_query.pop_back();
+    }
+
     start = chrono::high_resolution_clock::now();
     for (string &token : tokens_query)
     {
@@ -264,7 +281,8 @@ void query_select(ring_type &graph, map_type &so_mapping, map_type &p_mapping, v
     time_span = chrono::duration_cast<chrono::microseconds>(stop - start);
     backward_trad = time_span.count();
 
-    cout << "Select;" <<  nQ << ";" << res.size() << ";" << (unsigned long long)(total_time * 1000000000ULL);
+    cout << "Select;" << type << ";" <<  nQ << ";" << res.size();
+    cout << ";" << (unsigned long long)(total_time * 1000000000ULL);
     cout << ";" << (unsigned long long)(forward_trad * 1000000000ULL);
     cout << ";" << (unsigned long long)(backward_trad * 1000000000ULL) << endl;
 }
