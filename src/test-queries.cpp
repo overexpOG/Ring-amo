@@ -470,6 +470,12 @@ void mapped_ring(const string &file, const string &so_mapping_file, const string
     {
         for (string &query_string : dummy_queries)
         {
+            if (nQ % 10 == 0) {
+                std::cout << "Bit size;" << nQ/10 << ";" << sdsl::size_in_bytes(graph) << ";";
+                std::cout << graph.bit_size() / 8 << ";" << so_mapping.bit_size() / 8;
+                std::cout << ";" << p_mapping.bit_size() / 8 << std::endl;
+            }
+
             pair<QueryType, vector<string>> tokens_query = parse_query(query_string);
 
             if (tokens_query.first == QueryType::SELECT)

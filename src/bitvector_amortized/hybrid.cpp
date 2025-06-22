@@ -249,10 +249,10 @@ namespace amo {
     }
 
     // gives space of hybridBV in w-bit words
-    uint64_t HybridBV::space () const { 
+    uint64_t HybridBV::bit_size () const { 
         return std::visit([](auto& obj) -> uint64_t {
             uint64_t s = (sizeof(HybridBV) * 8 + w - 1) / w;
-            return s + obj->space();
+            return s + obj->bit_size();
         }, bv);
     }
 

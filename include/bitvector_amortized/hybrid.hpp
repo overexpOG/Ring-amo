@@ -38,7 +38,7 @@ namespace amo {
             void balance(uint64_t i, int64_t* delta);
             uint64_t serialize(std::ostream& out);
             void load(std::istream& in);
-            uint64_t space() const;
+            uint64_t bit_size() const;
             uint64_t leaves() const;
             uint64_t length() const;
             uint64_t getOnes() const;

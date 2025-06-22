@@ -43,7 +43,7 @@ namespace amo {
             // return the number of leaves
             uint64_t getLeaves() const;
             // Returns the size of the bitvector in words of w bits
-            uint64_t space() const;
+            uint64_t bit_size() const;
             // Returns the length (in bits)
             uint64_t length() const;
             // Returns the number of ones

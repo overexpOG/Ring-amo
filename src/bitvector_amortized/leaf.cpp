@@ -81,7 +81,7 @@ namespace amo {
     }
 
     // Espacio usado en palabras w-bit
-    uint64_t LeafBV::space() const {
+    uint64_t LeafBV::bit_size() const {
         return (sizeof(*this) + sizeof(uint64_t) - 1) / sizeof(uint64_t) + MaxBlockWords;
     }
 

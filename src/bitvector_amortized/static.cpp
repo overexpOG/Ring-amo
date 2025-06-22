@@ -152,13 +152,12 @@ namespace amo {
     }
 
     // Devuelve el tamaño del bitvector en palabras de w bits
-    uint64_t StaticBV::space() const {
-        if (!this) return 0;
-        uint64_t space = sizeof(StaticBV) * 8 / w;
-        if (data) space += (size + w - 1) / w;
-        if (B) space += ((size + K * w - 1) / (K * w)) / (w / w16);
-        if (S) space += (size + (1ULL << w16) - 1) / (1ULL << w16);
-        return space;
+    uint64_t StaticBV::bit_size() const {
+        uint64_t bit_size = sizeof(StaticBV) * 8 / w;
+        if (data) bit_size += (size + w - 1) / w;
+        if (B) bit_size += ((size + K * w - 1) / (K * w)) / (w / w16);
+        if (S) bit_size += (size + (1ULL << w16) - 1) / (1ULL << w16);
+        return bit_size;
     }
 
     // Devuelve el largo (en bits)
