@@ -2,8 +2,6 @@
 
 # Lista de rings a probar
 configs=(
-    "ring-dyn-map"
-    "ring-dyn-map-avl"
     "ring-dyn-amo-map"
     "ring-dyn-amo-map-avl"
 )

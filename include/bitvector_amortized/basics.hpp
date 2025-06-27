@@ -20,6 +20,10 @@ namespace amo {
 
     using uint = uint32_t;
 
+    inline void setTheta(float t) {
+        Theta = t;
+    }
+
     inline uint popcount (uint64_t y) { 
         y -= ((y >> 1) & 0x5555555555555555ull);
         y = (y & 0x3333333333333333ull) + (y >> 2 & 0x3333333333333333ull);
