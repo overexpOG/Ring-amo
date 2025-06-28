@@ -219,31 +219,81 @@ namespace amo {
 
     // writes B to file, which must be opened for writing
     uint64_t HybridBV::serialize(std::ostream &out) {
-        int64_t w_bytes = 0;
-        int64_t delta;
-        flatten(&delta);
-        if (auto stat = std::get_if<StaticBV*>(&bv)) {
-            w_bytes += myfwrite(&(*stat)->size,sizeof(uint64_t),1,out);
-            w_bytes += (*stat)->serialize(out);
-        } else if (auto leaf = std::get_if<LeafBV*>(&bv)) { 
-            w_bytes += myfwrite (&(*leaf)->size,sizeof(uint64_t),1,out);
-            w_bytes += (*leaf)->serialize(out);
+        uint64_t w_bytes = 0;
+        uint64_t n = size();
+
+        w_bytes += myfwrite(&n,sizeof(uint64_t),1,out);
+        w_bytes += serialize_(out, n);
+
+        return w_bytes;
+    }
+
+    uint64_t HybridBV::serialize_(std::ostream &out, uint64_t n) {
+        uint64_t w_bytes = 0;
+        uint64_t dynamic = n+1;
+        int64_t delta = 0;
+
+        // caso donde se realiza flatten
+        if (size() <= Epsilon * n) {
+            flatten(&delta);
+            if (auto stat = std::get_if<StaticBV*>(&bv)) {
+                w_bytes += myfwrite(&(*stat)->size,sizeof(uint64_t),1,out);
+                w_bytes += (*stat)->serialize(out);
+            } else if (auto leaf = std::get_if<LeafBV*>(&bv)) { 
+                w_bytes += myfwrite(&(*leaf)->size,sizeof(uint64_t),1,out);
+                w_bytes += (*leaf)->serialize(out);
+            } else {
+                throw std::runtime_error("HybridBV::save(): tipo inesperado, se esperaba StaticBV o LeafBV");
+            }
+        // caso donde no se realiza flatten
         } else {
-            throw std::runtime_error("HybridBV::save(): tipo inesperado, se esperaba StaticBV o LeafBV");
+            if (auto stat = std::get_if<StaticBV*>(&bv)) {
+                w_bytes += myfwrite(&(*stat)->size,sizeof(uint64_t),1,out);
+                w_bytes += (*stat)->serialize(out);
+            } else if (auto leaf = std::get_if<LeafBV*>(&bv)) { 
+                w_bytes += myfwrite(&(*leaf)->size,sizeof(uint64_t),1,out);
+                w_bytes += (*leaf)->serialize(out);
+            } else if (auto dyn = std::get_if<DynamicBV*>(&bv)) {
+                w_bytes += myfwrite(&dynamic,sizeof(uint64_t),1,out);
+                w_bytes += (*dyn)->left->serialize_(out, n);
+                w_bytes += (*dyn)->right->serialize_(out, n);
+            } else {
+                throw std::runtime_error("HybridBV::save(): tipo inesperado, se esperaba StaticBV, LeafBV o DynamicBV");
+            }
         }
+
         return w_bytes;
     }
 
     // loads hybridBV from file, which must be opened for reading
     void HybridBV::load(std::istream& in) {
-        uint64_t size;
+        uint64_t n;
+
         // Se elimina el anterior bitVector
         deleteBV();
         // Se carga el nuevo bitVector
-        myfread (&size,sizeof(uint64_t),1,in);
-        if (size > leafNewSize()*w) { 
+        myfread(&n,sizeof(uint64_t),1,in);
+        load_(in, n);
+    }
+
+    void HybridBV::load_(std::istream &in, uint64_t n) {
+        uint64_t size;
+
+        myfread(&size,sizeof(uint64_t),1,in);
+        if (size == n+1) {
+            DynamicBV *DB = new DynamicBV();
+            DB->left = new HybridBV();
+            DB->left->load_(in, n);
+            DB->right = new HybridBV();
+            DB->right->load_(in, n);
+            DB->accesses = 0;
+            DB->size = DB->left->size() + DB->right->size();
+            DB->ones = DB->left->getOnes() + DB->right->getOnes();
+            DB->leaves = DB->left->leaves() + DB->right->leaves();
+            bv = DB;
+        } else if (size > leafNewSize()*w) { 
             bv = StaticBV::load(in,size);
-        } else { 
+        } else {
             bv = LeafBV::load(in,size);
         }
     }
@@ -251,7 +301,7 @@ namespace amo {
     // gives space of hybridBV in w-bit words
     uint64_t HybridBV::bit_size () const { 
         return std::visit([](auto& obj) -> uint64_t {
-            uint64_t s = (sizeof(HybridBV) * 8 + w - 1) / w;
+            uint64_t s = sizeof(HybridBV) * 8;
             return s + obj->bit_size();
         }, bv);
     }

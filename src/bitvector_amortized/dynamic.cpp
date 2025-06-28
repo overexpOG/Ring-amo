@@ -152,7 +152,7 @@ namespace amo {
     }
 
     uint64_t DynamicBV::bit_size() const {
-        return (sizeof(DynamicBV)*8+w-1)/w + left->bit_size() + right->bit_size();
+        return sizeof(DynamicBV)*8+ left->bit_size() + right->bit_size();
     }
 
     // Devuelve el largo (en bits)
