@@ -120,7 +120,7 @@ namespace ring
                 new_C_O.shrink_to_fit();
 
                 M_S.clear();
-                M_S.shrink_to_fit();
+                std::vector<uint32_t>().swap(M_S);
 
                 int_vector<> new_O(n + 1);
                 new_O[0] = 0;
@@ -157,6 +157,7 @@ namespace ring
                 new_C_P.shrink_to_fit();
 
                 M_O.clear();
+                std::vector<uint32_t>().swap(M_O);
 
                 int_vector<> new_P(n + 1);
                 new_P[0] = 0;
@@ -192,6 +193,7 @@ namespace ring
                 new_C_S.shrink_to_fit();
 
                 M_P.clear();
+                std::vector<uint32_t>().swap(M_P);
 
                 int_vector<> new_S(n + 1);
                 new_S[0] = 0;
