@@ -37,7 +37,9 @@ namespace amo {
             static DynamicBV* splitFrom (uint64_t *data, uint64_t n, uint64_t ones, uint64_t i);
             void balance(uint64_t i, int64_t* delta);
             uint64_t serialize(std::ostream& out);
+            uint64_t serialize_(std::ostream& out, uint64_t n);
             void load(std::istream& in);
+            void load_(std::istream& in, uint64_t n);
             uint64_t bit_size() const;
             uint64_t leaves() const;
             uint64_t length() const;

@@ -139,7 +139,6 @@ void build_index_mapped(const std::string &dataset, const std::string &output)
 
 int main(int argc, char **argv)
 {
-
     if (argc != 4)
     {
         std::cout << "Usage: " << argv[0] << " <dataset> <type> <output>" << std::endl;
