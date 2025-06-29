@@ -486,6 +486,7 @@ namespace ring
      *
      * @param val value being inserted
      * @param id ID assigned to that value
+     * @return std::pair<node_avl *, PFC *> a triple containing the node in the root and the PFC it was inserted
      */
     std::pair<node_avl *, PFC *> insert(const std::string &val, const uint64_t &id, std::vector<EmptyOrPFC> &id_map)
     {
@@ -546,7 +547,7 @@ namespace ring
      *
      * @param val value being searched or inserted
      * @param id  ID assigned to the value if its inserted
-     * @return std::tuple<uint64_t, node *, PFC *> a pair containing the ID of the value and the PFC it was found/inserted
+     * @return std::tuple<uint64_t, node *, PFC *> a triple containing the ID of the value, the node in the root and the PFC it was found/inserted
      */
     std::tuple<uint64_t, node_avl *, PFC *> get_or_insert(const std::string &val, const uint64_t &id, std::vector<EmptyOrPFC> &id_map)
     {
@@ -614,8 +615,8 @@ namespace ring
      * @brief Find and delete the value given
      *
      * @param val value being deleted
-     * @return std::tuple<node *, uint64_t, uint64_t> a pair containing
-     * the ID of the deleted value and the resulting size of the PFC it was stored in
+     * @return std::tuple<node *, uint64_t, uint64_t> a triple containing
+     * the node in the root, the ID of the deleted value and the resulting size of the PFC it was stored in
      */
     std::tuple<node_avl *, uint64_t, uint64_t> eliminate(const std::string &val, std::vector<EmptyOrPFC> &id_map)
     {
