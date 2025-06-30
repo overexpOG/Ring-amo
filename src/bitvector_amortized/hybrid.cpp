@@ -134,7 +134,7 @@ namespace amo {
 
     // halves a static bitmap into leaves, leaving a leaf covering i
     // returns a dynamicBV and destroys B
-    DynamicBV* HybridBV::splitFrom (uint64_t *data, uint64_t n, uint64_t ones, uint64_t i) {
+    DynamicBV* HybridBV::splitFrom(uint64_t *data, uint64_t n, uint64_t ones, uint64_t i) {
         HybridBV *HB;
         DynamicBV *DB,*finalDB;
         uint bsize; // byte size of blocks to create
@@ -155,7 +155,11 @@ namespace amo {
             if (HB == NULL) {
                 finalDB = DB;
             } else {
-                HB->bv = DB;
+                if (auto leaf = std::get_if<LeafBV*>(&HB->bv)) {
+                    LeafBV* old_leaf = *leaf;
+                    HB->bv = DB;
+                    delete old_leaf;
+                }
             }
             DB->size = n;
             DB->ones = ones;
@@ -169,10 +173,18 @@ namespace amo {
                 DB->right = HB = new HybridBV();
                 // create a static
                 if (n - (nblock/2)*blen > leafNewSize() * w) {
-                    HB->bv = new StaticBV((uint64_t*)mid, subBits);
+                    if (auto leaf = std::get_if<LeafBV*>(&HB->bv)) {
+                        LeafBV* old_leaf = *leaf;
+                        HB->bv = new StaticBV((uint64_t*)mid, subBits);
+                        delete old_leaf;
+                    }
                 // create a leaf
                 } else {
-                    HB->bv = new LeafBV((uint64_t*)mid, subBits);
+                    if (auto leaf = std::get_if<LeafBV*>(&HB->bv)) {
+                        LeafBV* old_leaf = *leaf;
+                        HB->bv = new LeafBV((uint64_t*)mid, subBits);
+                        delete old_leaf;
+                    }
                 }
                 // continue on left half
                 end = mid;
@@ -187,10 +199,18 @@ namespace amo {
                 DB->left = HB = new HybridBV();
                 // create a static
                 if ((nblock/2)*blen > leafNewSize() * w) {
-                    HB->bv = new StaticBV((uint64_t*)start,subBits);
+                    if (auto leaf = std::get_if<LeafBV*>(&HB->bv)) {
+                        LeafBV* old_leaf = *leaf;
+                        HB->bv = new StaticBV((uint64_t*)start,subBits);
+                        delete old_leaf;
+                    }
                 // create a leaf
                 } else {
-                    HB->bv = new LeafBV((uint64_t*)start,subBits);
+                    if (auto leaf = std::get_if<LeafBV*>(&HB->bv)) {
+                        LeafBV* old_leaf = *leaf;
+                        HB->bv = new LeafBV((uint64_t*)start,subBits);
+                        delete old_leaf;
+                    }
                 }
                 // continue for right half
                 start = mid;
@@ -202,7 +222,12 @@ namespace amo {
             }
         }
         // finally, the leaf where i lies
-        HB->bv = new LeafBV((uint64_t*)start,n);
+        if (auto leaf = std::get_if<LeafBV*>(&HB->bv)) {
+            LeafBV* old_leaf = *leaf;
+            HB->bv = new LeafBV((uint64_t*)start,n);
+            delete old_leaf;
+        }
+        
         return finalDB;
     }
 
@@ -291,10 +316,18 @@ namespace amo {
             DB->ones = DB->left->getOnes() + DB->right->getOnes();
             DB->leaves = DB->left->leaves() + DB->right->leaves();
             bv = DB;
-        } else if (size > leafNewSize()*w) { 
-            bv = StaticBV::load(in,size);
+        } else if (size > leafNewSize()*w) {
+            if (auto leaf = std::get_if<LeafBV*>(&bv)) {
+                LeafBV* old_leaf = *leaf;
+                bv = StaticBV::load(in,size);
+                delete old_leaf;
+            }
         } else {
-            bv = LeafBV::load(in,size);
+            if (auto leaf = std::get_if<LeafBV*>(&bv)) {
+                LeafBV* old_leaf = *leaf;
+                bv = LeafBV::load(in,size);
+                delete old_leaf;
+            }
         }
     }
 
