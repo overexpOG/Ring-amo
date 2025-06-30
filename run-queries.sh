@@ -23,7 +23,7 @@ for file in "$4"/*.txt
 do
     queryName=$(basename "$file")
     echo "testing $queryName"
-    ./test-queries "$1" "$file" "$2" "$3" "$theta" > "$5/$queryName"
+    /usr/bin/time -v ./test-queries "$1" "$file" "$2" "$3" "$theta" > "$5/$queryName" 2>&1
 done
 
 cd ..
