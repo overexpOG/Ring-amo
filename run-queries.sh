@@ -23,7 +23,12 @@ for file in "$4"/*.txt
 do
     queryName=$(basename "$file")
     echo "testing $queryName"
-    ./test-queries "$1" "$file" "$2" "$3" "$theta" > "$5/$queryName"
+    ./test-queries "$1" "$file" "$2" "$3" "$theta" > "$5/$queryName" 2>&1 &
+    pid=$!
+
+    ./monitor.sh $pid "$5/${queryName}.mem" > "$5/${queryName}.monitor.log"
+
+    wait $pid
 done
 
 cd ..
