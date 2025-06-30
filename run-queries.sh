@@ -26,7 +26,9 @@ do
     ./test-queries "$1" "$file" "$2" "$3" "$theta" > "$5/$queryName" 2>&1 &
     pid=$!
 
+    cd ..
     ./monitor.sh $pid "$5/${queryName}.mem" > "$5/${queryName}.monitor.log"
+    cd build
 
     wait $pid
 done
