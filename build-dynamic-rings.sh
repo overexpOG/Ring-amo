@@ -4,6 +4,8 @@
 configs=(
     "ring-dyn-amo-map"
     "ring-dyn-amo-map-avl"
+    "ring-dyn-map"
+    "ring-dyn-map-avl"
 )
 
 # Función para verificar archivos
