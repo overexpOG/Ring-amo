@@ -13,11 +13,17 @@ if [ ! -d "$4" ]; then echo "Queries folder doesn't exist."; exit 1; fi
 if [ ! -d "$5" ]; then echo "Results folder doesn't exist."; exit 1; fi
 
 thetas=(
-    "1.0"
+    "100000"
+    "10000"
+    "1000"
+    "100"
+    "10"
+    "1"
     "0.1"
     "0.01"
     "0.001"
     "0.0001"
+    "0.00001"
 )
 
 for theta in "${thetas[@]}"; do

@@ -38,7 +38,6 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2888> ?x2 . ?x1 <http
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2517> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P910> ?x3 } LIMIT 1000 [P2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1410> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P576> ?x3 . ?x4 <http://www.wikidata.org/prop/direct/P1100> ?x2 . ?x4 <http://www.wikidata.org/prop/direct/P580> ?x3 } LIMIT 1000 [S2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2014> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P364> ?x3 . ?x4 <http://www.wikidata.org/prop/direct/P1953> ?x2 . ?x4 <http://www.wikidata.org/prop/direct/P1412> ?x3 } LIMIT 1000 [S2]
-INSERT DATA { <http://www.wikidata.org/entity/Q506127> <http://www.wikidata.org/prop/direct/P264-beta> <http://www.wikidata.org/entity/Q7751417> . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P26> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P22> ?x3 . ?x1 <http://www.wikidata.org/prop/direct/P3342> ?x3 } LIMIT 1000 [Tr2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P853> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P2354> ?x3 } LIMIT 1000 [P2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P175> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P2581> ?x3 } LIMIT 1000 [P2]
@@ -90,12 +89,10 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P190> ?x2 . ?x1 <http:
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P40> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P945> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P37> ?x4 . ?x1 <http://www.wikidata.org/prop/direct/P103> ?x4 } LIMIT 1000 [S3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P376> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P948> ?x3 } LIMIT 1000 [P2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P417> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P119> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P36> ?x1 } LIMIT 1000 [Tr1]
-DELETE WHERE { <http://www.wikidata.org/entity/Q252567> <http://www.wikidata.org/prop/direct/P140> <http://www.wikidata.org/entity/Q75809> . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2824> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P2386> ?x3 . ?x4 <http://www.wikidata.org/prop/direct/P3769> ?x2 . ?x4 <http://www.wikidata.org/prop/direct/P2067> ?x3 } LIMIT 1000 [S2]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P5383> ?y . ?x <http://www.wikidata.org/prop/direct/P5294> ?z . ?x <http://www.wikidata.org/prop/direct/P84> ?u } LIMIT 1000 [T3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1200> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P301> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P4614> ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P974> ?x1 } LIMIT 1000 [S1]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P553> ?x . ?z <http://www.wikidata.org/prop/direct/P2283> ?x . ?u <http://www.wikidata.org/prop/direct/P138> ?x . ?v <http://www.wikidata.org/prop/direct/P178> ?x } LIMIT 1000 [TI4]
-INSERT DATA { <http://www.wikidata.org/entity/Q554761> <http://www.wikidata.org/prop/direct/P2048-alpha> "+173"^^<http://www.w3.org/2001/XMLSchema#decimal> . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P5138> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P155> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P582> ?x4 } LIMIT 1000 [P3]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P1036> ?x . ?z <http://www.wikidata.org/prop/direct/P2818> ?x } LIMIT 1000 [TI2]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P286> ?x . ?z <http://www.wikidata.org/prop/direct/P26> ?x . ?x <http://www.wikidata.org/prop/direct/P5476> ?u . ?x <http://www.wikidata.org/prop/direct/P166> ?v } LIMIT 1000 [J4]
@@ -166,7 +163,6 @@ SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P1659> ?x . ?z <http://
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1416> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P485> ?x3 . ?x4 <http://www.wikidata.org/prop/direct/P166> ?x2 . ?x4 <http://www.wikidata.org/prop/direct/P69> ?x3 } LIMIT 1000 [S2]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P1382> ?y . ?x <http://www.wikidata.org/prop/direct/P649> ?z . ?x <http://www.wikidata.org/prop/direct/P2596> ?u . ?x <http://www.wikidata.org/prop/direct/P276> ?v } LIMIT 1000 [T4]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P1687> ?x . ?z <http://www.wikidata.org/prop/direct/P1963> ?x . ?x <http://www.wikidata.org/prop/direct/P227> ?v } LIMIT 1000 [J3]
-DELETE {?s ?p ?o} WHERE { SELECT ?s ?p ?o WHERE { {?s ?p ?o FILTER (?s=<http://www.wikidata.org/entity/Q47774>)} UNION { ?s ?p ?o . FILTER (?o=<http://www.wikidata.org/entity/Q47774>) } } }
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P3650> ?y . ?x <http://www.wikidata.org/prop/direct/P1712> ?z . ?x <http://www.wikidata.org/prop/direct/P825> ?u } LIMIT 1000 [T3]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P3441> ?y . ?x <http://www.wikidata.org/prop/direct/P3794> ?z . ?x <http://www.wikidata.org/prop/direct/P856> ?u } LIMIT 1000 [T3]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P275> ?x . ?z <http://www.wikidata.org/prop/direct/P88> ?x . ?u <http://www.wikidata.org/prop/direct/P750> ?x . ?v <http://www.wikidata.org/prop/direct/P749> ?x } LIMIT 1000 [TI4]
@@ -182,7 +178,6 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P664> ?x2 . ?x1 <http:
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P5841> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1889> ?x3 . ?x1 <http://www.wikidata.org/prop/direct/P141> ?x3 } LIMIT 1000 [Tr2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2302> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1889> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P1687> ?x1 } LIMIT 1000 [Tr1]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P5880> ?x . ?z <http://www.wikidata.org/prop/direct/P737> ?x . ?x <http://www.wikidata.org/prop/direct/P5226> ?u . ?x <http://www.wikidata.org/prop/direct/P950> ?v } LIMIT 1000 [J4]
-INSERT DATA { <http://www.wikidata.org/entity/Q11707> <http://www.wikidata.org/prop/direct-normalized/P2581> <http://babelnet.org/rdf/s00029545n-alpha> . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2547> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P4511> ?x3 . ?x4 <http://www.wikidata.org/prop/direct/P1314> ?x2 . ?x4 <http://www.wikidata.org/prop/direct/P2043> ?x3 } LIMIT 1000 [S2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1427> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P163> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P1001> ?x4 . ?x1 <http://www.wikidata.org/prop/direct/P276> ?x4 } LIMIT 1000 [S3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2332> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P1412> ?x3 . ?x4 <http://www.wikidata.org/prop/direct/P5327> ?x2 . ?x4 <http://www.wikidata.org/prop/direct/P364> ?x3 } LIMIT 1000 [S2]
@@ -326,7 +321,6 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P306> ?x2 . ?x2 <http:
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P5081> ?y . ?x <http://www.wikidata.org/prop/direct/P1343> ?z } LIMIT 1000 [T2]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P3106> ?x . ?z <http://www.wikidata.org/prop/direct/P5395> ?x } LIMIT 1000 [TI2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P690> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P556> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P910>  ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P301> ?x5 } LIMIT 1000 [P4]
-DELETE {?s ?p ?o} WHERE { SELECT ?s ?p ?o WHERE { {?s ?p ?o FILTER (?s=<http://www.wikidata.org/entity/Q27594224>)} UNION { ?s ?p ?o . FILTER (?o=<http://www.wikidata.org/entity/Q27594224>) } } }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P3096> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1687> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P1855> ?x4 } LIMIT 1000 [P3]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P3171> ?y . ?x <http://www.wikidata.org/prop/direct/P3630> ?z . ?x <http://www.wikidata.org/prop/direct/P3509> ?u } LIMIT 1000 [T3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P58> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P69> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P140> ?x4 . ?x1 <http://www.wikidata.org/prop/direct/P750> ?x4 } LIMIT 1000 [S3]
@@ -452,7 +446,6 @@ SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P1400> ?x . ?z <http://
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1383> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1343> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P495>  ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P1279> ?x5 } LIMIT 1000 [P4]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P4046> ?x . ?z <http://www.wikidata.org/prop/direct/P4525> ?x } LIMIT 1000 [TI2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1434> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P162> ?x3 . ?x2 <http://www.wikidata.org/prop/direct/P272> ?x4 . ?x3 <http://www.wikidata.org/prop/direct/P108> ?x4 } LIMIT 1000 [S4]
-DELETE WHERE { <http://www.wikidata.org/entity/Q48850> <http://www.wikidata.org/prop/direct/P47> <http://www.wikidata.org/entity/Q489079> . }
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P833> ?x . ?z <http://www.wikidata.org/prop/direct/P180> ?x . ?u <http://www.wikidata.org/prop/direct/P138> ?x } LIMIT 1000 [TI3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1792> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1753> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P360> ?x4 } LIMIT 1000 [P3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P4792> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P200> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P469> ?x1 } LIMIT 1000 [Tr1]
@@ -464,7 +457,6 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P741> ?x2 . ?x2 <http:
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P450> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P910> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P301>  ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P582> ?x5 } LIMIT 1000 [P4]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P264> ?x . ?z <http://www.wikidata.org/prop/direct/P725> ?x . ?x <http://www.wikidata.org/prop/direct/P3136> ?v } LIMIT 1000 [J3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P237> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P287> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P69>  ?x4 . ?x4 <http://www.wikidata.org/prop/direct-normalized/P244> ?x5 } LIMIT 1000 [P4]
-DELETE WHERE { <http://www.wikidata.org/entity/Q497381> <http://www.wikidata.org/prop/direct-normalized/P244> <http://id.loc.gov/authorities/names/no2001065234> . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P559> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P155> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P642> ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P2789> ?x1 } LIMIT 1000 [S1]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1151> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P2354> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P360> ?x1 } LIMIT 1000 [Tr1]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P2568> ?x . ?z <http://www.wikidata.org/prop/direct/P180> ?x } LIMIT 1000 [TI2]
@@ -750,7 +742,6 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P3373> ?x2 . ?x2 <http
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P398> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P196> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P397> ?x1 } LIMIT 1000 [Tr1]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P658> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P175> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P800> ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P156> ?x1 } LIMIT 1000 [S1]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P4643> ?y . ?x <http://www.wikidata.org/prop/direct-normalized/P1795> ?z . ?x <http://www.wikidata.org/prop/direct/P1559> ?u } LIMIT 1000 [T3]
-INSERT DATA { <http://www.wikidata.org/entity/Q72511> <http://www.wikidata.org/prop/direct/P1266-alpha> "211986" . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P466> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P3342> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P69>  ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P3793> ?x5 } LIMIT 1000 [P4]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2515> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P803> ?x3 . ?x3 <http://www.wikidata.org/prop/direct-normalized/P349> ?x4 } LIMIT 1000 [P3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2684> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P156> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P155> ?x4 } LIMIT 1000 [P3]
@@ -872,7 +863,6 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1423> ?x2 . ?x1 <http
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1200> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P4792> ?x3 . ?x2 <http://www.wikidata.org/prop/direct/P301> ?x4 . ?x3 <http://www.wikidata.org/prop/direct/P4614> ?x4 } LIMIT 1000 [S4]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P2423> ?x . ?z <http://www.wikidata.org/prop/direct/P393> ?x . ?u <http://www.wikidata.org/prop/direct/P5375> ?x } LIMIT 1000 [TI3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1444> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P2789> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P138>  ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P2188> ?x5 } LIMIT 1000 [P4]
-DELETE {?s ?p ?o} WHERE { SELECT ?s ?p ?o WHERE { {?s ?p ?o FILTER (?s=<http://www.wikidata.org/entity/Q497653>)} UNION { ?s ?p ?o . FILTER (?o=<http://www.wikidata.org/entity/Q497653>) } } }
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P655> ?x . ?z <http://www.wikidata.org/prop/direct/P175> ?x . ?x <http://www.wikidata.org/prop/direct/P3040> ?v } LIMIT 1000 [J3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P360> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P910> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P2354> ?x1 } LIMIT 1000 [Tr1]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2302> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1889> ?x3 . ?x1 <http://www.wikidata.org/prop/direct/P1629> ?x3 } LIMIT 1000 [Tr2]
@@ -1110,10 +1100,8 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1416> ?x2 . ?x1 <http
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1412> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P3219> ?x3 } LIMIT 1000 [P2]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P4786> ?y . ?x <http://www.wikidata.org/prop/direct/P179> ?z . ?x <http://www.wikidata.org/prop/direct/P2465> ?u . ?x <http://www.wikidata.org/prop/direct/P2515> ?v } LIMIT 1000 [T4]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1754> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1889> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P1753> ?x1 } LIMIT 1000 [Tr1]
-INSERT DATA { <http://www.wikidata.org/entity/Q187266> <http://www.wikidata.org/prop/direct/P725> <http://www.wikidata.org/entity/Q311068-beta> . }
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P5951> ?y . ?x <http://www.wikidata.org/prop/direct/P1986> ?z } LIMIT 1000 [T2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P3096> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1687> ?x3 . ?x3 <http://wikiba.se/ontology-beta#propertyType> ?x4 } LIMIT 1000 [P3]
-DELETE WHERE { <http://www.wikidata.org/entity/Q2119> <http://www.wikidata.org/prop/direct/P473> "0621" . }
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P2293> ?x . ?z <http://www.wikidata.org/prop/direct/P684> ?x . ?x <http://www.wikidata.org/prop/direct/P353> ?u . ?x <http://www.wikidata.org/prop/direct/P227> ?v } LIMIT 1000 [J4]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P930> ?y . ?x <http://www.wikidata.org/prop/direct/P954> ?z . ?x <http://www.wikidata.org/prop/direct/P856> ?u . ?x <http://www.wikidata.org/prop/direct/P1064> ?v } LIMIT 1000 [T4]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2548> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1889> ?x3 } LIMIT 1000 [P2]
@@ -1242,7 +1230,6 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1533> ?x2 . ?x2 <http
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P2698> ?x . ?z <http://www.wikidata.org/prop/direct/P3990> ?x . ?u <http://www.wikidata.org/prop/direct/P2946> ?x } LIMIT 1000 [TI3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P690> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P556> ?x3 . ?x1 <http://www.wikidata.org/prop/direct/P138> ?x3 } LIMIT 1000 [Tr2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P275> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P178> ?x3 . ?x2 <http://www.wikidata.org/prop/direct/P1535> ?x4 . ?x3 <http://www.wikidata.org/prop/direct/P800> ?x4 } LIMIT 1000 [S4]
-DELETE WHERE { <http://www.wikidata.org/entity/Q690450> <http://www.wikidata.org/prop/direct/P1417> "topic/Psilocybe-cubensis" . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1142> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1424> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P1423> ?x4 . ?x1 <http://www.wikidata.org/prop/direct/P135> ?x4 } LIMIT 1000 [S3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P532> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P504> ?x3 . ?x2 <http://www.wikidata.org/prop/direct/P1376> ?x4 . ?x3 <http://www.wikidata.org/prop/direct/P47> ?x4 } LIMIT 1000 [S4]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2377> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P275> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P856> ?x4 } LIMIT 1000 [P3]
@@ -1305,7 +1292,6 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P479> ?x2 . ?x2 <http:
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P781> ?x . ?z <http://www.wikidata.org/prop/direct/P645> ?x } LIMIT 1000 [TI2]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P5966> ?x . ?z <http://www.wikidata.org/prop/direct/P1933> ?x } LIMIT 1000 [TI2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P460> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P910> ?x3 . ?x2 <http://www.wikidata.org/prop/direct/P1420> ?x4 . ?x3 <http://www.wikidata.org/prop/direct/P301> ?x4 } LIMIT 1000 [S4]
-INSERT DATA { <http://www.wikidata.org/entity/Q44281> <http://www.wikidata.org/prop/direct-normalized/P2163-alpha> <http://id.worldcat.org/fast/34893> . }
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P552> ?x . ?z <http://www.wikidata.org/prop/direct/P1552> ?x . ?x <http://www.wikidata.org/prop/direct/P3417> ?u . ?x <http://www.wikidata.org/prop/direct/P3219> ?v } LIMIT 1000 [J4]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P488> ?x . ?z <http://www.wikidata.org/prop/direct/P127> ?x . ?x <http://www.wikidata.org/prop/direct/P2387> ?u . ?x <http://www.wikidata.org/prop/direct/P40> ?v } LIMIT 1000 [J4]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1753> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1754> ?x3 . ?x1 <http://www.wikidata.org/prop/direct/P1889> ?x3 } LIMIT 1000 [Tr2]
@@ -1648,7 +1634,6 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P196> ?x2 . ?x2 <http:
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P1591> ?x . ?z <http://www.wikidata.org/prop/direct/P710> ?x . ?x <http://www.wikidata.org/prop/direct-normalized/P1015> ?v } LIMIT 1000 [J3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1434> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P162> ?x3 . ?x2 <http://www.wikidata.org/prop/direct/P272> ?x4 . ?x3 <http://www.wikidata.org/prop/direct/P108> ?x4 } LIMIT 1000 [S4]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P61> ?x . ?z <http://www.wikidata.org/prop/direct/P547> ?x . ?x <http://www.wikidata.org/prop/direct/P2435> ?v } LIMIT 1000 [J3]
-DELETE WHERE { <http://www.wikidata.org/entity/Q677637> <http://www.wikidata.org/prop/direct-normalized/P648> <https://openlibrary.org/works/OL2177728A> . }
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P2184> ?x . ?z <http://www.wikidata.org/prop/direct/P2650> ?x . ?x <http://www.wikidata.org/prop/direct/P1366> ?u . ?x <http://www.wikidata.org/prop/direct/P1807> ?v }  LIMIT 1000 [J4]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P360> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P398> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P397> ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P2354> ?x1 } LIMIT 1000 [S1]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P3876> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P4195> ?x3 . ?x2 <http://www.wikidata.org/prop/direct/P69> ?x4 . ?x3 <http://www.wikidata.org/prop/direct/P4224> ?x4 } LIMIT 1000 [S4]
@@ -1673,7 +1658,6 @@ SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P1045> ?y . ?x <http://
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P3449> ?x . ?z <http://www.wikidata.org/prop/direct/P685> ?x . ?u <http://www.wikidata.org/prop/direct/P4728> ?x . ?v <http://www.wikidata.org/prop/direct/P2163> ?x } LIMIT 1000 [TI4]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P282> ?x2 . ?x2 <http://www.wikidata.org/prop/direct-normalized/P2581> ?x3 } LIMIT 1000 [P2]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P5383> ?y . ?x <http://www.wikidata.org/prop/direct/P5294> ?z . ?x <http://www.wikidata.org/prop/direct/P84> ?u } LIMIT 1000 [T3]
-INSERT DATA { <http://www.wikidata.org/entity/Q125060> <http://www.wikidata.org/prop/direct/P2685> "r/rodrise01-alpha" . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1465> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P4224> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P1343> ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P291> ?x1 } LIMIT 1000 [S1]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2695> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1376> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P36> ?x4 . ?x1 <http://www.wikidata.org/prop/direct/P138> ?x4 } LIMIT 1000 [S3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1038> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P5284> ?x3 } LIMIT 1000 [P2]
@@ -1706,7 +1690,6 @@ SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P1725> ?y . ?x <http://
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P184> ?x . ?z <http://www.wikidata.org/prop/direct/P25> ?x . ?x <http://www.wikidata.org/prop/direct/P1615> ?v } LIMIT 1000 [J3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2332> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P1412> ?x3 . ?x4 <http://www.wikidata.org/prop/direct/P5327> ?x2 . ?x4 <http://www.wikidata.org/prop/direct/P364> ?x3 } LIMIT 1000 [S2]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P223> ?x . ?z <http://www.wikidata.org/prop/direct/P3072> ?x . ?u <http://www.wikidata.org/prop/direct/P296> ?x } LIMIT 1000 [TI3]
-INSERT DATA { <http://www.wikidata.org/entity/Q417286-beta> <http://www.wikidata.org/prop/direct/P138> <http://www.wikidata.org/entity/Q70538> . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P237> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P287> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P69>  ?x4 . ?x4 <http://www.wikidata.org/prop/direct-normalized/P244> ?x5 } LIMIT 1000 [P4]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P166> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1365> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P1346> ?x1 } LIMIT 1000 [Tr1]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P450> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1269> ?x3 . ?x3 <http://www.wikidata.org/prop/direct-normalized/P2581> ?x4 } LIMIT 1000 [P3]
@@ -1881,7 +1864,6 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1884> ?x2 . ?x2 <http
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P941> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P103> ?x3 . ?x1 <http://www.wikidata.org/prop/direct/P1412> ?x3 } LIMIT 1000 [Tr2]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P2037> ?x . ?z <http://www.wikidata.org/prop/direct/P3417> ?x . ?u <http://www.wikidata.org/prop/direct/P3636> ?x } LIMIT 1000 [TI3]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P802> ?x . ?z <http://www.wikidata.org/prop/direct/P87> ?x . ?u <http://www.wikidata.org/prop/direct/P175> ?x . ?v <http://www.wikidata.org/prop/direct/P112> ?x } LIMIT 1000 [TI4]
-INSERT DATA { <http://www.wikidata.org/entity/Q21682-beta> <http://www.wikidata.org/prop/direct-normalized/P268> <http://data.bnf.fr/ark:/12148/cb152655679> . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P833> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P138> ?x3 . ?x2 <http://www.wikidata.org/prop/direct/P954> ?x4 . ?x3 <http://www.wikidata.org/prop/direct/P722> ?x4 } LIMIT 1000 [S4]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P3441> ?y . ?x <http://www.wikidata.org/prop/direct/P3794> ?z . ?x <http://www.wikidata.org/prop/direct/P856> ?u } LIMIT 1000 [T3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P680> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P2293> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P1995>  ?x4 . ?x4 <http://www.wikidata.org/prop/direct-normalized/P508> ?x5 } LIMIT 1000 [P4]
@@ -1928,7 +1910,6 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P84> ?x2 . ?x2 <http:/
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P729> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P176> ?x3 . ?x4 <http://www.wikidata.org/prop/direct/P1317> ?x2 . ?x4 <http://www.wikidata.org/prop/direct/P1532> ?x3 } LIMIT 1000 [S2]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P3925> ?x . ?z <http://www.wikidata.org/prop/direct/P3435> ?x } LIMIT 1000 [TI2]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P1942> ?y . ?x <http://www.wikidata.org/prop/direct/P127> ?z . ?x <http://www.wikidata.org/prop/direct/P5584> ?u } LIMIT 1000 [T3]
-DELETE WHERE { <http://www.wikidata.org/entity/Q553921> <http://www.wikidata.org/prop/direct-normalized/P244> <http://id.loc.gov/authorities/names/n81139490> . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P5130> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1464> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P4224>  ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P1709> ?x5 } LIMIT 1000 [P4]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P2389> ?y . ?x <http://www.wikidata.org/prop/direct/P1014> ?z . ?x <http://www.wikidata.org/prop/direct/P2354> ?u . ?x <http://www.wikidata.org/prop/direct/P227> ?v } LIMIT 1000 [T4]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P477> ?y . ?x <http://www.wikidata.org/prop/direct/P2581> ?z . ?x <http://www.wikidata.org/prop/direct/P2049> ?u . ?x <http://www.wikidata.org/prop/direct/P1314> ?v } LIMIT 1000 [T4]
@@ -2024,7 +2005,6 @@ SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P511> ?x . ?z <http://w
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P609> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P2184> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P244> ?x4 } LIMIT 1000 [P3]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P914> ?x . ?z <http://www.wikidata.org/prop/direct/P155> ?x . ?x <http://www.wikidata.org/prop/direct/P910> ?v } LIMIT 1000 [J3]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P3450> ?x . ?z <http://www.wikidata.org/prop/direct/P463> ?x . ?x <http://www.wikidata.org/prop/direct/P1661> ?v } LIMIT 1000 [J3]
-INSERT DATA { <http://www.wikidata.org/entity/Q57172-beta> <http://www.wikidata.org/prop/direct/P598> <http://www.wikidata.org/entity/Q163084> . }
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P1400> ?x . ?z <http://www.wikidata.org/prop/direct/P2824> ?x . ?u <http://www.wikidata.org/prop/direct/P3957> ?x } LIMIT 1000 [TI3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P3858> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1423> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P126> ?x4 . ?x1 <http://www.wikidata.org/prop/direct/P137> ?x4 } LIMIT 1000 [S3]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P669> ?x . ?z <http://www.wikidata.org/prop/direct/P915> ?x . ?x <http://www.wikidata.org/prop/direct/P4244> ?v } LIMIT 1000 [J3]
@@ -2053,7 +2033,6 @@ SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P1989> ?y . ?x <http://
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P291> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P155> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P156> ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P1343> ?x1 } LIMIT 1000 [S1]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1056> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1542> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P828> ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P155> ?x1 } LIMIT 1000 [S1]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P59> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P138> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P40>  ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P1417> ?x5 } LIMIT 1000 [P4]
-INSERT DATA { <http://www.wikidata.org/entity/Q164004> <http://www.wikidata.org/prop/direct/P4491> "borodin_aleksandr_porfir\u02B9evic_auteur_ou_responsable_intellectuel-beta" . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P306> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P460> ?x3 . ?x1 <http://www.wikidata.org/prop/direct/P400> ?x3 } LIMIT 1000 [Tr2]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P2558> ?y . ?x <http://www.wikidata.org/prop/direct/P2268> ?z . ?x <http://www.wikidata.org/prop/direct-normalized/P269> ?u } LIMIT 1000 [T3]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P5782> ?x . ?z <http://www.wikidata.org/prop/direct/P617> ?x . ?u <http://www.wikidata.org/prop/direct/P2040> ?x . ?v <http://www.wikidata.org/prop/direct/P4665> ?x } LIMIT 1000 [TI4]
@@ -2103,7 +2082,6 @@ SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P575> ?y . ?x <http://w
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P40> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P39> ?x3 . ?x1 <http://www.wikidata.org/prop/direct/P166> ?x3 } LIMIT 1000 [Tr2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P532> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P504> ?x3 . ?x2 <http://www.wikidata.org/prop/direct/P1376> ?x4 . ?x3 <http://www.wikidata.org/prop/direct/P47> ?x4 } LIMIT 1000 [S4]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P509> ?x . ?z <http://www.wikidata.org/prop/direct/P1376> ?x . ?x <http://www.wikidata.org/prop/direct/P36> ?v } LIMIT 1000 [J3]
-INSERT DATA { <http://www.wikidata.org/entity/Q582147> <http://www.wikidata.org/prop/direct/P1970> "4906" . }
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P1400> ?x . ?z <http://www.wikidata.org/prop/direct/P2824> ?x . ?u <http://www.wikidata.org/prop/direct/P3957> ?x } LIMIT 1000 [TI3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P870> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P460> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P1963>  ?x4 . ?x4 <http://wikiba.se/ontology-beta#novalue> ?x5 } LIMIT 1000 [P4]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P166> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1365> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P1346> ?x1 } LIMIT 1000 [Tr1]
@@ -2169,9 +2147,7 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P20> ?x2 . ?x1 <http:/
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P966> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P3192> ?x3 . ?x4 <http://www.wikidata.org/prop/direct/P434> ?x2 . ?x4 <http://www.wikidata.org/prop/direct/P3265> ?x3 } LIMIT 1000 [S2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1123> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P1122> ?x3 . ?x4 <http://www.wikidata.org/prop/direct/P1132> ?x2 . ?x4 <http://www.wikidata.org/prop/direct/P1339> ?x3 } LIMIT 1000 [S2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P833> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P138> ?x3 . ?x2 <http://www.wikidata.org/prop/direct/P954> ?x4 . ?x3 <http://www.wikidata.org/prop/direct/P722> ?x4 } LIMIT 1000 [S4]
-INSERT DATA { <http://www.wikidata.org/entity/Q434160> <http://www.wikidata.org/prop/direct-normalized/P906> <http://libris.kb.se/resource/auth/306017-alpha> . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P4908> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P840> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P1376> ?x4 . ?x1 <http://www.wikidata.org/prop/direct/P495> ?x4 } LIMIT 1000 [S3]
-DELETE WHERE { <http://www.wikidata.org/entity/Q560986> <http://www.wikidata.org/prop/direct-normalized/P1006> <http://data.bibliotheken.nl/id/thes/p071774335> . }
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P3424> ?x . ?z <http://www.wikidata.org/prop/direct/P5499> ?x . ?u <http://www.wikidata.org/prop/direct/P4169> ?x . ?v <http://www.wikidata.org/prop/direct/P1422> ?x } LIMIT 1000 [TI4]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P205> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1424> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P1423> ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P206> ?x1 } LIMIT 1000 [S1]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1542> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P425> ?x3 . ?x4 <http://www.wikidata.org/prop/direct/P135> ?x2 . ?x4 <http://www.wikidata.org/prop/direct/P140> ?x3 } LIMIT 1000 [S2]
@@ -2494,7 +2470,6 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P3876> ?x2 . ?x2 <http
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P3392> ?x . ?z <http://www.wikidata.org/prop/direct/P1045> ?x . ?u <http://www.wikidata.org/prop/direct/P2800> ?x . ?v <http://www.wikidata.org/prop/direct/P4276> ?x } LIMIT 1000 [TI4]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P833> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P197> ?x3 . ?x2 <http://www.wikidata.org/prop/direct/P576> ?x4 . ?x3 <http://www.wikidata.org/prop/direct/P1619> ?x4 } LIMIT 1000 [S4]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P366> ?x . ?z <http://www.wikidata.org/prop/direct/P2505> ?x } LIMIT 1000 [TI2]
-INSERT DATA { <http://www.wikidata.org/entity/Q291749> <http://www.wikidata.org/prop/direct/P1766> <http://commons.wikimedia.org/wiki/Special:FilePath/Rose%20Mofford%20Way%20sign%20by%20Gage%20Skidmore.jpg-alpha> . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1427> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P559> ?x3 . ?x4 <http://www.wikidata.org/prop/direct/P915> ?x2 . ?x4 <http://www.wikidata.org/prop/direct/P840> ?x3 } LIMIT 1000 [S2]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P22> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1875> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P138> ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P3373> ?x1 } LIMIT 1000 [S1]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P553> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P170> ?x3 } LIMIT 1000 [P2]
@@ -2708,7 +2683,6 @@ SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1049> ?x2 . ?x2 <http
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P282> ?y . ?x <http://www.wikidata.org/prop/direct/P935> ?z . ?x <http://www.wikidata.org/prop/direct/P194> ?u . ?x <http://www.wikidata.org/prop/direct/P402> ?v } LIMIT 1000 [T4]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P509> ?x . ?z <http://www.wikidata.org/prop/direct/P1376> ?x . ?x <http://www.wikidata.org/prop/direct/P36> ?v } LIMIT 1000 [J3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P366> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P910> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P301> ?x4 . ?x1 <http://www.wikidata.org/prop/direct/P2505> ?x4 } LIMIT 1000 [S3]
-DELETE WHERE { <http://www.wikidata.org/entity/Q500700> <http://www.wikidata.org/prop/direct/P409> "35487102" . }
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P206> ?x . ?z <http://www.wikidata.org/prop/direct/P138> ?x . ?x <http://www.wikidata.org/prop/direct/P4839> ?v } LIMIT 1000 [J3]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P2558> ?y . ?x <http://www.wikidata.org/prop/direct/P2268> ?z . ?x <http://www.wikidata.org/prop/direct-normalized/P269> ?u } LIMIT 1000 [T3]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P126> ?x . ?z <http://www.wikidata.org/prop/direct/P1040> ?x . ?x <http://www.wikidata.org/prop/direct/P3835> ?u . ?x <http://www.wikidata.org/prop/direct-normalized/P648> ?v } LIMIT 1000 [J4]
@@ -2735,7 +2709,6 @@ SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P1368> ?x . ?z <http://
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P4952> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P123> ?x3 } LIMIT 1000 [P2]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P4808> ?x . ?z <http://www.wikidata.org/prop/direct/P3684> ?x . ?u <http://www.wikidata.org/prop/direct/P3782> ?x } LIMIT 1000 [TI3]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P398> ?x . ?z <http://www.wikidata.org/prop/direct/P183> ?x . ?x <http://www.wikidata.org/prop/direct/P2572> ?v } LIMIT 1000 [J3]
-DELETE WHERE { <http://www.wikidata.org/entity/Q1276> <http://www.wikidata.org/prop/direct/P119> <http://www.wikidata.org/entity/Q340> . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1151> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P155> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P1204> ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P156> ?x1 } LIMIT 1000 [S1]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P1064> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1269> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P910> ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P301> ?x1 } LIMIT 1000 [S1]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P126> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P610> ?x3 . ?x1 <http://www.wikidata.org/prop/direct/P559> ?x3 } LIMIT 1000 [Tr2]
@@ -2847,7 +2820,6 @@ SELECT * WHERE { ?x <http://wikiba.se/ontology-beta#novalue> ?y . ?x <http://wik
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P3095> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P1889> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P425> ?x4 } LIMIT 1000 [P3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P306> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P2184> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P856> ?x4 } LIMIT 1000 [P3]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P4704> ?x . ?z <http://www.wikidata.org/prop/direct/P4866> ?x . ?u <http://www.wikidata.org/prop/direct/P2858> ?x } LIMIT 1000 [TI3]
-INSERT DATA { <http://www.wikidata.org/entity/Q588078> <http://www.wikidata.org/prop/direct/P345> "tt0096000-alpha" . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P3092> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P58> ?x3 . ?x2 <http://www.wikidata.org/prop/direct/P3269> ?x4 . ?x3 <http://www.wikidata.org/prop/direct/P650> ?x4 } LIMIT 1000 [S4]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P1989> ?y . ?x <http://www.wikidata.org/prop/direct/P2003> ?z . ?x <http://www.wikidata.org/prop/direct/P244> ?u } LIMIT 1000 [T3]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P688> ?x . ?z <http://www.wikidata.org/prop/direct/P3781> ?x . ?x <http://www.wikidata.org/prop/direct/P1748> ?v } LIMIT 1000 [J3]
@@ -2955,7 +2927,6 @@ SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P1753> ?x . ?z <http://
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P3420> ?y . ?x <http://www.wikidata.org/prop/direct/P1036> ?z . ?x <http://www.wikidata.org/prop/direct/P1745> ?u . ?x <http://www.wikidata.org/prop/direct/P4728> ?v } LIMIT 1000 [T4]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P2417> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P108> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P2397> ?x4 } LIMIT 1000 [P3]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P780> ?x . ?z <http://www.wikidata.org/prop/direct/P682> ?x . ?x <http://www.wikidata.org/prop/direct/P1056> ?v } LIMIT 1000 [J3]
-DELETE WHERE { <http://www.wikidata.org/entity/Q527608> <http://www.wikidata.org/prop/direct/P410> <http://www.wikidata.org/entity/Q2487961> . }
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P4792> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P200> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P469> ?x1 } LIMIT 1000 [Tr1]
 SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P4728> ?y . ?x <http://www.wikidata.org/prop/direct/P961> ?z . ?x <http://www.wikidata.org/prop/direct/P5984> ?u } LIMIT 1000 [T3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P137> ?x2 . ?x1 <http://www.wikidata.org/prop/direct/P176> ?x3 . ?x2 <http://www.wikidata.org/prop/direct/P1412> ?x4 . ?x3 <http://www.wikidata.org/prop/direct/P37> ?x4 } LIMIT 1000 [S4]
@@ -3003,7 +2974,6 @@ SELECT * WHERE { ?x <http://www.wikidata.org/prop/direct/P2750> ?y . ?x <http://
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P4611> ?x . ?z <http://www.wikidata.org/prop/direct/P2818> ?x } LIMIT 1000 [TI2]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P530> ?x . ?z <http://www.wikidata.org/prop/direct/P205> ?x . ?x <http://www.wikidata.org/prop/direct/P2427> ?v } LIMIT 1000 [J3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P5353> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P159> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P194>  ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P856> ?x5 } LIMIT 1000 [P4]
-DELETE {?s ?p ?o} WHERE { SELECT ?s ?p ?o WHERE { {?s ?p ?o FILTER (?s=<http://www.wikidata.org/entity/Q6714402>)} UNION { ?s ?p ?o . FILTER (?o=<http://www.wikidata.org/entity/Q6714402>) } } }
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P3450> ?x . ?z <http://www.wikidata.org/prop/direct/P463> ?x . ?x <http://www.wikidata.org/prop/direct/P1661> ?v } LIMIT 1000 [J3]
 SELECT * WHERE { ?x1 <http://www.wikidata.org/prop/direct/P5277> ?x2 . ?x2 <http://www.wikidata.org/prop/direct/P155> ?x3 . ?x3 <http://www.wikidata.org/prop/direct/P910>  ?x4 . ?x4 <http://www.wikidata.org/prop/direct/P301> ?x5 } LIMIT 1000 [P4]
 SELECT * WHERE { ?y <http://www.wikidata.org/prop/direct/P4132> ?x . ?z <http://www.wikidata.org/prop/direct/P461> ?x . ?x <http://www.wikidata.org/prop/direct/P4342> ?v } LIMIT 1000 [J3]
