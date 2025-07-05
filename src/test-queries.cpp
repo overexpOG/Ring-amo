@@ -546,11 +546,7 @@ int main(int argc, char *argv[])
     std::string p_mapping = argv[4];
     std::string type = get_name(index);
 
-    if (type == "ring-map")
-    {
-        mapped_ring<ring::ring<>, ring::basic_map>(index, so_mapping, p_mapping, queries);
-    }
-    else if (type == "ring-dyn-basic")
+    if (type == "ring-dyn-basic")
     {
         mapped_ring<ring::ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
     }
