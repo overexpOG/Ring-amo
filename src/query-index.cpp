@@ -213,8 +213,9 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
 
 std::string get_type(const std::string &file)
 {
-    auto p = file.find_last_of('.');
-    return file.substr(p + 1);
+    auto p = file.find('.');
+    if (p == std::string::npos) return file;
+    return file.substr(0, p);
 }
 
 template <class ring_type>
