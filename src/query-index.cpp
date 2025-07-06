@@ -211,11 +211,12 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     return triple;
 }
 
-std::string get_type(const std::string &file) {
-    auto p = file.find('.');
-    if (p == std::string::npos)
-        return file; // No hay punto, devuelve todo el string
-    return file.substr(0, p);
+std::string get_type(const std::string& path) {
+    size_t last_slash = path.find_last_of('/');
+    std::string filename = (last_slash == std::string::npos) ? path : path.substr(last_slash + 1);
+
+    size_t last_dot = filename.find_last_of('.');
+    return (last_dot == std::string::npos) ? filename : filename.substr(0, last_dot);
 }
 
 template <class ring_type>
