@@ -22,7 +22,6 @@
 #include <utility>
 #include "ring.hpp"
 #include "dict_map.hpp"
-#include "dict_map_avl.hpp"
 #include <chrono>
 #include <triple_pattern.hpp>
 #include <ltj_algorithm.hpp>
@@ -413,7 +412,7 @@ int main(int argc, char *argv[])
         std::string p_mapping = argv[4];
         if (type == "ring")
         {
-            mapped_query<ring::ring<>, ring::basic_map_avl>(index, so_mapping, p_mapping, queries);
+            mapped_query<ring::ring<>, ring::basic_map>(index, so_mapping, p_mapping, queries);
         }
         else if (type == "c-ring")
         {
