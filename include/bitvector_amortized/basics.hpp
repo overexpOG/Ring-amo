@@ -6,7 +6,7 @@
 #include <cstring>
 
 namespace amo {
-    static float Theta = 0.0001;                             // Theta * length reads => rebuild as static
+    static float Theta = 0.001;                             // Theta * length reads => rebuild as static
     static float Epsilon = 0.1;                            // do not flatten leaves of size over Epsilon * n
     static constexpr int MaxBlockWords = 32;
     static constexpr double NewFraction = 0.75;
