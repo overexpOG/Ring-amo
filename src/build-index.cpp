@@ -192,6 +192,11 @@ int main(int argc, char **argv)
         std::string index_name = output + "/ring-dyn-amo-map.ring";
         build_index_mapped<ring::ring_dyn_amo, ring::basic_map>(dataset, index_name);
     }
+    else if (type == "ring-map-avl")
+    {
+        std::string index_name = output + "/ring-map-avl.ring";
+        build_index_mapped<ring::ring<>, ring::basic_map_avl>(dataset, index_name);
+    }
     else if (type == "ring-map-avl") {
         std::string index_name = output + "/ring-map-avl.ring";
         build_index_mapped<ring::ring<>, ring::basic_map_avl>(dataset, index_name);

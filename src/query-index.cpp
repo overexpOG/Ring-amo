@@ -22,6 +22,7 @@
 #include <utility>
 #include "ring.hpp"
 #include "dict_map.hpp"
+#include "dict_map_avl.hpp"
 #include <chrono>
 #include <triple_pattern.hpp>
 #include <ltj_algorithm.hpp>
@@ -210,10 +211,11 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     return triple;
 }
 
-std::string get_type(const std::string &file)
-{
-    auto p = file.find_last_of('.');
-    return file.substr(p + 1);
+std::string get_type(const std::string &file) {
+    auto p = file.find('.');
+    if (p == std::string::npos)
+        return file; // No hay punto, devuelve todo el string
+    return file.substr(0, p);
 }
 
 template <class ring_type>
@@ -410,9 +412,13 @@ int main(int argc, char *argv[])
     {
         std::string so_mapping = argv[3];
         std::string p_mapping = argv[4];
-        if (type == "ring")
+        if (type == "ring-map")
         {
             mapped_query<ring::ring<>, ring::basic_map>(index, so_mapping, p_mapping, queries);
+        } 
+        else if (type == "ring-map-avl")
+        {
+            mapped_query<ring::ring<>, ring::basic_map_avl>(index, so_mapping, p_mapping, queries);
         }
         else if (type == "c-ring")
         {
@@ -426,11 +432,11 @@ int main(int argc, char *argv[])
         {
             mapped_query<ring::ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
         }
-        else if (type == "ring-dyn")
+        else if (type == "ring-dyn-map")
         {
             mapped_query<ring::medium_ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
         }
-        else if (type == "ring-dyn-amo")
+        else if (type == "ring-dyn-amo-map")
         {
             mapped_query<ring::ring_dyn_amo, ring::basic_map>(index, so_mapping, p_mapping, queries);
         }
