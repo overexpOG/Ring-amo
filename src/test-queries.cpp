@@ -534,9 +534,9 @@ string get_name(const string &path)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 5 && argc != 6)
+    if (argc != 5)
     {
-        std::cout << "Usage: " << argv[0] << " <index> <queries> <SO mapping> <P mapping> [Theta]" << std::endl;
+        std::cout << "Usage: " << argv[0] << " <index> <queries> <SO mapping> <P mapping>" << std::endl;
         return 0;
     }
 
@@ -560,16 +560,10 @@ int main(int argc, char *argv[])
     }
     else if (type == "ring-dyn-amo-map")
     {
-        if (argc == 6) {
-            amo::setTheta(std::stof(argv[5]));
-        }
         mapped_ring<ring::ring_dyn_amo, ring::basic_map>(index, so_mapping, p_mapping, queries);
     }
     else if (type == "ring-dyn-amo-map-avl")
     {
-        if (argc == 6) {
-            amo::setTheta(std::stof(argv[5]));
-        }
         mapped_ring<ring::ring_dyn_amo, ring::basic_map_avl>(index, so_mapping, p_mapping, queries);
     }
     else

@@ -6,7 +6,7 @@
 #include <cstring>
 
 namespace amo {
-    static float Theta = 1;                             // Theta * length reads => rebuild as static
+    static float Theta = 0.01;                             // Theta * length reads => rebuild as static
     static float Epsilon = 0.1;                            // do not flatten leaves of size over Epsilon * n
     static constexpr int MaxBlockWords = 32;
     static constexpr double NewFraction = 0.75;
@@ -19,10 +19,6 @@ namespace amo {
     static constexpr float MinFillFactor = 0.3;             // less than this involves rebuild. Must be <= NewFraction/2
 
     using uint = uint32_t;
-
-    inline void setTheta(float t) {
-        Theta = t;
-    }
 
     inline uint popcount (uint64_t y) { 
         y -= ((y >> 1) & 0x5555555555555555ull);
