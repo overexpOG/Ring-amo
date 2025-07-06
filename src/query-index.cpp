@@ -213,9 +213,8 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
 
 std::string get_type(const std::string &file)
 {
-    auto p = file.find('.');
-    if (p == std::string::npos) return file;
-    return file.substr(0, p);
+    auto p = file.find_last_of('.');
+    return file.substr(p + 1);
 }
 
 template <class ring_type>
@@ -414,15 +413,11 @@ int main(int argc, char *argv[])
         std::string p_mapping = argv[4];
         if (type == "ring")
         {
-            mapped_query<ring::ring<>, ring::basic_map>(index, so_mapping, p_mapping, queries);
+            mapped_query<ring::ring<>, ring::basic_map_avl>(index, so_mapping, p_mapping, queries);
         }
         else if (type == "c-ring")
         {
             mapped_query<ring::c_ring, ring::basic_map>(index, so_mapping, p_mapping, queries);
-        }
-        else if ("ring-avl")
-        {
-            mapped_query<ring::ring<>, ring::basic_map_avl>(index, so_mapping, p_mapping, queries);
         }
         else if (type == "ring-sel")
         {
