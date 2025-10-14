@@ -8,7 +8,7 @@ Contains the dynamic implementation of the Ring with a compact dictionary for th
 
 To run our code, **we have to install an extended version of the library SDSL**. Go to [this repository](https://github.com/darroyue/sdsl-lite) and follow the instructions.
 
-We also need to install the extended version of the **DYNAMIC library**. Go to [this repository](https://github.com/yuval-linker/DYNAMIC) and follow the instructions.
+We also need to install the extended version of the **DYNAMIC library**. Go to [this repository](https://github.com/overexpOG/DYNAMIC) and follow the instructions.
 This repository is included as a github submodule in the `external` folder. After downloading the submodule
 
 ```Bash
@@ -33,14 +33,9 @@ Check that we do not have any errors.
 
 2. Download the version of the translated Wikidata that we want to use:
 
-- [Translated Wikidata Filtered (about 80M triples)](http://compact-leapfrog.tk/files/wikidata-filtered-enumerated.dat).
-- [Translated Wikidata (about 1000M triples)](http://compact-leapfrog.tk/files/wikidata-enumerated.dat.gz). Note that we have to decompress this file.
+- [Wikidata](https://zenodo.org/records/4035223).
 
 Now put the .dat file inside a folder.
-
-Or get the original filtered Wikidata file:
-
-- [Original Wikidata Filtered (about 80M triples)](https://zenodo.org/record/4035223/files/wikidata-wcg-filtered.nt.bz2?download=1)
 
 3. Now we have to create the index. After compiling the code we should have an executable called `build-index`. Now run:
 
