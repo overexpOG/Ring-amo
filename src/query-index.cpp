@@ -17,10 +17,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <regex> 
 #include <iostream>
 #include <utility>
 #include "ring.hpp"
 #include "dict_map.hpp"
+#include "dict_map_avl.hpp"
 #include <chrono>
 #include <triple_pattern.hpp>
 #include <ltj_algorithm.hpp>
@@ -188,7 +190,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_s(so_mapping.locate(terms[0]));
+        triple.const_s(so_mapping.locate(terms[0]).second);
     }
     if (is_variable(terms[1]))
     {
@@ -196,7 +198,7 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_p(p_mapping.locate(terms[1]));
+        triple.const_p(p_mapping.locate(terms[1]).second);
     }
     if (is_variable(terms[2]))
     {
@@ -204,15 +206,17 @@ ring::triple_pattern get_user_triple(string &s, std::unordered_map<std::string, 
     }
     else
     {
-        triple.const_o(so_mapping.locate(terms[2]));
+        triple.const_o(so_mapping.locate(terms[2]).second);
     }
     return triple;
 }
 
-std::string get_type(const std::string &file)
-{
-    auto p = file.find_last_of('.');
-    return file.substr(p + 1);
+std::string get_type(const std::string& path) {
+    size_t last_slash = path.find_last_of('/');
+    std::string filename = (last_slash == std::string::npos) ? path : path.substr(last_slash + 1);
+
+    size_t last_dot = filename.find_last_of('.');
+    return (last_dot == std::string::npos) ? filename : filename.substr(0, last_dot);
 }
 
 template <class ring_type>
@@ -253,12 +257,10 @@ void query(const std::string &file, const std::string &queries)
             start = high_resolution_clock::now();
 
             ring::ltj_algorithm<ring_type> ltj(&query, &graph);
-
             typedef std::vector<typename ring::ltj_algorithm<>::tuple_type> results_type;
             results_type res;
-
+            
             ltj.join(res, 1000, 600);
-
             stop = high_resolution_clock::now();
             time_span = duration_cast<microseconds>(stop - start);
             total_time = time_span.count();
@@ -316,7 +318,6 @@ void mapped_query(const std::string &file, const std::string &so_mapping_file, c
             vector<string> tokens_query = parse_select(query_string);
 
             start = high_resolution_clock::now();
-
             for (string &token : tokens_query)
             {
                 auto triple_pattern = get_user_triple<map_type>(token, hash_table_vars, so_mapping, p_mapping);
@@ -333,7 +334,6 @@ void mapped_query(const std::string &file, const std::string &so_mapping_file, c
 
             typedef std::vector<typename ring::ltj_algorithm<>::tuple_type> results_type;
             results_type res;
-
             ltj.join(res, 1000, 600);
 
             stop = high_resolution_clock::now();
@@ -399,6 +399,10 @@ int main(int argc, char *argv[])
         {
             query<ring::medium_ring_dyn>(index, queries);
         }
+        else if (type == "ring-dyn-amo")
+        {
+            query<ring::ring_dyn_amo>(index, queries);
+        }
         else
         {
             std::cout << "Type of index: " << type << " is not supported." << std::endl;
@@ -409,9 +413,13 @@ int main(int argc, char *argv[])
     {
         std::string so_mapping = argv[3];
         std::string p_mapping = argv[4];
-        if (type == "ring")
+        if (type == "ring-map")
         {
             mapped_query<ring::ring<>, ring::basic_map>(index, so_mapping, p_mapping, queries);
+        } 
+        else if (type == "ring-map-avl")
+        {
+            mapped_query<ring::ring<>, ring::basic_map_avl>(index, so_mapping, p_mapping, queries);
         }
         else if (type == "c-ring")
         {
@@ -425,9 +433,13 @@ int main(int argc, char *argv[])
         {
             mapped_query<ring::ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
         }
-        else if (type == "ring-dyn")
+        else if (type == "ring-dyn-map")
         {
             mapped_query<ring::medium_ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
+        }
+        else if (type == "ring-dyn-amo-map")
+        {
+            mapped_query<ring::ring_dyn_amo, ring::basic_map>(index, so_mapping, p_mapping, queries);
         }
         else
         {

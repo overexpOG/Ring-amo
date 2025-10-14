@@ -25,6 +25,7 @@
 #include <triple_pattern.hpp>
 #include <ltj_algorithm.hpp>
 #include "utils.hpp"
+#include <regex>
 
 using namespace std;
 
@@ -121,7 +122,7 @@ spo_triple parse_delete(const std::string &input, const map_type &so_mapping, co
     string query = input.substr(start + 1, end - start - 1);
     regex token_regex("(?:\".*\"|[^[:space:]])+");
     vector<string> terms = regex_tokenizer(query, token_regex);
-    return {so_mapping.locate(terms[0]), p_mapping.locate(terms[1]), so_mapping.locate(terms[2])};
+    return {so_mapping.locate(terms[0]).second, p_mapping.locate(terms[1]).second, so_mapping.locate(terms[2]).second};
 }
 
 std::string get_type(const std::string &file)
@@ -305,6 +306,10 @@ int main(int argc, char *argv[])
         {
             delete_query<ring::medium_ring_dyn>(index, queries);
         }
+        else if (type == "ring-dyn-amo")
+        {
+            delete_query<ring::ring_dyn_amo>(index, queries);
+        }
         else
         {
             std::cout << "Type of index: " << type << " is not supported." << std::endl;
@@ -322,6 +327,10 @@ int main(int argc, char *argv[])
         else if (type == "ring-dyn")
         {
             mapped_delete_query<ring::medium_ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
+        }
+        else if (type == "ring-dyn-amo")
+        {
+            mapped_delete_query<ring::ring_dyn_amo, ring::basic_map>(index, so_mapping, p_mapping, queries);
         }
         else
         {

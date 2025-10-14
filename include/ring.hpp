@@ -120,7 +120,7 @@ namespace ring
                 new_C_O.shrink_to_fit();
 
                 M_S.clear();
-                M_S.shrink_to_fit();
+                std::vector<uint32_t>().swap(M_S);
 
                 int_vector<> new_O(n + 1);
                 new_O[0] = 0;
@@ -157,6 +157,7 @@ namespace ring
                 new_C_P.shrink_to_fit();
 
                 M_O.clear();
+                std::vector<uint32_t>().swap(M_O);
 
                 int_vector<> new_P(n + 1);
                 new_P[0] = 0;
@@ -192,6 +193,7 @@ namespace ring
                 new_C_S.shrink_to_fit();
 
                 M_P.clear();
+                std::vector<uint32_t>().swap(M_P);
 
                 int_vector<> new_S(n + 1);
                 new_S[0] = 0;
@@ -255,7 +257,7 @@ namespace ring
         }
 
         //! Serializes the data structure into the given ostream
-        size_type serialize(std::ostream &out, sdsl::structure_tree_node *v = nullptr, std::string name = "") const
+        size_type serialize(std::ostream &out, sdsl::structure_tree_node *v = nullptr, std::string name = "")
         {
             sdsl::structure_tree_node *child = sdsl::structure_tree::add_child(v, name, sdsl::util::class_name(*this));
             size_type written_bytes = 0;
@@ -312,19 +314,19 @@ namespace ring
         }
 
         // Given a Suffix returns its range in BWT O
-        pair<uint64_t, uint64_t> init_S(uint64_t S) const
+        pair<uint64_t, uint64_t> init_S(uint64_t S)
         {
             return m_bwt_o.backward_search_1_interval(S);
         }
 
         // Given a Predicate returns its range in BWT S
-        pair<uint64_t, uint64_t> init_P(uint64_t P) const
+        pair<uint64_t, uint64_t> init_P(uint64_t P)
         {
             return m_bwt_s.backward_search_1_interval(P);
         }
 
         // Given an Object returns its range in BWT P
-        pair<uint64_t, uint64_t> init_O(uint64_t O) const
+        pair<uint64_t, uint64_t> init_O(uint64_t O)
         {
             return m_bwt_p.backward_search_1_interval(O);
         }
@@ -348,14 +350,14 @@ namespace ring
 
 
         // POS -> SPO
-        pair<uint64_t, uint64_t> init_SP(uint64_t S, uint64_t P) const
+        pair<uint64_t, uint64_t> init_SP(uint64_t S, uint64_t P)
         {
             auto I = m_bwt_s.backward_search_1_rank(P, S);   // POS
             return m_bwt_o.backward_search_2_interval(S, I); // SPO
         }
 
         // SPO -> OSP
-        pair<uint64_t, uint64_t> init_SO(uint64_t S, uint64_t O) const
+        pair<uint64_t, uint64_t> init_SO(uint64_t S, uint64_t O)
         {
             auto I = m_bwt_o.backward_search_1_rank(S, O);   // SPO
             return m_bwt_p.backward_search_2_interval(O, I); // OSP
@@ -363,7 +365,7 @@ namespace ring
         }
 
         // OSP -> POS
-        pair<uint64_t, uint64_t> init_PO(uint64_t P, uint64_t O) const
+        pair<uint64_t, uint64_t> init_PO(uint64_t P, uint64_t O)
         {
             auto I = m_bwt_p.backward_search_1_rank(O, P);   // OSP
             return m_bwt_s.backward_search_2_interval(P, I); // POS
@@ -371,7 +373,7 @@ namespace ring
         }
 
         // OSP -> POS -> SPO
-        pair<uint64_t, uint64_t> init_SPO(uint64_t S, uint64_t P, uint64_t O) const
+        pair<uint64_t, uint64_t> init_SPO(uint64_t S, uint64_t P, uint64_t O)
         {
             auto I = m_bwt_p.backward_search_1_rank(O, P);   // OSP
             I = m_bwt_s.backward_search_2_rank(P, S, I);     // POS
@@ -1062,7 +1064,8 @@ namespace ring
             insert_index = m_bwt_p.get_C(o) + m_bwt_o.ranky(insert_index, o);
             m_bwt_p.insert_WT(insert_index, p);
             m_bwt_s.insert_C(m_bwt_s.select_C(p + 1), 0);
-            
+            m_n_triples++;
+
             return;
         }
 
@@ -1081,6 +1084,7 @@ namespace ring
             insert_index = m_bwt_s.get_C(p) + m_bwt_p.ranky(insert_index, p);
             m_bwt_s.insert_WT(insert_index, s); // POS
             m_bwt_o.insert_C(m_bwt_o.select_C(s + 1), 0);
+            m_n_triples++;
 
             return;
         }
@@ -1100,6 +1104,7 @@ namespace ring
             insert_index = m_bwt_o.get_C(s) + m_bwt_s.ranky(insert_index, s);
             m_bwt_o.insert_WT(insert_index, o);
             m_bwt_p.insert_C(m_bwt_p.select_C(o + 1), 0);
+            m_n_triples++;
 
             return;
         }
@@ -1125,65 +1130,20 @@ namespace ring
         uint64_t low = 0, high = 0;
 
         // Find triple
+        // find triple with p
         low = m_bwt_s.get_C(p);
         high = m_bwt_s.get_C(p + 1) - 1;
-
-        // Deleting in S first
-        if (low == high)
-        {
-            uint64_t o_remove_index = m_bwt_o.get_C(s) + m_bwt_s.ranky(low, s);
-            uint64_t p_remove_index = m_bwt_p.get_C(o) + m_bwt_o.ranky(o_remove_index, o);
-
-            m_bwt_s.remove_WT(low);
-            m_bwt_o.remove_WT(o_remove_index);
-            m_bwt_p.remove_WT(p_remove_index);
-
-            // Update the bitvectors
-            m_bwt_o.remove_C(m_bwt_o.select_C(s + 1) - 1);
-            m_bwt_s.remove_C(m_bwt_s.select_C(p + 1) - 1);
-            m_bwt_p.remove_C(m_bwt_p.select_C(o + 1) - 1);
-
-            // Check if the elements s,p,o are still in use
-            bool s_is_used = m_bwt_o.nElems(s);
-            bool p_is_used = m_bwt_s.nElems(p);
-            bool o_is_used = m_bwt_p.nElems(o);
-
-            return {s_is_used, p_is_used, o_is_used};
-        }
-
+        // find triple with p and s
         low = m_bwt_o.get_C(s) - 1 + m_bwt_s.ranky(low, s) + 1;
         high = m_bwt_o.get_C(s) - 1 + m_bwt_s.ranky(high + 1, s);
-
-
-        // Deleting in O first
-        if (low == high)
-        {
-            uint64_t p_remove_index = m_bwt_p.get_C(o) + m_bwt_o.ranky(low, o);
-            uint64_t s_remove_index = m_bwt_s.get_C(p) + m_bwt_p.ranky(p_remove_index, p);
-
-            m_bwt_o.remove_WT(low);
-            m_bwt_p.remove_WT(p_remove_index);
-            m_bwt_s.remove_WT(s_remove_index);
-
-            // Update the bitvectors
-            m_bwt_o.remove_C(m_bwt_o.select_C(s + 1) - 1);
-            m_bwt_s.remove_C(m_bwt_s.select_C(p + 1) - 1);
-            m_bwt_p.remove_C(m_bwt_p.select_C(o + 1) - 1);
-
-            // Check if the elements s,p,o are still in use
-            bool s_is_used = m_bwt_o.nElems(s);
-            bool p_is_used = m_bwt_s.nElems(p);
-            bool o_is_used = m_bwt_p.nElems(o);
-
-            return {s_is_used, p_is_used, o_is_used};
-        }
-
+        // find triple with p, s and o
         low = m_bwt_p.get_C(o) - 1 + m_bwt_o.ranky(low, o) + 1;
         high = m_bwt_p.get_C(o) - 1 + m_bwt_o.ranky(high + 1, o);
 
-
+        // if low == high the triple exists, else if low < high the triple doesn't exist
+        // if low > high the triple is repeated
         // Deleting in P
-        if (low <= high)
+        if (low == high)
         {
             uint64_t s_remove_index = m_bwt_s.get_C(p) + m_bwt_p.ranky(low, p);
             uint64_t o_remove_index = m_bwt_o.get_C(s) + m_bwt_s.ranky(s_remove_index, s);
@@ -1198,16 +1158,17 @@ namespace ring
             m_bwt_p.remove_C(m_bwt_p.select_C(o + 1) - 1);
 
             // Check if the elements s,p,o are still in use
-            bool s_is_used = m_bwt_o.nElems(s);
+            bool s_is_used = m_bwt_o.nElems(s) || m_bwt_p.nElems(s);
             bool p_is_used = m_bwt_s.nElems(p);
-            bool o_is_used = m_bwt_p.nElems(o);
+            bool o_is_used = m_bwt_p.nElems(o) || m_bwt_o.nElems(o);
 
-            return {s_is_used, p_is_used, o_is_used};
+            m_n_triples--;
+
+            return {s_is_used, p_is_used, o_is_used, 1};
         }
-        else
-        {
-            throw std::invalid_argument("The given triple doesnt exist in the graph");
-        }
+        
+        // The given triple doesnt exist in the graph
+        return {1, 1, 1, 0};
     }
 
     /**
@@ -1291,6 +1252,8 @@ namespace ring
 
             return;
         }
+
+        m_n_triples--;
     }
 
     /**
@@ -1306,7 +1269,6 @@ namespace ring
     template <class bwt_so_t, class bwt_p_t>
     uint64_t ring<bwt_so_t, bwt_p_t>::remove_node(uint64_t x)
     {
-
         tuple<uint64_t, uint64_t> restricted_range = {m_bwt_o.get_C(x), m_bwt_o.get_C(x + 1) - 1};
         uint64_t low = get<0>(restricted_range), high = get<1>(restricted_range);
         uint64_t ret_value = 0;
@@ -1354,6 +1316,7 @@ namespace ring
             new_index = m_bwt_p.get_C(ret_value) + m_bwt_o.ranky(new_index, ret_value);
             m_bwt_p.remove_C(m_bwt_p.select_C(ret_value + 1) - 1);
         }
+        m_n_triples -= total_removed;
 
         return total_removed;
     }
@@ -1374,7 +1337,6 @@ namespace ring
     template <class bwt_so_t, class bwt_p_t>
     uint64_t ring<bwt_so_t, bwt_p_t>::remove_node_with_check(uint64_t x, std::vector<uint64_t> &so_removed, std::vector<uint64_t> &p_removed)
     {
-
         tuple<uint64_t, uint64_t> restricted_range = {m_bwt_o.get_C(x), m_bwt_o.get_C(x + 1) - 1};
         uint64_t low = get<0>(restricted_range), high = get<1>(restricted_range);
         uint64_t ret_value = 0;
@@ -1443,6 +1405,8 @@ namespace ring
                 m_bwt_p.remove_C(m_bwt_p.select_C(ret_value + 1) - 1);
             }
         }
+        m_n_triples -= total_removed;
+
         return total_removed;
     }
 
@@ -1461,6 +1425,7 @@ namespace ring
     typedef ring<bwt_plain, bwt_plain> ring_sel;     // with select
     typedef ring<bwt_dynamic, bwt_dynamic> ring_dyn; // dynamic
     typedef ring<big_bwt, big_bwt> medium_ring_dyn;  // dynamic
+    typedef ring<bwt_dyn_amo, bwt_dyn_amo> ring_dyn_amo; // dynamic amortizado
 
 }
 

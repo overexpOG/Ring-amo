@@ -25,6 +25,7 @@
 #include <triple_pattern.hpp>
 #include <ltj_algorithm.hpp>
 #include "utils.hpp"
+#include <regex>
 
 using namespace std;
 
@@ -113,7 +114,7 @@ std::vector<std::string> regex_tokenizer(const std::string &input, std::regex re
 }
 
 template <class map_type>
-spo_triple parse_insert(const std::string &input, const map_type &so_mapping, const map_type &p_mapping)
+spo_triple parse_insert(const std::string &input, map_type &so_mapping, map_type &p_mapping)
 {
     vector<string> res;
     size_t start = input.find_first_of("{"),
@@ -257,6 +258,10 @@ int main(int argc, char *argv[])
         {
             insert_query<ring::medium_ring_dyn>(index, queries);
         }
+        else if (type == "ring-dyn-amo")
+        {
+            insert_query<ring::ring_dyn_amo>(index, queries);
+        }
         else
         {
             std::cout << "Type of index: " << type << " is not supported." << std::endl;
@@ -274,6 +279,10 @@ int main(int argc, char *argv[])
         else if (type == "ring-dyn")
         {
             mapped_insert_query<ring::medium_ring_dyn, ring::basic_map>(index, so_mapping, p_mapping, queries);
+        }
+        else if (type == "ring-dyn-amo")
+        {
+            mapped_insert_query<ring::ring_dyn_amo, ring::basic_map>(index, so_mapping, p_mapping, queries);
         }
         else
         {

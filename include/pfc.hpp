@@ -30,10 +30,42 @@ namespace ring
   * Union type to represent a pointer to a PFC
   * or the next ID that its free in the array.
   */
-  union EmptyOrPFC
-  {
-    PFC *pfc;
-    uint64_t next_empty;
+  struct EmptyOrPFC {
+    bool is_empty = true;
+    union {
+        PFC* pfc;
+        uint64_t next_empty;
+    };
+
+    EmptyOrPFC() : is_empty(true), next_empty(0) {}
+
+    EmptyOrPFC(PFC* ptr) : is_empty(false), pfc(ptr) {}
+
+    EmptyOrPFC(uint64_t next) : is_empty(true), next_empty(next) {}
+
+    void set_pfc(PFC* ptr) {
+        is_empty = false;
+        pfc = ptr;
+    }
+
+    void set_next_empty(uint64_t next) {
+        is_empty = true;
+        next_empty = next;
+    }
+
+    bool has_pfc() const { return !is_empty; }
+
+    bool is_slot_empty() const { return is_empty; }
+
+    PFC* get_pfc() const {
+        assert(!is_empty);
+        return pfc;
+    }
+
+    uint64_t get_next_empty() const {
+        assert(is_empty);
+        return next_empty;
+    }
   };
 
   /**
@@ -105,7 +137,7 @@ namespace ring
       // Get first word
       curr_id = decode_number(index);
       index = text_string.find_first_of('\0', index) + 1;
-      id_map[curr_id - 1].pfc = this;
+      id_map[curr_id - 1].set_pfc(this);
 
       // Go through the PFC loading the ID map
       while (index < text_string.size())
@@ -113,7 +145,7 @@ namespace ring
         curr_id = decode_number(index);
         decode_number(index);
         index = text_string.find_first_of('\0', index) + 1;
-        id_map[curr_id - 1].pfc = this;
+        id_map[curr_id - 1].set_pfc(this);
       }
     }
 
@@ -292,6 +324,43 @@ namespace ring
       }
 
       throw std::invalid_argument(s + " not in Plain Front Coding");
+    }
+
+    /**
+     * @brief Search the string in the PFC and return its ID
+     * If its not found it throws an invalid_argument error
+     *
+     * @param s The string bieng searched
+     * @return std::pair<bool, uint64_t> True if the string exits and the ID of the string otherwise false and 0
+     */
+    std::pair<bool, uint64_t> locate_if_exists(const std::string &s)
+    {
+      uint64_t index = 0;
+      std::string prev, curr;
+      uint64_t curr_id;
+
+      // Linear search
+      curr_id = decode_number(index);
+      read_string(index, curr);
+      prev = curr;
+      while (index < text_string.size())
+      {
+        if (curr == s)
+        {
+          return {true, curr_id};
+        }
+        curr_id = decode_number(index);
+        uint64_t lcp = decode_number(index);
+        read_string(index, curr, prev, lcp);
+        prev = curr;
+      }
+
+      if (curr == s)
+      {
+        return {true, curr_id};
+      }
+
+      return {false, 0};
     }
 
     /**

@@ -22,6 +22,7 @@
 
 #include <dynamic/dynamic.hpp>
 #include "configuration.hpp"
+#include "bitvector_amortized/hybrid.hpp"
 
 using namespace std;
 
@@ -136,7 +137,7 @@ namespace ring
     }
 
     // //! Serializes the data structure into the given ostream
-    size_type serialize(ostream &out, sdsl::structure_tree_node *v = nullptr, string name = "") const
+    size_type serialize(ostream &out, sdsl::structure_tree_node *v = nullptr, string name = "")
     {
       sdsl::structure_tree_node *child = sdsl::structure_tree::add_child(v, name, "bwt_dyn");
       size_type written_bytes = 0;
@@ -203,7 +204,7 @@ namespace ring
 
     // Operations
     //  Get the value of v in C
-    inline size_type get_C(const uint64_t v) const
+    inline size_type get_C(const uint64_t v)
     {
       return m_C.select1(v) - v;
     }
@@ -271,13 +272,13 @@ namespace ring
     }
 
     // backward search for pattern of length 1
-    pair<uint64_t, uint64_t> backward_search_1_interval(uint64_t P) const
+    pair<uint64_t, uint64_t> backward_search_1_interval(uint64_t P)
     {
       return {get_C(P), get_C(P + 1) - 1};
     }
 
     // backward search for pattern of length 1
-    pair<uint64_t, uint64_t> backward_search_1_rank(uint64_t P, uint64_t S) const
+    pair<uint64_t, uint64_t> backward_search_1_rank(uint64_t P, uint64_t S)
     {
       return {m_L.rank(get_C(P), S), m_L.rank(get_C(P + 1), S)};
     }
@@ -285,13 +286,13 @@ namespace ring
     // backward search for pattern PQ of length 2
     // returns an empty interval if search is unsuccessful
     pair<uint64_t, uint64_t>
-    backward_search_2_interval(uint64_t P, pair<uint64_t, uint64_t> &I) const
+    backward_search_2_interval(uint64_t P, pair<uint64_t, uint64_t> &I)
     {
       return {get_C(P) + I.first, get_C(P) + I.second - 1};
     }
 
     pair<uint64_t, uint64_t>
-    backward_search_2_rank(uint64_t P, uint64_t S, pair<uint64_t, uint64_t> &I) const
+    backward_search_2_rank(uint64_t P, uint64_t S, pair<uint64_t, uint64_t> &I)
     {
       uint64_t c = get_C(P);
       return {m_L.rank(c + I.first, S), m_L.rank(c + I.second, S)};
@@ -338,6 +339,7 @@ namespace ring
 
   typedef bwt_dyn<> bwt_dynamic;
   typedef bwt_dyn<dyn::suc_bv, chosen_one_bwt> big_bwt;
+  typedef bwt_dyn<amo::HybridBV, dyn::wm_string<amo::HybridBV>> bwt_dyn_amo;
 }
 
 #endif

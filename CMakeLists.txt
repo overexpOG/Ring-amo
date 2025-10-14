@@ -3,6 +3,8 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 include(AppendCompilerFlags)
 project(Ring)
 set(CMAKE_PROJECT_NAME "Ring")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #Change to "Debug" when you need it
 set(CMAKE_BUILD_TYPE "Release")
@@ -17,17 +19,16 @@ endif()
 if(CMAKE_CXX_COMPILER MATCHES ".*clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_COMPILER_IS_CLANGXX 1)
 endif()
-if( (CMAKE_COMPILER_IS_GNUCXX AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 4.7) OR
-(CMAKE_COMPILER_IS_CLANGXX AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 3.2))
-    message(FATAL_ERROR "Your C++ compiler does not support C++11. Please install g++ 4.7 (or greater) or clang 3.2 (or greater)")
+if (CMAKE_CXX_STANDARD LESS 17)
+  message(FATAL_ERROR "Your C++ compiler does not support C++17")
 else()
-    message(STATUS "Compiler is recent enough to support C++11.")
+    message(STATUS "Compiler is recent enough to support C++17.")
 endif()
 if( CMAKE_COMPILER_IS_GNUCXX )
-    append_cxx_compiler_flags("-fpermissive -std=c++11" "GCC" CMAKE_CXX_FLAGS)
+    append_cxx_compiler_flags("-fpermissive" "GCC" CMAKE_CXX_FLAGS)
     append_cxx_compiler_flags("-msse4.2 -O3 -ffast-math" "GCC" CMAKE_CXX_FLAGS_RELEASE)
 else()
-    append_cxx_compiler_flags("-fpermissive -std=c++11" "CLANG" CMAKE_CXX_FLAGS)
+    append_cxx_compiler_flags("-fpermissive" "CLANG" CMAKE_CXX_FLAGS)
     append_cxx_compiler_flags("-stdlib=libc++" "CLANG" CMAKE_CXX_FLAGS)
     append_cxx_compiler_flags("-msse4.2 -O3  -ffast-math" "CLANG" CMAKE_CXX_FLAGS_RELEASE)
 endif()
@@ -52,24 +53,43 @@ include_directories(~/include
 
 link_directories(~/lib)
 
+add_library(bitvector_amortized_lib STATIC
+    src/bitvector_amortized/static.cpp
+    src/bitvector_amortized/leaf.cpp
+    src/bitvector_amortized/dynamic.cpp
+    src/bitvector_amortized/hybrid.cpp
+)
+
+target_include_directories(bitvector_amortized_lib PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/bitvector_amortized
+)
 
 add_executable(build-index src/build-index.cpp)
-target_link_libraries(build-index sdsl divsufsort divsufsort64)
+target_link_libraries(build-index sdsl divsufsort divsufsort64 bitvector_amortized_lib)
 
 add_executable(query-index src/query-index.cpp)
-target_link_libraries(query-index sdsl divsufsort divsufsort64)
+target_link_libraries(query-index sdsl divsufsort divsufsort64 bitvector_amortized_lib)
 
 add_executable(delete-edge src/delete-edge.cpp)
-target_link_libraries(delete-edge sdsl divsufsort divsufsort64)
+target_link_libraries(delete-edge sdsl divsufsort divsufsort64 bitvector_amortized_lib)
 
 add_executable(delete-node src/delete-node.cpp)
-target_link_libraries(delete-node sdsl divsufsort divsufsort64)
+target_link_libraries(delete-node sdsl divsufsort divsufsort64 bitvector_amortized_lib)
 
 add_executable(insert-edge src/insert-edge.cpp)
-target_link_libraries(insert-edge sdsl divsufsort divsufsort64)
+target_link_libraries(insert-edge sdsl divsufsort divsufsort64 bitvector_amortized_lib)
 
 add_executable(update-query src/update-query.cpp)
-target_link_libraries(update-query sdsl divsufsort divsufsort64)
+target_link_libraries(update-query sdsl divsufsort divsufsort64 bitvector_amortized_lib)
 
 add_executable(test-B src/test-B.cpp)
-target_link_libraries(test-B sdsl divsufsort divsufsort64)
+target_link_libraries(test-B sdsl divsufsort divsufsort64 bitvector_amortized_lib)
+
+add_executable(test-amortized-bitvector src/test-amortized-bitvector.cpp)
+target_link_libraries(test-amortized-bitvector sdsl divsufsort divsufsort64 bitvector_amortized_lib)
+
+add_executable(test-dict-map-avl src/test-dict-map-avl.cpp)
+target_link_libraries(test-dict-map-avl sdsl divsufsort divsufsort64 bitvector_amortized_lib)
+
+add_executable(test-queries src/test-queries.cpp)
+target_link_libraries(test-queries sdsl divsufsort divsufsort64 bitvector_amortized_lib)
